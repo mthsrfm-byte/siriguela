@@ -2,7 +2,7 @@
    Para mudar nome, texto ou preço de uma sunga, edite só este arquivo.
    As fotos ficam em assets/produtos/<slug>/ */
 
-window.SIRIGUELA = {
+globalThis.SIRIGUELA = {
   preco: 249.90,
   parcelas: 3,
   freteGratisAPartir: 399.90,

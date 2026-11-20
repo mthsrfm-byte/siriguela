@@ -1,0 +1,12 @@
+{
+  "name": "siriguela-avisos",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-18",
+  "workers_dev": false,
+  "routes": [{ "pattern": "siriguela.site/api/avisos*", "zone_name": "siriguela.site" }],
+  "d1_databases": [{ "binding": "DB", "database_name": "siriguela-avisos", "database_id": "cab36667-c280-41f6-b9e2-5618164cae7e" }],
+  "ratelimits": [{ "name": "LIMITE", "namespace_id": "28931", "simple": { "limit": 10, "period": 60 } }],
+  "send_email": [{ "name": "EMAIL" }],
+  "vars": { "ENVIAR": "nao" },
+  "triggers": { "crons": ["*/5 * * * *"] }
+}

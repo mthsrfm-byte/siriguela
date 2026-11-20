@@ -350,21 +350,37 @@
       </tbody>
     </table>`;
 
-  /* aviso por e-mail quando a janela está fechada (ainda não conectado a um serviço) */
-  const avisoForm = (id) => `
-    <form class="notify" data-notify>
+  /* aviso por e-mail quando a janela está fechada */
+  const avisoForm = (id, produto = "") => `
+    <form class="notify" data-notify="${produto}">
       <label class="sr" for="${id}">Seu e-mail</label>
       <input id="${id}" type="email" required placeholder="Seu e-mail" autocomplete="email">
       <button type="submit">Avisar</button>
     </form>
     <p class="notify__ok" data-notify-ok aria-live="polite"></p>`;
-  document.addEventListener("submit", (e) => {
+  document.addEventListener("submit", async (e) => {
     const f = e.target.closest("[data-notify]");
     if (!f) return;
     e.preventDefault();
-    // TODO: ligar a um serviço de e-mail (Mailchimp, Brevo, Klaviyo…)
-    f.parentElement.querySelector("[data-notify-ok]").textContent = `Pronto. A gente avisa em ${J.longa(J.ini)}, quando a ${J.safra.toLowerCase()} abrir.`;
-    f.reset();
+    const button = f.querySelector("button");
+    if (button.disabled) return;
+    const status = f.parentElement.querySelector("[data-notify-ok]");
+    button.disabled = true;
+    status.textContent = "Anotando seu e-mail…";
+    try {
+      const response = await fetch("/api/avisos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: f.querySelector("input").value, produto: f.dataset.notify })
+      });
+      if (!response.ok || (await response.json()).ok !== true) throw new Error();
+      status.textContent = "E-mail anotado. A gente avisa quando as encomendas abrirem.";
+      f.reset();
+    } catch {
+      status.textContent = "Não conseguimos anotar seu e-mail. Tente novamente em instantes.";
+    } finally {
+      button.disabled = false;
+    }
   });
 
   /* Título do hero: as letras sobem uma a uma por trás de uma máscara e o ponto entra por último.
@@ -476,7 +492,7 @@
         <p class="picker__msg mono mute" data-msg>Corte justo. Na dúvida, vá no maior.</p>
         ${J.aberta
           ? `<button class="btn btn--full" data-add>Encomendar a minha <span>→</span></button>`
-          : `<button class="btn btn--full" data-notify-open>Avise-me quando abrir <span>→</span></button><div class="info__notify" data-notify-box hidden>${avisoForm("aviso-pdp")}</div>`}
+          : `<button class="btn btn--full" data-notify-open>Avise-me quando abrir <span>→</span></button><div class="info__notify" data-notify-box hidden>${avisoForm("aviso-pdp", p.slug)}</div>`}
         <p class="info__perks">Frete grátis a partir de ${brl(S.freteGratisAPartir)}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
       </div>
       <div class="acc">
