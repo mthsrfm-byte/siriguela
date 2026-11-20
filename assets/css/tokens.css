@@ -18,7 +18,7 @@
   --areia:       #E4DCCF;  /* rodapé, fundo atrás das fotos */
   --tinta:       #121212;  /* texto, botão, logo */
   --tinta-suave: #5E5953;  /* texto secundário */
-  --cinza:       #8F8980;  /* índices, legendas */
+  --cinza:       #706A63;  /* índices, legendas (escurecido p/ contraste AA 4.5:1 no linho) */
   --linha:       #D9D1C4;  /* fios de 1 px */
   --siriguela:   #B8322A;  /* o ponto: só sinais pequenos, nunca texto corrido */
   --siriguela-escura: #8E241E;  /* erro e alerta curto */

@@ -6,14 +6,27 @@
   <title>Siriguela · Sungas estampadas</title>
   <meta name="description" content="Sunga estampada Siriguela.">
   <meta name="theme-color" content="#F3EFE8">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Siriguela">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Siriguela · Sete sungas estampadas">
+  <meta property="og:description" content="Sungas com estampas inspiradas em pedacinhos do Brasil. Nenhuma lisa, nunca. Somente sob encomenda.">
+  <meta property="og:url" content="https://mthsrfm-byte.github.io/siriguela/">
+  <meta property="og:image" content="https://mthsrfm-byte.github.io/siriguela/assets/img/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="As sete sungas Siriguela lado a lado: Sete estampas. Nenhuma lisa.">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/fonts/instrument-sans-normal-latin-5.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/ibm-plex-mono-normal-latin-1.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body data-page="produto">
+  <script src="assets/js/produtos.js"></script>
+  <script src="assets/js/app.js"></script>
 
   <main>
     <nav class="crumbs" aria-label="Você está em">
@@ -34,11 +47,6 @@
     </section>
   </main>
 
-  <script src="assets/js/produtos.js"></script>
-  <script src="assets/js/app.js"></script>
-  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
-  <script src="assets/js/movimento.js" defer></script>
+  <script>siriguelaInit()</script>
 </body>
 </html>

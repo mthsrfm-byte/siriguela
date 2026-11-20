@@ -161,11 +161,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 /* Hover: só a sunga no piso, de frente. Em card vertical a foto horizontal entra inteira
    e se dissolve na cor do piso em cima e embaixo. */
 .card__piso { position: absolute; inset: 0; display: grid; place-items: center; background: var(--piso, var(--soft)); opacity: 0; transition: opacity .42s ease; pointer-events: none; }
-.card__piso img { display: block; width: 100%; height: auto; -webkit-mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); mask-image: linear-gradient(transparent, #000 18%, #000 82%, transparent); }
-.r32 .card__piso img { height: 100%; object-fit: cover; -webkit-mask-image: none; mask-image: none; }
+.card__piso img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 @media (hover: hover) { .card:hover .card__piso { opacity: 1; } }
 
-.card__meta { display: flex; align-items: baseline; gap: 12px; margin-top: 12px; font-size: var(--t-body); }
+.card__meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; margin-top: 12px; font-size: var(--t-body); }
 .card__name { font-weight: var(--w-text); }
 .card__price { margin-left: auto; }
 .card__sub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 4px; font-size: var(--t-small); color: var(--mute); transition: opacity .2s, transform .2s; }
@@ -235,7 +234,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .join__ok { margin: 12px 0 0; min-height: 1.5em; font-size: var(--t-small); color: var(--mute); }
 
 /* ---------- Rodapé ---------- */
-footer { background: var(--soft); }
+footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza claro não passa no contraste */
 .foot { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); padding: clamp(40px, 5vw, 72px) var(--pad); font-size: var(--t-small); }
 .foot > div:first-child { grid-column: 1 / span 6; }
 .foot > div { grid-column: span 2; }
@@ -296,6 +295,7 @@ footer { background: var(--soft); }
 .gallery figure { margin: 0; position: relative; }
 .gallery figure:first-child { grid-column: 1 / -1; }
 .gallery__ph { display: block; overflow: hidden; background: var(--soft); } /* janela do parallax */
+.gallery img[data-adiada] { color: transparent; } /* foto ainda não pedida: sem texto alternativo piscando */
 .gallery img { display: block; width: 100%; aspect-ratio: 617/407; object-fit: cover; background: var(--soft); }
 .gallery figure.is-v img { aspect-ratio: 3/4; }
 .gallery figcaption { margin-top: 8px; font-family: var(--f-mono); font-size: var(--t-idx); color: var(--faint); }
@@ -337,6 +337,10 @@ footer { background: var(--soft); }
 .grid--more .card { grid-column: span 3; }
 
 /* ---------- Responsivo ---------- */
+@media (max-width: 1280px) {
+  .gallery-wrap { grid-column: 1 / span 7; }
+  .info { grid-column: 9 / span 4; }
+}
 @media (max-width: 1000px) {
   .hero__a { grid-column: 1 / span 8; }
   .hero__b { grid-column: 9 / span 4; }
@@ -376,15 +380,28 @@ footer { background: var(--soft); }
   .head__nav a { padding: 6px 0; border: 0; }
   .is-menu .head__nav { display: flex; }
   .head__menu { display: block; }
+  .more { padding-top: var(--sect); }
+}
+/* tablet: fotos em duas colunas à esquerda, compra fixa à direita */
+@media (min-width: 701px) and (max-width: 1000px) {
+  .gallery-wrap { grid-column: 1 / span 7; }
+  .info { grid-column: 8 / span 5; }
+}
+@media (max-width: 700px) {
   .pdp { display: block; padding: 0; }
   .gallery-wrap { margin-bottom: 28px; }
   /* celular: todas as fotos empilhadas, uma embaixo da outra, cada uma na sua proporção */
   .gallery { grid-template-columns: minmax(0, 1fr); gap: 20px; }
   .gallery figure:first-child { grid-column: auto; }
   .gallery figcaption { padding: 0 var(--pad); }
-  .gallery__count { display: none; }
   .info { position: static; padding: 0 var(--pad); }
-  .more { padding-top: var(--sect); }
+}
+/* telas de toque: links pequenos ganham área de toque sem mudar o desenho */
+@media (pointer: coarse) {
+  .head__menu, .head__bag { padding: 12px 0; margin: -12px 0; }
+  .head__nav a { padding: 11px 0; }
+  .foot a { padding: 7px 0; margin: 0; }
+  .janela-bar__main { padding: 6px 0; margin: -6px 0; }
 }
 @media (max-width: 600px) {
   .hero__a { grid-column: 1 / -1; }
@@ -419,7 +436,7 @@ footer { background: var(--soft); }
   display: flex; justify-content: space-between; align-items: center; gap: 8px 24px; flex-wrap: wrap;
   padding: 10px var(--pad);
   border-bottom: 1px solid var(--line);
-  font-family: var(--f-mono); font-size: calc(var(--t-idx) * 0.85); font-weight: var(--w-mid);
+  font-family: var(--f-mono); font-size: max(10px, calc(var(--t-idx) * 0.85)); font-weight: var(--w-mid);
   letter-spacing: var(--track-meta); text-transform: uppercase;
 }
 .janela-bar__main { display: flex; flex-wrap: wrap; gap: 4px 10px; }
@@ -500,9 +517,14 @@ footer { background: var(--soft); }
 
 /* ---------- Hero: faixa de vídeos da campanha (marquee) ---------- */
 .reel { --reel-h: clamp(340px, 62vh, 680px); --reel-gap: var(--gap); --reel-dur: 70s;
-  overflow: hidden; margin: 0 calc(var(--pad) * -1); padding: 0;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  position: relative; overflow: hidden; margin: 0 calc(var(--pad) * -1); padding: 0; }
+/* véu das bordas: em vez de sumir no branco, o vídeo desfoca de leve perto da borda */
+.reel::before, .reel::after {
+  content: ""; position: absolute; top: 0; bottom: 0; z-index: 2; width: clamp(28px, 5vw, 80px); pointer-events: none;
+  -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+}
+.reel::before { left: 0; -webkit-mask-image: linear-gradient(90deg, #000, transparent); mask-image: linear-gradient(90deg, #000, transparent); }
+.reel::after { right: 0; -webkit-mask-image: linear-gradient(270deg, #000, transparent); mask-image: linear-gradient(270deg, #000, transparent); }
 .reel__track { display: flex; width: max-content; animation: reel var(--reel-dur) linear infinite; will-change: transform; }
 .reel:hover .reel__track, .reel:focus-within .reel__track { animation-play-state: paused; }
 .reel__set { display: flex; gap: var(--reel-gap); padding-right: var(--reel-gap); }

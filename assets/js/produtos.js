@@ -7,10 +7,11 @@ window.SIRIGUELA = {
   parcelas: 3,
   freteGratisAPartir: 399.90,
   cupom: { codigo: "SIRIGUELA10", desconto: 0.10, regra: "Válido na primeira compra. Conferido no pagamento." },
-  /* Encomenda: a safra abre todo mês do dia 1 ao dia 10 (até 23h59, horário local).
-     A produção começa quando a janela fecha e a entrega chega em até 15 dias depois.
+  /* Encomenda: a safra abre todo mês do dia 1 ao dia 7 (até 23h59, horário local).
+     A produção começa quando a janela fecha e a entrega chega em até 10 dias úteis depois
+     (sem sábado, domingo e feriados nacionais de data fixa).
      Para testar a loja fora da janela, abra o site com ?janela=aberta (ou ?janela=fechada). */
-  janela: { diaInicio: 1, diaFim: 10, entregaDias: 15 },
+  janela: { diaInicio: 1, diaFim: 7, entregaDiasUteis: 10 },
   tamanhos: ["P", "M", "G", "GG"],
   produtos: [
     {

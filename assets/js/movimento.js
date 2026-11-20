@@ -84,6 +84,7 @@
   });
 
   /* imagens e vídeos que carregam depois mudam a altura da página: recalcula as posições */
-  addEventListener("load", () => ScrollTrigger.refresh());
+  if (document.readyState === "complete") ScrollTrigger.refresh();
+  else addEventListener("load", () => ScrollTrigger.refresh());
   document.querySelectorAll("img").forEach((img) => img.complete || img.addEventListener("load", () => ScrollTrigger.refresh(), { once: true }));
 })();

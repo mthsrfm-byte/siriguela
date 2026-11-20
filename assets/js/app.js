@@ -7,6 +7,12 @@
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   const img = (p, f) => `assets/produtos/${p.slug}/${f}.${(p.jpg || []).includes(f) ? "jpg" : "webp"}`;
+  /* foto responsiva: o navegador escolhe entre as versões WebP de 640/1080/1600px
+     (geradas por scripts/variantes-webp.py) a menor que serve para a tela */
+  const pic = (path, sizes) => {
+    const b = path.replace(/\.(jpg|webp)$/, "");
+    return `src="${b}.w1080.webp" srcset="${b}.w640.webp 640w, ${b}.w1080.webp 1080w, ${b}.w1600.webp 1600w" sizes="${sizes}"`;
+  };
   const num = (i) => String(i + 1).padStart(2, "0");
   const total = S.produtos.length;
   const bySlug = (slug) => S.produtos.find((p) => p.slug === slug);
@@ -25,9 +31,10 @@
 
   /* ---------- Janela de encomenda ----------
      Cada mês é uma safra: encomendas do dia 1 ao 10, produção depois que a
-     janela fecha, entrega em até N dias. Tudo que o site diz sobre prazo sai daqui. */
+     janela fecha, entrega em até N dias úteis. Tudo que o site diz sobre prazo sai daqui. */
   const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
   const DIA = 86400000;
+  const EXTENSO = ["", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove", "dez", "onze", "doze", "treze", "catorze", "quinze"];
   const J = (() => {
     const cfg = S.janela;
     let sim = null;
@@ -49,7 +56,11 @@
     if (sim === "aberta" && !w.aberta) { now = new Date(w.ini.getTime() + 3.5 * DIA); w = calc(now); }
     if (sim === "fechada" && w.aberta) { now = new Date(w.fim.getTime() + DIA); w = calc(now); }
     const producao = new Date(w.fim.getTime() + 1000);
-    const entrega = new Date(w.fim.getTime() + cfg.entregaDias * DIA);
+    /* dias úteis: pula sábado, domingo e feriados nacionais de data fixa */
+    const FERIADOS = ["1-1", "21-4", "1-5", "7-9", "12-10", "2-11", "15-11", "20-11", "25-12"];
+    const util = (d) => d.getDay() !== 0 && d.getDay() !== 6 && !FERIADOS.includes(`${d.getDate()}-${d.getMonth() + 1}`);
+    const entrega = new Date(w.fim);
+    for (let n = 0; n < cfg.entregaDiasUteis;) { entrega.setDate(entrega.getDate() + 1); if (util(entrega)) n++; }
     const diasPara = (d) => Math.max(0, Math.ceil((d - now) / DIA));
     const dia = (d) => (d.getDate() === 1 ? "1º" : String(d.getDate()));
     const longa = (d) => `${dia(d)} de ${MESES[d.getMonth()]}`;
@@ -60,7 +71,7 @@
     const quando = w.aberta
       ? (nFecha <= 1 ? "Fecha hoje, às 23h59" : `Fecha em ${nFecha} dias`)
       : (nAbre <= 1 ? "Abre amanhã" : `Abre em ${nAbre} dias`);
-    return { ...w, producao, entrega, longa, curta, safra, periodo, quando, entregaDias: cfg.entregaDias };
+    return { ...w, producao, entrega, longa, curta, safra, periodo, quando, entregaDias: cfg.entregaDiasUteis, diasJanela: cfg.diaFim - cfg.diaInicio + 1 };
   })();
 
   /* ---------- Cupom e frete ---------- */
@@ -75,7 +86,9 @@
   };
 
   /* ---------- Cabeçalho, rodapé e sacola (comuns às páginas) ---------- */
-  function chrome() {
+  /* faixa da safra + cabeçalho: entram antes do conteúdo (app.js roda no início do <body>),
+     assim nada empurra a página para baixo depois que ela aparece */
+  function chromeTop() {
     document.body.insertAdjacentHTML("afterbegin", `
       <div class="janela-bar">
         <a href="index.html#encomenda" class="janela-bar__main">
@@ -89,7 +102,7 @@
         <a class="logo" href="index.html" aria-label="Siriguela, página inicial">${logo()}</a>
         <nav class="head__nav" aria-label="Principal">
           <a href="index.html#colecao">Coleção</a>
-          <a href="index.html#encomenda">Encomenda</a>
+          <a href="index.html#encomenda">Como funciona?</a>
           <a href="index.html#indice">Índice</a>
           <a href="index.html#sobre">Sobre</a>
         </nav>
@@ -99,7 +112,9 @@
         </div>
       </header>
       <div class="head-dot" aria-hidden="true"><span class="logo">${logo()}</span></div>`);
+  }
 
+  function chrome() {
     document.body.insertAdjacentHTML("beforeend", `
       <footer>
         <div class="foot">
@@ -131,7 +146,7 @@
         </div>
       </footer>
       <div class="scrim" data-close-bag></div>
-      <aside class="bag" aria-label="Sacola" aria-hidden="true" data-lenis-prevent>
+      <aside class="bag" aria-label="Sacola" aria-hidden="true" inert data-lenis-prevent>
         <div class="bag__head mono">
           <span>Sacola</span>
           <button data-close-bag>Fechar ✕</button>
@@ -199,7 +214,7 @@
     list.innerHTML = `<p class="bag__safra idx">Encomenda · ${J.safra}</p>` + items.map((i, idx) => {
       const p = bySlug(i.slug);
       return `<div class="line">
-        <a href="${urlDe(p)}"><img src="${img(p, "frente")}" alt="Sunga ${p.nome}"></a>
+        <a href="${urlDe(p)}"><img ${pic(img(p, "frente"), "120px")} alt="Sunga ${p.nome}"></a>
         <div>
           <div class="line__name">${p.nome}</div>
           <div class="mono mute">Tam. ${i.size} · feita sob encomenda</div>
@@ -239,8 +254,8 @@
            <p class="bag__note">Sua sacola fica guardada até lá.</p>`}`;
   }
 
-  const openBag = () => { document.body.classList.add("is-bag"); $(".bag").setAttribute("aria-hidden", "false"); window.siriguelaLenis?.stop(); };
-  const closeBag = () => { document.body.classList.remove("is-bag"); $(".bag").setAttribute("aria-hidden", "true"); window.siriguelaLenis?.start(); };
+  const openBag = () => { document.body.classList.add("is-bag"); $(".bag").setAttribute("aria-hidden", "false"); $(".bag").inert = false; window.siriguelaLenis?.stop(); };
+  const closeBag = () => { document.body.classList.remove("is-bag"); $(".bag").setAttribute("aria-hidden", "true"); $(".bag").inert = true; window.siriguelaLenis?.start(); };
 
   let toastT;
   function toast(msg) {
@@ -296,17 +311,18 @@
     /* card deitado ou quadrado usa a foto horizontal (o recorte só tira fundo das laterais);
        card em pé usa a vertical. Assim rosto e sunga nunca saem do quadro. */
     const v = look.r === "32" || look.r === "11" ? "" : "-v";
-    const pic = (f) => `assets/produtos/${p.slug}/${f}${v}.jpg`;
+    const foto = (f) => `assets/produtos/${p.slug}/${f}${v}.jpg`;
+    const tam = look.q ? "(max-width: 600px) 72vw, 30vw" : look.c ? "(max-width: 600px) 100vw, 50vw" : "(max-width: 1000px) 50vw, 25vw";
     /* cards pequenos (q): quadrado de perto, centrado na sunga; frente do "no corpo, de perto", costas recortada */
-    const frente = look.q ? `assets/produtos/${p.slug}/recorte-q.jpg` : pic("modelo");
-    const costas = look.q ? `assets/produtos/${p.slug}/costas-q.jpg` : pic("costas-modelo");
+    const frente = look.q ? `assets/produtos/${p.slug}/recorte-q.jpg` : foto("modelo");
+    const costas = look.q ? `assets/produtos/${p.slug}/costas-q.jpg` : foto("costas-modelo");
     return `<a class="card ${look.c} r${look.r}" href="${urlDe(p)}" style="--piso:${p.piso || "var(--soft)"}">
       <div class="card__media">
         <div class="flip" data-flip>
-          <img class="flip__f" src="${frente}" alt="Sunga ${p.nome} no corpo, de frente" loading="lazy">
-          <img class="flip__b" src="${costas}" alt="Sunga ${p.nome} no corpo, de costas" loading="lazy">
+          <img class="flip__f" ${pic(frente, tam)} alt="Sunga ${p.nome} no corpo, de frente" loading="lazy">
+          <img class="flip__b" ${pic(costas, tam)} alt="Sunga ${p.nome} no corpo, de costas" loading="lazy">
         </div>
-        <div class="card__piso" aria-hidden="true"><img src="${img(p, "frente")}" alt="" loading="lazy"></div>
+        <div class="card__piso" aria-hidden="true"><img ${pic(look.r === "32" ? img(p, "frente") : `assets/produtos/${p.slug}/piso-v.jpg`, tam)} alt="" loading="lazy"></div>
       </div>
       <div class="card__meta"><span class="idx">${num(i)}</span><span class="card__name">${p.nome}</span><span class="card__price">${brl(S.preco)}</span></div>
       <div class="card__sub"><span>${p.origem}</span><span class="idx">${J.aberta ? `Encomenda até ${J.curta(J.fim)}` : `Abre ${J.curta(J.ini)}`}</span></div>
@@ -377,9 +393,9 @@
 
     $("[data-janela-status]").textContent = `${J.safra} · ${J.quando}`;
     const passos = [
-      { t: "Encomenda", d: J.periodo, p: "A safra fica aberta por dez dias. Você escolhe a estampa e o tamanho e garante a sua." },
+      { t: "Encomenda", d: J.periodo, p: `A safra fica aberta por ${EXTENSO[J.diasJanela] || J.diasJanela} dias. Você escolhe a estampa e o tamanho e garante a sua.` },
       { t: "Produção", d: `a partir de ${J.longa(J.producao)}`, p: "Quando a janela fecha, a gente corta e costura só o que foi encomendado. Cada peça tem dono antes de existir." },
-      { t: "Entrega", d: `até ${J.longa(J.entrega)}`, p: `A sunga chega em casa em até ${J.entregaDias} dias depois do fechamento. Frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
+      { t: "Entrega", d: `até ${J.longa(J.entrega)}`, p: `A sunga chega em casa em até ${J.entregaDias} dias úteis depois do fechamento. Frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
     ];
     $("[data-steps]").innerHTML = passos.map((s, k) => `
       <li class="step${J.aberta && k === 0 ? " is-now" : ""}">
@@ -398,7 +414,7 @@
         <span class="index__from">${p.origem}</span>
         <span class="idx index__coord">${p.coord}</span>
         <span class="index__go" aria-hidden="true">→</span>
-        <span class="index__thumb" aria-hidden="true"><img src="${img(p, "estampa")}" alt="" loading="lazy"></span>
+        <span class="index__thumb" aria-hidden="true"><img ${pic(img(p, "estampa"), "240px")} alt="" loading="lazy"></span>
       </a></li>`).join("");
 
     const grid = $("[data-grid]");
@@ -429,11 +445,18 @@
     $("[data-gallery]").innerHTML = `
       <div class="gallery" data-track>${p.fotos.map((f, k) => `
         <figure${(p.vertical || []).includes(f) ? ' class="is-v"' : ""}>
-          <span class="gallery__ph"><img src="${(p.vertical || []).includes(f) ? `assets/produtos/${p.slug}/${f}-v.jpg` : img(p, f)}" alt="Sunga ${p.nome}: ${S.legendas[f].toLowerCase()}" ${k > 1 ? 'loading="lazy"' : ""}></span>
+          <span class="gallery__ph"><img ${((a) => (k > 1 ? a.replace(/\b(srcset|src)=/g, "data-$1=") : a))(pic((p.vertical || []).includes(f) ? `assets/produtos/${p.slug}/${f}-v.jpg` : img(p, f), k === 0 ? "(max-width: 700px) 100vw, 58vw" : "(max-width: 700px) 100vw, 29vw"))} alt="Sunga ${p.nome}: ${S.legendas[f].toLowerCase()}" ${k > 1 ? "data-adiada" : 'fetchpriority="high"'}></span>
           <figcaption class="mono">${S.legendas[f]}</figcaption>
         </figure>`).join("")}
       </div>
       <span class="gallery__count mono" data-counter>1 / ${p.fotos.length}</span>`;
+    /* da 3ª foto em diante, só baixa quando chega perto da tela: no 4G a primeira foto não divide a banda */
+    const adiadas = $$("[data-adiada]");
+    const solta = (im) => { im.srcset = im.dataset.srcset; im.src = im.dataset.src; delete im.dataset.adiada; };
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { io.unobserve(e.target); solta(e.target); } }), { rootMargin: "400px 0px" });
+      adiadas.forEach((im) => io.observe(im));
+    } else adiadas.forEach(solta);
     const track = $("[data-track]");
     track.addEventListener("scroll", () => {
       $("[data-counter]").textContent = `${Math.round(track.scrollLeft / track.clientWidth) + 1} / ${p.fotos.length}`;
@@ -467,7 +490,7 @@
         <details>
           <summary class="mono">Encomenda e entrega</summary>
           <div class="acc__body">
-            <p>Esta sunga é feita depois do seu pedido. As encomendas ficam abertas do dia ${S.janela.diaInicio} ao dia ${S.janela.diaFim} de cada mês; quando a janela fecha, a produção começa e a entrega chega em até ${J.entregaDias} dias.</p>
+            <p>Esta sunga é feita depois do seu pedido. As encomendas ficam abertas do dia ${S.janela.diaInicio} ao dia ${S.janela.diaFim} de cada mês; quando a janela fecha, a produção começa e a entrega chega em até ${J.entregaDias} dias úteis.</p>
             <p>Nada de estoque parado nem de sobra de coleção: só existe a peça que alguém encomendou.</p>
             <p>Enviamos para todo o Brasil, com frete grátis a partir de ${brl(S.freteGratisAPartir)}. Troca em até 30 dias, com a peça sem uso e com etiqueta.</p>
           </div>
@@ -533,19 +556,48 @@
     track.appendChild(clone);
     const vids = [...track.querySelectorAll("video")];
     const calmo = matchMedia("(prefers-reduced-motion: reduce)");
-    const tocar = (on) => vids.forEach((v) => {
+    // só toca o vídeo que está na tela (a faixa tem 14, mas uns 4 aparecem por vez)
+    const visiveis = new Set();
+    const ajusta = (v) => {
       v.muted = true;
-      if (on && !calmo.matches) { const p = v.play(); if (p) p.catch(() => {}); } else v.pause();
-    });
-    new IntersectionObserver(([e]) => tocar(e.isIntersecting)).observe(track);
-    calmo.addEventListener("change", () => tocar(!calmo.matches));
+      if (visiveis.has(v) && !calmo.matches && !document.hidden) { const p = v.play(); if (p) p.catch(() => {}); } else v.pause();
+    };
+    const io = new IntersectionObserver((es) => es.forEach((e) => {
+      e.isIntersecting ? visiveis.add(e.target) : visiveis.delete(e.target);
+      ajusta(e.target);
+    }), { rootMargin: "0px 25% 0px 25%" });
+    vids.forEach((v) => { v.removeAttribute("autoplay"); io.observe(v); });
+    calmo.addEventListener("change", () => vids.forEach(ajusta));
+    document.addEventListener("visibilitychange", () => vids.forEach(ajusta));
     if (calmo.matches) vids.forEach((v) => { v.removeAttribute("autoplay"); v.pause(); });
   }
 
-  reel();
-  chrome();
-  if (document.body.dataset.page === "home") home();
-  if (document.body.dataset.page === "produto") product();
-  render();
-  flips();
+  chromeTop();
+  const init = () => {
+    reel();
+    chrome();
+    if (document.body.dataset.page === "home") home();
+    if (document.body.dataset.page === "produto") product();
+    render();
+    flips();
+    movimento();
+  };
+
+  /* Lenis + GSAP só entram depois que a página carregou: a primeira pintura não espera
+     ~100 KB de animação (e quem pede movimento reduzido nem baixa) */
+  function movimento() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const carrega = () => ["assets/vendor/lenis.min.js", "assets/vendor/gsap.min.js", "assets/vendor/ScrollTrigger.min.js", "assets/js/movimento.js"]
+      .forEach((src) => { const s = document.createElement("script"); s.src = src; s.async = false; document.body.appendChild(s); });
+    // espera a página carregar e dois quadros já desenhados
+    const depois = () => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(carrega, 120)));
+    if (document.readyState === "complete") depois();
+    else addEventListener("load", depois, { once: true });
+  }
+  /* a página chama siriguelaInit() logo depois do </main>, antes dos scripts de animação
+     (que vêm de CDN com defer); assim a galeria não espera por eles */
+  let foi = false;
+  window.siriguelaInit = () => { if (!foi) { foi = true; init(); } };
+  if (document.readyState !== "loading") window.siriguelaInit();
+  else document.addEventListener("DOMContentLoaded", window.siriguelaInit);
 })();
