@@ -36,9 +36,19 @@ A loja funciona sob encomenda: a safra abre todo mês do dia 1 ao 7, a produçã
 
 Para ver a loja com a janela aberta fora do período, abra `?janela=aberta` (ou `?janela=fechada`). A escolha vale até fechar a aba.
 
+## Checkout Nextout
+
+A sacola envia os itens para `POST /api/checkout`. O worker `siriguela-checkout` usa o catálogo do repositório para conferir tamanho, preço e disponibilidade, e só cria links entre os dias 1 e 7 no horário de Brasília. Uma lista opcional `esgotados: ["M", "GG"]` em cada produto bloqueia novas encomendas desses tamanhos. Mudanças no catálogo ou nas regras de venda precisam ser publicadas também no worker: `npx wrangler deploy --config checkout/wrangler.jsonc`.
+
+Para ativar a loja:
+
+1. No painel Nextout, conecte o gateway que recebe as vendas e cadastre `checkout.siriguela.site` em Domínio. Depois de o painel associar o domínio à loja, publique o registro DNS indicado por ele no Cloudflare.
+2. Configure a origem dos envios, o peso e as dimensões reais da embalagem. Confira frete grátis a partir de R$ 399,90 após o desconto, cartão em até 3× sem juros e o cupom `SIRIGUELA10` de 10% exclusivo para primeira compra. A API pública só recebe itens e campanha. O cliente informa o cupom no checkout e o painel precisa verificar a elegibilidade.
+3. Em Produtos → Integração via API, gere a chave e salve-a como secret `NEXTOUT_KEY` nas configurações do worker `siriguela-checkout`. O valor fica só no Cloudflare. A rota passa a usá-lo sem alterar o código.
+
+Na homologação, confira uma sacola com duas estampas, o desconto de primeira compra, o CEP, o parcelamento e o pedido no painel. O modo de prévia da vitrine não libera pagamentos fora da safra. A Nextout documenta que links da API não expiram. O bloqueio local se aplica à criação de novos links, e o encerramento de um link já emitido depende da Nextout. As confirmações dos pedidos dessa integração são acompanhadas no painel.
+
 ## Ainda não conectado
 
-- Checkout (o botão "Finalizar compra" só mostra um aviso)
 - Formulário da lista de e-mail e o aviso de abertura da safra
-- Cupom: o site aceita SIRIGUELA10 em qualquer compra; a regra de primeira compra precisa ser conferida no pagamento
 - Links de Instagram, TikTok, contato, trocas e envio no rodapé

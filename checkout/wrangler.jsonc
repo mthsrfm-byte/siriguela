@@ -1,0 +1,9 @@
+{
+  "name": "siriguela-checkout",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-20",
+  "workers_dev": false,
+  "routes": [{ "pattern": "siriguela.site/api/checkout", "zone_name": "siriguela.site" }],
+  "ratelimits": [{ "name": "LIMITE", "namespace_id": "28932", "simple": { "limit": 30, "period": 60 } }],
+  "observability": { "enabled": true, "traces": { "enabled": true } }
+}

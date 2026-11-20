@@ -30,7 +30,7 @@
   const logo = () => `<svg class="logo__svg" viewBox="-29 -787 3922 1062" role="img" aria-label="Siriguela"><path fill="currentColor" d="${LOGO_PATH}"/><ellipse class="logo__dot" cx="3748" cy="-110" rx="85" ry="110" transform="rotate(-12 3748 -110)"/></svg>`;
 
   /* ---------- Janela de encomenda ----------
-     Cada mês é uma safra: encomendas do dia 1 ao 10, produção depois que a
+     Cada mês é uma safra: encomendas do dia 1 ao 7, produção depois que a
      janela fecha, entrega em até N dias úteis. Tudo que o site diz sobre prazo sai daqui. */
   const MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
   const DIA = 86400000;
@@ -51,7 +51,10 @@
       if (now <= fecha(y, m)) return { aberta: true, ini: abre(y, m), fim: fecha(y, m) };
       return { aberta: false, ini: abre(y, m + 1), fim: fecha(y, m + 1) };
     };
-    let now = new Date();
+    const horario = new Intl.DateTimeFormat("sv-SE", {
+      timeZone: "America/Sao_Paulo", dateStyle: "short", timeStyle: "medium"
+    }).format(new Date());
+    let now = new Date(horario.replace(" ", "T"));
     let w = calc(now);
     if (sim === "aberta" && !w.aberta) { now = new Date(w.ini.getTime() + 3.5 * DIA); w = calc(now); }
     if (sim === "fechada" && w.aberta) { now = new Date(w.fim.getTime() + DIA); w = calc(now); }
@@ -240,9 +243,10 @@
     foot.innerHTML = `
       <div class="bag__row"><span class="mute">Subtotal</span><span>${brl(c.sub)}</span></div>
       ${cupom}
+      ${cupomAtivo() ? `<p class="bag__note">Use ${S.cupom.codigo} no pagamento para confirmar o desconto da primeira compra.</p>` : ""}
       <div class="bag__row"><span class="mute">Frete</span><span>${c.gratis ? "Grátis" : `<span class="mute">no pagamento</span>`}</span></div>
       <p class="bag__frete">${freteFrase(c)}</p>
-      <div class="bag__row total"><span>Total</span><span>${brl(c.produtos)}</span></div>
+      <div class="bag__row total"><span>${cupomAtivo() ? "Total com cupom" : "Total"}</span><span>${brl(c.produtos)}</span></div>
       ${J.aberta
         ? `<button class="btn btn--full" data-checkout>Finalizar encomenda <span>→</span></button>
            <p class="bag__note">Produção a partir de ${J.longa(J.producao)}. Chega até ${J.longa(J.entrega)}.<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.produtos)} sem juros</span></p>`
@@ -268,6 +272,39 @@
     } catch { toast(`Cupom: ${txt}`); }
   };
 
+  const parametros = new URLSearchParams(location.search);
+  const campanha = Object.fromEntries(["source", "medium", "campaign", "content", "term"]
+    .filter(k => parametros.has("utm_" + k)).map(k => [k, parametros.get("utm_" + k)]));
+  try {
+    if (Object.keys(campanha).length) sessionStorage.setItem("siriguela.campanha", JSON.stringify(campanha));
+  } catch {}
+
+  let iniciandoPagamento = false;
+  async function finalizar(botao) {
+    if (iniciandoPagamento) return;
+    iniciandoPagamento = true;
+    botao.disabled = true;
+    const rotulo = botao.innerHTML;
+    botao.textContent = "Abrindo pagamento…";
+    let utm = campanha;
+    try { utm = JSON.parse(sessionStorage.getItem("siriguela.campanha")) || campanha; } catch {}
+    try {
+      const resposta = await fetch("/api/checkout", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items: bag.get(), utm }), signal: AbortSignal.timeout(16000)
+      });
+      const dados = await resposta.json();
+      if (resposta.ok && dados.url) location.assign(dados.url);
+      else toast(dados.erro || "Não foi possível abrir o pagamento. Tente novamente.");
+    } catch {
+      toast("Não foi possível abrir o pagamento. Sua sacola está salva.");
+    } finally {
+      iniciandoPagamento = false;
+      botao.disabled = false;
+      botao.innerHTML = rotulo;
+    }
+  }
+
   document.addEventListener("click", (e) => {
     const t = e.target.closest("[data-open-bag],[data-close-bag],[data-q],[data-rm],[data-checkout],[data-cupom-rm],[data-copy]");
     if (!t) return;
@@ -277,7 +314,7 @@
     else if (t.matches("[data-rm]")) bag.rm(+t.dataset.rm);
     else if (t.matches("[data-cupom-rm]")) { store.set(CUPOM_KEY, null); render(); }
     else if (t.matches("[data-copy]")) copiar(t.dataset.copy);
-    else if (t.matches("[data-checkout]")) toast("Pagamento ainda não conectado.");
+    else if (t.matches("[data-checkout]")) finalizar(t);
   });
   document.addEventListener("submit", (e) => {
     const f = e.target.closest("[data-coupon]");
@@ -491,7 +528,7 @@
       <div class="picker" data-picker>
         <div class="picker__head mono"><span>Tamanho</span><a href="#medidas-pdp" data-open-sizes>Medidas</a></div>
         <div class="picker__opts" role="radiogroup" aria-label="Tamanho">
-          ${S.tamanhos.map((t) => `<button class="size" role="radio" aria-checked="false" data-size="${t}">${t}</button>`).join("")}
+          ${S.tamanhos.map((t) => `<button class="size" role="radio" aria-checked="false" data-size="${t}" ${p.esgotados?.includes(t) ? "disabled" : ""}>${t}${p.esgotados?.includes(t) ? " · esgotado" : ""}</button>`).join("")}
         </div>
         ${p.modelo ? `<p class="picker__modelo">O modelo tem ${p.modelo.altura} m e veste ${p.modelo.veste}.</p>` : ""}
         <p class="picker__msg mono mute" data-msg>Corte justo. Na dúvida, vá no maior.</p>
