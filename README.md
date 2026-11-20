@@ -27,6 +27,7 @@ Abra http://localhost:5190
 - `assets/produtos/<slug>/`: fotos de cada sunga (frente, modelo, costas, detalhe, estampa, inspiracao). O site usa as versões `.w640/.w1080/.w1600.webp` (o navegador escolhe pelo `srcset`); gere de novo com `python3 scripts/variantes-webp.py` sempre que trocar ou incluir uma foto. `piso-v.jpg` é a frente 9:16 que aparece no hover dos cards.
 - `assets/fonts/` + `assets/css/fonts.css`: Instrument Sans e IBM Plex Mono hospedadas no próprio site (sem Google Fonts).
 - Desempenho: Lighthouse acima de 90 em tudo (home e produto, celular e computador). Para manter: fotos novas sempre pelo `variantes-webp.py`, vídeos da faixa nas três versões acima (~1–2 MB cada) e nada de script novo no `<head>`.
+- Página de produto ("Capa", celular e computador): a primeira foto é a sunga no chão em 3:2, com o nome gigante encostado nela e a compra logo abaixo; as outras fotos seguem num mosaico. Sunga com `recorte: true` no `produtos.js` usa a sunga recortada (PNG transparente) no lugar da foto: o original fica em `_originais-fotos/<slug>/solta.png` e o site usa `assets/produtos/<slug>/solta.w640/w1080/w1448.webp` (WebP com transparência, gerado com Pillow). Depois de marcar uma sunga nova, rode `python3 scripts/gerar-paginas.py`.
 - `assets/produtos/grades/`: as grades originais de onde as fotos foram recortadas
 
 ## Encomenda

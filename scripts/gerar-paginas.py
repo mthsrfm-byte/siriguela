@@ -20,6 +20,8 @@ catalogo = open(os.path.join(RAIZ, "assets", "js", "produtos.js"), encoding="utf
 slugs = re.findall(r'slug:\s*"([^"]+)"', catalogo)
 nomes = re.findall(r'nome:\s*"([^"]+)"', catalogo)
 chamadas = re.findall(r'chamada:\s*"([^"]+)"', catalogo)
+# sungas com capa recortada (PNG transparente em WebP: solta.w640/1080/1448.webp)
+recortes = set(re.findall(r'slug:\s*"([^"]+)",\s*recorte:\s*true', catalogo))
 modelo = open(os.path.join(RAIZ, "produto.html"), encoding="utf-8").read()
 
 # começa do zero para não sobrar página de sunga que saiu do catálogo
@@ -39,13 +41,12 @@ for slug, nome, chamada in zip(slugs, nomes, chamadas):
     html = re.sub(r'<meta property="og:url" content="([^"]*)">',
                   lambda m: f'<meta property="og:url" content="{m.group(1)}colecao1/sunga/{slug}/">', html, count=1)
     # primeiras fotos da galeria já pedidas no <head> (o app.js só monta a galeria depois)
-    def pre(f, sizes, media=""):
+    def pre(f, sizes, larguras=(640, 1080, 1600)):
         b = f"assets/produtos/{slug}/{f}"
-        m = f' media="{media}"' if media else ""
-        return (f'  <link rel="preload" as="image" fetchpriority="high"{m} imagesrcset="{b}.w640.webp 640w, '
-                f'{b}.w1080.webp 1080w, {b}.w1600.webp 1600w" imagesizes="{sizes}">\n')
-    html = html.replace('  <link rel="icon"', pre("frente", "(max-width: 700px) 100vw, 58vw")
-                        + pre("modelo-v", "100vw", "(max-width: 700px)") + '  <link rel="icon"', 1)
+        srcset = ", ".join(f"{b}.w{w}.webp {w}w" for w in larguras)
+        return f'  <link rel="preload" as="image" fetchpriority="high" imagesrcset="{srcset}" imagesizes="{sizes}">\n'
+    capa = pre("solta", "(max-width: 700px) 88vw, 58vw", (640, 1080, 1448)) if slug in recortes else pre("frente", "100vw")
+    html = html.replace('  <link rel="icon"', capa + '  <link rel="icon"', 1)
     destino = os.path.join(PASTA, slug)
     os.makedirs(destino, exist_ok=True)
     with open(os.path.join(destino, "index.html"), "w", encoding="utf-8") as f:

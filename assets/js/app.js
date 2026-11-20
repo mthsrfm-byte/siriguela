@@ -426,7 +426,7 @@
         <span class="index__from">${p.origem}</span>
         <span class="idx index__coord">${p.coord}</span>
         <span class="index__go" aria-hidden="true">→</span>
-        <span class="index__thumb" aria-hidden="true"><img ${pic(img(p, "estampa"), "240px")} alt="" loading="lazy"></span>
+        <span class="index__thumb" aria-hidden="true"><img ${pic(img(p, "estampa"), "400px")} alt="" loading="lazy"></span>
       </a></li>`).join("");
 
     const grid = $("[data-grid]");
@@ -453,11 +453,16 @@
     document.title = `${p.nome} · Siriguela`;
     $('meta[name="description"]').setAttribute("content", `Sunga ${p.nome}. ${p.chamada} ${brl(S.preco)}, feita sob encomenda, do P ao GG.`);
     $("[data-crumb]").textContent = p.nome;
+    /* sunga recortada (só quem tem `recorte: true`): WebP transparente de 640/1080/1448 px */
+    const soltaAttrs = (q) => {
+      const b = `assets/produtos/${q.slug}/solta`;
+      return `src="${b}.w1080.webp" srcset="${b}.w640.webp 640w, ${b}.w1080.webp 1080w, ${b}.w1448.webp 1448w" sizes="(max-width: 700px) 88vw, 58vw"`;
+    };
 
     $("[data-gallery]").innerHTML = `
       <div class="gallery" data-track>${p.fotos.map((f, k) => `
         <figure${(p.vertical || []).includes(f) ? ' class="is-v"' : ""}>
-          <span class="gallery__ph"><img ${((a) => (k > 1 ? a.replace(/\b(srcset|src)=/g, "data-$1=") : a))(pic((p.vertical || []).includes(f) ? `assets/produtos/${p.slug}/${f}-v.jpg` : img(p, f), k === 0 ? "(max-width: 700px) 100vw, 58vw" : "(max-width: 700px) 100vw, 29vw"))} alt="Sunga ${p.nome}: ${S.legendas[f].toLowerCase()}" ${k > 1 ? "data-adiada" : 'fetchpriority="high"'}></span>
+          <span class="gallery__ph"><img ${((a) => (k > 1 ? a.replace(/\b(srcset|src)=/g, "data-$1=") : a))(k === 0 && p.recorte ? soltaAttrs(p) : pic((p.vertical || []).includes(f) ? `assets/produtos/${p.slug}/${f}-v.jpg` : img(p, f), k === 0 ? "100vw" : "(max-width: 700px) 100vw, 50vw"))} alt="Sunga ${p.nome}: ${S.legendas[f].toLowerCase()}" ${k > 1 ? "data-adiada" : 'fetchpriority="high"'}></span>
           <figcaption class="mono">${S.legendas[f]}</figcaption>
         </figure>`).join("")}
       </div>
@@ -555,6 +560,73 @@
     });
 
     $("[data-more]").innerHTML = [1, 2, 3, 4].map((k) => S.produtos[(i + k) % total]).map((q) => card(q)).join("");
+
+    /* "Capa" (celular e computador): a ficha entra logo depois da primeira foto, com o nome
+       gigante encostado nela; as outras fotos seguem num mosaico (style.css). */
+    const ficha = $("[data-info]");
+    $(".gallery figure").after(ficha);
+    /* nome gigante: se não couber na largura (Mandacaru no celular), encolhe só o quanto precisa */
+    const nome = ficha.querySelector("h1");
+    encaixaNome(nome);
+    document.fonts.ready.then(() => encaixaNome(nome));
+    if (p.recorte) capaRecortada(p, ficha);
+    else addEventListener("resize", () => requestAnimationFrame(() => encaixaNome(nome)));
+  }
+
+  function encaixaNome(h1) {
+    h1.style.fontSize = "";
+    const caixa = h1.parentElement, cs = getComputedStyle(caixa);
+    const livre = caixa.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const r = document.createRange();
+    r.selectNodeContents(h1);
+    const largura = r.getBoundingClientRect().width;
+    if (largura > livre) h1.style.fontSize = `${(parseFloat(getComputedStyle(h1).fontSize) * livre / largura * 0.98).toFixed(1)}px`;
+  }
+
+  /* Capa com a sunga recortada (PNG transparente em WebP): a sunga fica solta no linho, desce
+     mais devagar que a página (parallax leve, também no toque) e o nome passa ~12% da altura das
+     maiúsculas por baixo do ponto mais baixo dela, medido na transparência da imagem. */
+  function capaRecortada(p, ficha) {
+    const POR_BAIXO = 0.12;
+    const fig = $(".gallery figure"), img = fig.querySelector("img");
+    document.body.classList.add("com-recorte");
+    img.alt = `Sunga ${p.nome}, recortada, de frente`;
+    Object.assign(fig.dataset, { scroll: "", scrollSpeed: "-0.1", scrollDelay: "0.09", scrollEnableTouchSpeed: "" });
+
+    let fim = 1; // onde a sunga termina dentro da imagem (fração da altura), olhando o miolo de 30% da largura
+    const mede = () => {
+      try {
+        const c = document.createElement("canvas");
+        const w = (c.width = 300), h = (c.height = Math.round(300 * img.naturalHeight / img.naturalWidth));
+        const g = c.getContext("2d");
+        g.drawImage(img, 0, 0, w, h);
+        const px = g.getImageData(0, 0, w, h).data;
+        for (let y = h - 1; y >= 0; y--) {
+          for (let x = Math.round(w * .35); x < w * .65; x++) if (px[(y * w + x) * 4 + 3] > 40) { fim = (y + 1) / h; return; }
+        }
+      } catch { fim = 0.97; }
+    };
+    const posiciona = () => {
+      const h1 = ficha.querySelector("h1");
+      encaixaNome(h1);
+      ficha.style.top = ficha.style.marginBottom = "";
+      ficha.style.top = "0px";
+      const cs = getComputedStyle(h1);
+      const c = document.createElement("canvas").getContext("2d");
+      c.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+      const m = c.measureText(h1.textContent);
+      const cap = c.measureText("H").actualBoundingBoxAscent;
+      const r = h1.getBoundingClientRect();
+      const base = r.top + (parseFloat(cs.lineHeight) - (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent)) / 2 + m.fontBoundingBoxAscent;
+      const ir = img.getBoundingClientRect();
+      const desvio = parseFloat((fig.style.translate || "0 0").split(" ")[1]) || 0; // o parallax não entra na conta
+      const d = ir.top - desvio + ir.height * fim - cap * POR_BAIXO - (base - cap);
+      ficha.style.top = `${d}px`;
+      ficha.style.marginBottom = `${40 + d}px`;
+    };
+    const pronto = () => { mede(); posiciona(); };
+    document.fonts.ready.then(() => (img.complete && img.naturalWidth ? pronto() : img.addEventListener("load", pronto, { once: true })));
+    addEventListener("resize", () => requestAnimationFrame(posiciona));
   }
 
   /* hero: faixa de vídeos. Duplica o conjunto (o CSS anda -50%, então o laço não pula),
@@ -629,7 +701,7 @@
      ~100 KB de animação (e quem pede movimento reduzido nem baixa) */
   function movimento() {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const carrega = () => ["assets/vendor/lenis.min.js", "assets/vendor/gsap.min.js", "assets/vendor/ScrollTrigger.min.js", "assets/js/movimento.js"]
+    const carrega = () => ["assets/vendor/lenis.min.js", "assets/vendor/gsap.min.js", "assets/vendor/ScrollTrigger.min.js", "assets/js/movimento.js", "assets/js/locomotiva.js"]
       .forEach((src) => { const s = document.createElement("script"); s.src = src; s.async = false; document.body.appendChild(s); });
     // espera a página carregar e dois quadros já desenhados
     const depois = () => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(carrega, 120)));

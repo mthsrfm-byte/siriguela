@@ -197,7 +197,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .index__thumb img { width: 100%; height: 100%; object-fit: cover; }
 @media (hover: hover) {
   .index__list a:hover .index__thumb { opacity: 1; transform: translateY(-50%) scale(1); }
-  .index__list a:hover .index__name { font-style: italic; }
   .index__list a:hover .index__go { color: var(--ponto); }
 }
 
@@ -555,3 +554,133 @@ html.lenis, html.lenis body { height: auto; }
 
 /* destaque da frase do hero: mesma fonte, só a cor da tinta */
 .hero__aside .hero__so { color: var(--ink); font-weight: var(--w-text); }
+
+/* ==========================================================
+   LOCOMOTIVA — efeitos ligados à rolagem (assets/js/locomotiva.js)
+   Tudo fica atrás de html.has-loco: sem JS ou com movimento reduzido, nada disso existe.
+   ========================================================== */
+
+/* item do menu da seção em que você está */
+.head__nav a.is-here { border-color: currentColor; }
+
+/* frases grandes: a tinta preenche palavra por palavra */
+.has-loco .ler { --tinta-ate: calc(var(--progress, 0) * 2.1 * (var(--wn) + 4) - 2); }
+.has-loco .ler .w {
+  display: inline-block;
+  opacity: clamp(.16, calc(var(--tinta-ate) - var(--wi)), 1);
+}
+
+/* títulos de seção: sobem por trás de uma linha, toda vez que entram */
+.has-loco .block__title .linha { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: .08em; margin-bottom: -.08em; }
+.has-loco .block__title .linha > span { display: inline-block; transform: translateY(105%); transition: transform .9s cubic-bezier(.2, .7, .2, 1); }
+.has-loco .block__title.is-inview .linha > span { transform: none; }
+
+/* grão leve sobre a estampa do Índice: ruído em SVG, sem baixar imagem */
+.index__thumb::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 160px; mix-blend-mode: multiply; opacity: .22;
+}
+
+/* ponto do "Só estampa.": cai, cresce e passa por baixo da faixa de vídeos (locomotiva.js) */
+.has-loco .hero__title .mask.solta { clip-path: inset(-.25em -100vw -200vh -.3em); }
+.has-loco .hero__title .ch--ponto { transform-origin: 50% 70%; will-change: translate, scale; }
+.reel { z-index: 1; }
+
+/* ==========================================================
+   PRODUTO NO CELULAR — "Capa"
+   1ª foto: a sunga no chão, 3:2, de ponta a ponta. O nome gigante sobe por cima dela,
+   a compra vem logo depois e o resto das fotos segue num mosaico de 6 colunas.
+   O app.js põe a ficha (.info) dentro da galeria só no celular.
+   ========================================================== */
+@media (max-width: 700px) {
+  .crumbs { padding-bottom: 12px; }
+  .gallery { grid-template-columns: repeat(6, minmax(0, 1fr)); column-gap: 8px; row-gap: 28px; }
+  .gallery > :is(figure, .info), .gallery figure:first-child { grid-column: 1 / -1; }
+  .gallery figure:first-of-type img { aspect-ratio: 3 / 2; }
+  .gallery figure:first-of-type figcaption { display: none; }
+
+  /* nome gigante encostado na base da foto */
+  .gallery .info { position: relative; z-index: 1; top: calc(-0.55em - 28px); margin-bottom: calc(40px - 0.55em - 28px); font-size: clamp(64px, 23vw, 120px); }
+  .gallery .info h1 { order: -1; margin: 0; font-size: 1em; line-height: .8; }
+  .gallery .info > :not(h1) { font-size: var(--t-body); }
+  .gallery .info .info__top { font-size: var(--t-idx); }
+
+  /* mosaico */
+  .gallery figure:nth-of-type(3) { grid-column: 2 / -1; }
+  .gallery figure:nth-of-type(4) { grid-column: 1 / span 3; }
+  .gallery figure:nth-of-type(5) { grid-column: 4 / span 3; margin-top: 64px; }
+  .gallery figure:nth-of-type(6) { grid-column: 1 / span 4; }
+  .gallery figure:nth-of-type(7) { grid-column: 3 / -1; }
+  .gallery figure:nth-of-type(8) { grid-column: 1 / span 3; }
+  .gallery figure:nth-of-type(9) { grid-column: 4 / span 3; margin-top: 40px; }
+  .gallery figure:is(:nth-of-type(4), :nth-of-type(5), :nth-of-type(8), :nth-of-type(9)) img { aspect-ratio: 3 / 4; }
+  .gallery figure:is(:nth-of-type(4), :nth-of-type(5), :nth-of-type(8), :nth-of-type(9)) figcaption { padding: 0; }
+}
+
+/* ==========================================================
+   PRODUTO NO COMPUTADOR — "Capa"
+   A mesma ideia do celular: capa de ponta a ponta, nome gigante encostado nela e,
+   embaixo, uma faixa editorial em 12 colunas (número · frase e detalhes · compra).
+   Depois, as outras fotos desencontradas na grade. Substitui a coluna fixa à direita.
+   ========================================================== */
+@media (min-width: 701px) {
+  .pdp { display: block; padding: 0 var(--pad); }
+  .gallery-wrap { grid-column: auto; }
+  /* o nome encolhe com a altura da tela, para capa + nome + 1ª linha da ficha caberem na primeira dobra */
+  .gallery { grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gap); row-gap: var(--fila); align-items: start; --fila: clamp(48px, 6vw, 112px); --nome: clamp(96px, min(17vw, 22svh), 300px); }
+  .gallery > :is(figure, .info), .gallery figure:first-child { grid-column: 1 / -1; }
+
+  /* capa: a sunga no chão, 3:2, de ponta a ponta */
+  .gallery figure:first-of-type { margin: 0 calc(var(--pad) * -1); }
+  .gallery figure:first-of-type img { aspect-ratio: 3 / 2; max-height: calc(100svh - 250px - var(--nome) * .45); }
+  .gallery figure:first-of-type figcaption { display: none; }
+
+  /* ficha */
+  .gallery .info {
+    position: relative; top: calc(-0.56em - var(--fila)); margin-bottom: calc(-0.56em - var(--fila) + 40px);
+    display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); column-gap: var(--gap); row-gap: 28px; align-items: start;
+    font-size: var(--nome);
+  }
+  .gallery .info > * { font-size: var(--t-body); }
+  .gallery .info h1 { grid-column: 1 / -1; grid-row: 1; margin: 0 0 clamp(8px, 1.4vw, 24px); font-size: 1em; line-height: .8; }
+  .gallery .info .info__top { grid-column: 1 / span 2; grid-row: 2; flex-direction: column; gap: 6px; font-size: var(--t-idx); }
+  .gallery .info .info__lede { grid-column: 3 / span 5; grid-row: 2; font-size: var(--t-lead); font-weight: var(--w-title); line-height: 1.04; letter-spacing: var(--track-title); color: var(--ink); }
+  .gallery .info .acc { grid-column: 3 / span 5; grid-row: 3 / span 3; margin-top: 24px; }
+  .gallery .info .info__price { grid-column: 9 / -1; grid-row: 2; }
+  .gallery .info .info__janela { grid-column: 9 / -1; grid-row: 3; margin: 0; }
+  .gallery .info .picker { grid-column: 9 / -1; grid-row: 4; }
+
+  /* mosaico */
+  .gallery figure:nth-of-type(2) { grid-column: 1 / span 6; }
+  .gallery figure:nth-of-type(3) { grid-column: 8 / span 4; margin-top: clamp(120px, 18vw, 300px); }
+  .gallery figure:nth-of-type(4) { grid-column: 3 / span 3; }
+  .gallery figure:nth-of-type(5) { grid-column: 7 / span 6; margin-top: clamp(40px, 6vw, 100px); }
+  .gallery figure:nth-of-type(6) { grid-column: 1 / span 7; }
+  .gallery figure:nth-of-type(7) { grid-column: 9 / span 4; margin-top: clamp(100px, 14vw, 240px); }
+  .gallery figure:nth-of-type(8) { grid-column: 2 / span 4; }
+  .gallery figure:nth-of-type(9) { grid-column: 7 / span 5; margin-top: clamp(60px, 8vw, 140px); }
+  .more { margin-top: clamp(40px, 6vw, 100px); }
+}
+
+/* ==========================================================
+   CAPA COM A SUNGA RECORTADA (sungas com `recorte: true` no catálogo)
+   PNG transparente em WebP (assets/produtos/<slug>/solta.w640/1080/1448.webp, original em
+   _originais-fotos/<slug>/solta.png). A sunga fica solta no linho e o nome passa ~12% por
+   baixo dela: o app.js mede a transparência e posiciona a ficha (top inline).
+   ========================================================== */
+.com-recorte .gallery figure:first-of-type { justify-self: center; position: relative; z-index: 2; pointer-events: none; }
+.com-recorte .gallery figure:first-of-type .gallery__ph { background: none; overflow: visible; }
+.com-recorte .gallery figure:first-of-type img { aspect-ratio: auto; max-height: none; object-fit: contain; background: none; filter: drop-shadow(0 18px 28px rgba(18, 18, 18, .10)); }
+.com-recorte .gallery .info { z-index: 1; }
+@media (max-width: 700px) {
+  .com-recorte .gallery figure:first-of-type { width: 88vw; margin: 4px 0 0; }
+  .com-recorte .gallery .info h1 { align-self: center; text-align: center; }
+}
+/* computador: tudo na primeira dobra. O nome encolhe com a altura da tela e a sunga ocupa o que sobra
+   (tela − faixa, menu e trilha ≈ 170 px − ¾ do nome − a primeira linha da ficha ≈ 120 px) */
+@media (min-width: 701px) {
+  .com-recorte .gallery figure:first-of-type { width: min(58vw, 980px, calc((100svh - 290px - var(--nome) * .75) * 1448 / 1086)); margin: 0; }
+  .com-recorte .gallery .info h1 { justify-self: center; text-align: center; }
+  .com-recorte .crumbs { padding-bottom: 4px; }
+}

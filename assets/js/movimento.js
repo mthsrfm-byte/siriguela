@@ -41,7 +41,7 @@
   const mm = gsap.matchMedia();
 
   /* Entrada dos blocos: opacidade e 8 px, como pede o branding. Só o que ainda está abaixo da tela. */
-  const entra = ".block__head, .card, .index__list li, .step, .order__why > div, .order__facts, .about__lead, .about__cols, .join__lead, .join__form, .sizes__table";
+  const entra = ".block__head, .card, .index__list li, .step, .order__why > div, .order__facts, .about__cols, .join__form, .sizes__table";
   const abaixo = gsap.utils.toArray(entra).filter((el) => el.getBoundingClientRect().top > innerHeight * 0.92);
   gsap.set(abaixo, { opacity: 0, y: 8 });
   ScrollTrigger.batch(abaixo, {

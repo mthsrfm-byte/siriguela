@@ -16,7 +16,7 @@ globalThis.SIRIGUELA = {
   tamanhos: ["P", "M", "G", "GG"],
   produtos: [
     {
-      slug: "pipa", modelo: { altura: "1,85", veste: "M" },
+      slug: "pipa", recorte: true, modelo: { altura: "1,85", veste: "M" },
       nome: "Pipa",
       origem: "Rio de Janeiro, RJ",
       coord: "22°57′S 43°10′W",
@@ -32,7 +32,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "caju", modelo: { altura: "1,80", veste: "M" },
+      slug: "caju", recorte: true, modelo: { altura: "1,80", veste: "M" },
       nome: "Caju",
       origem: "Fortaleza, CE",
       coord: "3°43′S 38°31′W",
@@ -48,7 +48,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "costas-modelo", "modelo", "frente", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "cobogo", modelo: { altura: "1,84", veste: "M" },
+      slug: "cobogo", recorte: true, modelo: { altura: "1,84", veste: "M" },
       nome: "Cobogó",
       origem: "Brasília, DF",
       coord: "15°47′S 47°52′W",
@@ -64,7 +64,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "mandacaru", modelo: { altura: "1,78", veste: "M" },
+      slug: "mandacaru", recorte: true, modelo: { altura: "1,78", veste: "M" },
       nome: "Mandacaru",
       origem: "Cabaceiras, PB",
       coord: "7°29′S 36°17′W",
@@ -80,7 +80,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "bacuri", modelo: { altura: "1,82", veste: "M" },
+      slug: "bacuri", recorte: true, modelo: { altura: "1,82", veste: "M" },
       nome: "Bacuri",
       origem: "Belém, PA",
       coord: "1°27′S 48°30′W",
@@ -96,7 +96,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "cupuacu", modelo: { altura: "1,83", veste: "M" },
+      slug: "cupuacu", recorte: true, modelo: { altura: "1,83", veste: "M" },
       nome: "Cupuaçu",
       origem: "Manaus, AM",
       coord: "3°07′S 60°01′W",
@@ -112,7 +112,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "pitanga", modelo: { altura: "1,80", veste: "M" },
+      slug: "pitanga", recorte: true, modelo: { altura: "1,80", veste: "M" },
       nome: "Pitanga",
       origem: "Salvador, BA",
       coord: "12°58′S 38°30′W",
