@@ -521,6 +521,8 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .reel { --reel-h: clamp(340px, 62vh, 680px); --reel-gap: var(--gap); --reel-dur: 70s;
   position: relative; overflow: hidden; margin: 0 calc(var(--pad) * -1); padding: 0; }
 /* véu das bordas: em vez de sumir no branco, o vídeo desfoca de leve perto da borda */
+.reel__play { position: absolute; top: 12px; left: 12px; z-index: 3; }
+.reel__play[hidden] { display: none; }
 .reel::before, .reel::after {
   content: ""; position: absolute; top: 0; bottom: 0; z-index: 2; width: clamp(28px, 5vw, 80px); pointer-events: none;
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
