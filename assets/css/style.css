@@ -521,8 +521,6 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .reel { --reel-h: clamp(340px, 62vh, 680px); --reel-gap: var(--gap); --reel-dur: 70s;
   position: relative; overflow: hidden; margin: 0 calc(var(--pad) * -1); padding: 0; }
 /* véu das bordas: em vez de sumir no branco, o vídeo desfoca de leve perto da borda */
-.reel__play { position: absolute; top: 12px; left: 12px; z-index: 3; }
-.reel__play[hidden] { display: none; }
 .reel::before, .reel::after {
   content: ""; position: absolute; top: 0; bottom: 0; z-index: 2; width: clamp(28px, 5vw, 80px); pointer-events: none;
   -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
@@ -533,9 +531,9 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .reel:hover .reel__track, .reel:focus-within .reel__track { animation-play-state: paused; }
 .reel__set { display: flex; gap: var(--reel-gap); padding-right: var(--reel-gap); }
 .reel__item { display: block; margin: 0; flex: none; width: calc(var(--reel-h) * 9 / 16); }
-.reel__item video { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: var(--soft); transition: filter .4s; }
-.reel:hover .reel__item video { filter: saturate(.75); }
-.reel:hover .reel__item:hover video { filter: none; }
+.reel__item :is(video, .reel__loop) { display: block; width: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: var(--soft); transition: filter .4s; }
+.reel:hover .reel__item :is(video, .reel__loop) { filter: saturate(.75); }
+.reel:hover .reel__item:hover :is(video, .reel__loop) { filter: none; }
 .reel figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; }
 @keyframes reel { to { transform: translate3d(-50%, 0, 0); } }
 @media (max-width: 640px) { .reel { --reel-h: 58vh; --reel-dur: 50s; } }

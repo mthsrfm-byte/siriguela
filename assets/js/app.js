@@ -558,7 +558,7 @@
   }
 
   /* hero: faixa de vídeos. Duplica o conjunto (o CSS anda -50%, então o laço não pula),
-     pausa tudo fora da tela e, com movimento reduzido, deixa os vídeos parados no pôster. */
+     toca os vídeos visíveis em loop e pausa o que sai da tela. */
   function reel() {
     const track = document.querySelector("[data-reel-track]");
     if (!track) return;
@@ -568,32 +568,33 @@
     clone.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", "-1"));
     track.appendChild(clone);
     const vids = [...track.querySelectorAll("video")];
-    const calmo = matchMedia("(prefers-reduced-motion: reduce)");
-    const rede = navigator.connection;
-    const poupa = rede && (rede.saveData || /2g/.test(rede.effectiveType || ""));
-    const botao = document.querySelector("[data-reel-play]");
     const visiveis = new Set();
-    const bloqueados = new Set();
-    let manual = false;
-    const permitido = () => manual || (!calmo.matches && !poupa);
+    const carregando = new WeakSet();
 
-    function mostraBotao() {
-      botao.hidden = permitido() && ![...visiveis].some(v => bloqueados.has(v));
+    // WebKit também aceita MP4 como imagem animada. Só troca o elemento
+    // quando a imagem carregar, para manter o pôster nos demais navegadores.
+    function usaAnimacao(v) {
+      if (carregando.has(v) || !v.isConnected) return;
+      carregando.add(v);
+      const imagem = new Image();
+      imagem.className = "reel__loop";
+      imagem.alt = v.getAttribute("aria-label") || "";
+      imagem.onload = () => {
+        io.unobserve(v);
+        visiveis.delete(v);
+        v.pause();
+        v.replaceWith(imagem);
+      };
+      imagem.src = v.querySelector("source").src;
     }
 
     function ajusta(v) {
-      if (!visiveis.has(v) || document.hidden || !permitido()) {
+      if (!visiveis.has(v) || document.hidden) {
         v.pause();
         return;
       }
-      v.play().then(() => {
-        bloqueados.delete(v);
-        mostraBotao();
-      }).catch(erro => {
-        if (erro.name !== "AbortError") {
-          bloqueados.add(v);
-          mostraBotao();
-        }
+      v.play().catch(erro => {
+        if (erro.name === "NotAllowedError") usaAnimacao(v);
       });
     }
 
@@ -603,7 +604,6 @@
         else visiveis.delete(e.target);
         ajusta(e.target);
       }
-      mostraBotao();
     });
     for (const v of vids) {
       v.defaultMuted = true;
@@ -611,18 +611,7 @@
       v.playsInline = true;
       io.observe(v);
     }
-    botao.addEventListener("click", () => {
-      manual = true;
-      visiveis.forEach(ajusta);
-      mostraBotao();
-    });
-    document.addEventListener("visibilitychange", () => vids.forEach(ajusta));
-    calmo.addEventListener("change", () => {
-      manual = false;
-      vids.forEach(ajusta);
-      mostraBotao();
-    });
-    mostraBotao();
+    document.addEventListener("visibilitychange", () => visiveis.forEach(ajusta));
   }
 
   chromeTop();
