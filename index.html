@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Siriguela · Sungas estampadas</title>
+  <meta name="description" content="Siriguela: só sungas estampadas, desenhadas a partir de pedaços do Brasil. R$ 249,90, feitas sob encomenda, do P ao GG.">
+  <meta name="theme-color" content="#F3EFE8">
+  <meta property="og:title" content="Siriguela · Sungas estampadas">
+  <meta property="og:description" content="Só estampa. Nenhuma sunga lisa.">
+  <meta property="og:image" content="assets/produtos/pipa/modelo.webp">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;1,400;1,500&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body data-page="home">
+
+  <main>
+    <section class="hero">
+      <!-- Manchete · versão C (Margem): título encosta na margem direita; à esquerda, descrição, safra e link -->
+      <div class="hero__foot hero--margem">
+        <div class="hero__aside">
+          <p>Sungas com estampas inspiradas em pedacinhos do Brasil. Nenhuma lisa, nunca. <strong class="hero__so">Somente sob encomenda.</strong></p>
+          <div class="hero__safra"><span class="idx" data-safra-nome>Safra de dezembro</span><span class="hero__datas" data-safra-datas>01/12 – 10/12</span></div>
+          <a class="link" href="#colecao">Ver a coleção</a>
+        </div>
+        <h1 class="hero__title" data-letras>Só estampa<span class="ponto" aria-hidden="true"></span><span class="sr">.</span></h1>
+      </div>
+      <!-- faixa de vídeos da campanha: rola da direita para a esquerda, sem fim (o app.js duplica o conjunto) -->
+      <div class="reel" data-reel>
+        <div class="reel__track" data-reel-track>
+          <div class="reel__set">
+            <a class="reel__item" href="colecao1/sunga/cobogo/"><video src="assets/video/cobogo.mp4" poster="assets/video/cobogo.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Cobogó: vídeo de campanha, Entre quadras, Brasília, DF"></video></a>
+            <a class="reel__item" href="colecao1/sunga/mandacaru/"><video src="assets/video/mandacaru.mp4" poster="assets/video/mandacaru.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Mandacaru: vídeo de campanha, Sol de avesso, Sertão"></video></a>
+            <a class="reel__item" href="colecao1/sunga/cupuacu/"><video src="assets/video/cupuacu.mp4" poster="assets/video/cupuacu.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Cupuaçu: vídeo de campanha, Cupuaçu no rio, Rio"></video></a>
+            <a class="reel__item" href="colecao1/sunga/pitanga/"><video src="assets/video/pitanga.mp4" poster="assets/video/pitanga.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Pitanga: vídeo de campanha, Pitanga no quintal, Quintal"></video></a>
+            <a class="reel__item" href="colecao1/sunga/pipa/"><video src="assets/video/pipa.mp4" poster="assets/video/pipa.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Pipa: vídeo de campanha, Pipa na laje, Laje, RJ"></video></a>
+            <a class="reel__item" href="colecao1/sunga/caju/"><video src="assets/video/caju.mp4" poster="assets/video/caju.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Caju: vídeo de campanha, Caju em negativo, Quintal"></video></a>
+            <figure class="reel__item"><video src="assets/video/ultraazul.mp4" poster="assets/video/ultraazul.jpg" muted loop playsinline autoplay preload="metadata" aria-label="Ultraazul: vídeo de campanha, Ultraazul, Lençóis, MA"></video></figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="colecao">
+      <header class="block__head">
+        <h2 class="block__title">Coleção 01</h2>
+        <span class="idx">7 estampas · R$ 249,90 · sob encomenda</span>
+      </header>
+      <div class="grid" data-grid></div>
+    </section>
+
+    <section class="block order" id="encomenda">
+      <header class="block__head">
+        <h2 class="block__title">Encomenda</h2>
+        <span class="idx" data-janela-status>Do dia 1 ao 10 de cada mês</span>
+      </header>
+      <p class="order__lead">Dez dias para encomendar. Quinze para chegar.</p>
+      <div class="order__intro">
+        <p>A Siriguela não tem estoque. Cada mês abre uma safra: durante dez dias você encomenda a sua, e só depois a gente produz. Cada sunga é cortada e costurada para quem pediu.</p>
+        <div data-order-cta></div>
+      </div>
+      <ol class="steps" data-steps></ol>
+      <div class="order__why">
+        <div><span class="idx">Exclusiva</span><p>Cada safra existe só para quem encomendou nela. Não tem arara cheia nem peça repetida em vitrine.</p></div>
+        <div><span class="idx">Sem sobra</span><p>Produzir depois do pedido significa nada de estoque parado, nada de sobra de coleção, nada de liquidação.</p></div>
+        <div><span class="idx">Com tempo</span><p>Quinze dias é o tempo de fazer direito: corte, costura, acabamento e a sua sunga na porta.</p></div>
+      </div>
+      <dl class="order__facts">
+        <div><dt class="idx">Preço</dt><dd>R$ 249,90 por peça</dd></div>
+        <div><dt class="idx">Frete</dt><dd>Grátis a partir de R$ 399,90</dd></div>
+        <div><dt class="idx">Primeira compra</dt><dd>10% com <button class="perk-code" data-copy="SIRIGUELA10" title="Copiar cupom">SIRIGUELA10</button></dd></div>
+      </dl>
+    </section>
+
+    <section class="block" id="indice">
+      <header class="block__head">
+        <h2 class="block__title">Índice</h2>
+        <span class="idx">De onde vem cada estampa</span>
+      </header>
+      <ol class="index__list" data-index></ol>
+    </section>
+
+    <section class="block about" id="sobre">
+      <header class="block__head">
+        <h2 class="block__title">Sobre</h2>
+        <span class="idx">Feito no Brasil</span>
+      </header>
+      <p class="about__lead">Liso, só o mar em dia de calmaria.</p>
+      <div class="about__cols">
+        <p>Toda sunga Siriguela é estampada. Cada estampa começa num lugar real do Brasil: uma pipa no morro, um cobogó de Brasília, a polpa de uma fruta de feira.</p>
+        <p>A gente recorta e simplifica até sobrar só forma e cor. Ousada no desenho, contida em todo o resto: corte limpo, nenhum logo à mostra.</p>
+      </div>
+    </section>
+
+    <section class="block sizes" id="medidas">
+      <header class="block__head">
+        <h2 class="block__title">Medidas</h2>
+        <span class="idx">Em centímetros</span>
+      </header>
+      <div class="sizes__text">
+        <p>Corte justo. Na dúvida entre dois tamanhos, vá no maior.</p>
+        <p class="mute">Meça a cintura na altura em que você usa a sunga.</p>
+      </div>
+      <div class="sizes__table" data-sizes></div>
+    </section>
+
+    <section class="block join">
+      <header class="block__head">
+        <h2 class="block__title">Lista</h2>
+        <span class="idx">Uma mensagem por estampa nova</span>
+      </header>
+      <p class="join__lead">Novas estampas chegam primeiro para quem está aqui.</p>
+      <div class="join__form">
+        <form data-join>
+          <label class="sr" for="email">Seu e-mail</label>
+          <input id="email" type="email" required placeholder="Seu e-mail" autocomplete="email">
+          <button type="submit">Entrar</button>
+        </form>
+        <p class="join__ok" data-join-ok aria-live="polite"></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/js/produtos.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script src="assets/js/movimento.js" defer></script>
+</body>
+</html>

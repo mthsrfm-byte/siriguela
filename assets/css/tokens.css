@@ -1,0 +1,67 @@
+/* ==========================================================
+   SIRIGUELA — tokens da marca · direção "Galeria"
+   ----------------------------------------------------------
+   Minimalista e em grade, com as cores do branding R01 Ponto.
+   ~90% da tela é neutra (linho, tinta, areia). A cor aparece
+   em dois lugares só: nas estampas e no ponto siriguela, usado
+   como sinal (fim do título, logo, item ativo, foco, hover).
+   Regra: no máximo dois pontos vermelhos visíveis por tela.
+
+   Para mudar a marca, mexa só neste arquivo.
+   O mesmo conjunto está em assets/tokens.json (para Figma).
+   ========================================================== */
+
+:root {
+  /* ---- Paleta (branding R01 Ponto) ---- */
+  --linho:       #F3EFE8;  /* fundo */
+  --papel:       #FBF9F5;  /* gaveta da sacola, campos */
+  --areia:       #E4DCCF;  /* rodapé, fundo atrás das fotos */
+  --tinta:       #121212;  /* texto, botão, logo */
+  --tinta-suave: #5E5953;  /* texto secundário */
+  --cinza:       #8F8980;  /* índices, legendas */
+  --linha:       #D9D1C4;  /* fios de 1 px */
+  --siriguela:   #B8322A;  /* o ponto: só sinais pequenos, nunca texto corrido */
+  --siriguela-escura: #8E241E;  /* erro e alerta curto */
+
+  /* ---- Papéis (o CSS usa estes nomes) ---- */
+  --bg:        var(--linho);
+  --surface:   var(--papel);
+  --ink:       var(--tinta);
+  --mute:      var(--tinta-suave);
+  --faint:     var(--cinza);
+  --line:      var(--linha);
+  --soft:      var(--areia);
+  --accent:    var(--tinta);
+  --accent-hover: #34322F;
+  --on-accent: var(--linho);
+  --ponto:     var(--siriguela);
+  --hot:       var(--siriguela-escura);
+
+  /* ---- Tipografia ---- */
+  --f-sans: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --t-hero:  clamp(64px, 12.5vw, 220px);  /* "Só estampa." */
+  --t-h1:    clamp(44px, 5vw, 80px);      /* nome da sunga */
+  --t-lead:  clamp(28px, 3.4vw, 52px);    /* frases grandes */
+  --t-title: clamp(22px, 2vw, 30px);      /* títulos de seção */
+  --t-body:  15px;
+  --t-small: 13px;
+  --t-idx:   11px;                         /* índices em mono */
+  --w-title: 500;  /* títulos: o peso máximo da marca é 500, nunca negrito */
+  --w-text:  400;
+  --w-mid:   500;
+  --track-tight: -0.04em;   /* display */
+  --track-title: -0.03em;   /* títulos de seção e nomes */
+  --track-meta:   0.14em;   /* mono em caixa alta */
+
+  /* ---- Grade e espaço ---- */
+  --cols: 12;
+  --gap:  clamp(8px, 1.1vw, 16px);
+  --pad:  clamp(16px, 4vw, 64px);
+  --sect: clamp(72px, 10vw, 160px);  /* espaço entre seções */
+  --head: 64px;
+
+  /* ---- Formas ---- */
+  --r: 0;  /* nada arredondado */
+}
