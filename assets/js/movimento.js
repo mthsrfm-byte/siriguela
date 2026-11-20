@@ -66,16 +66,7 @@
     });
   });
 
-  /* Galeria do produto: parallax leve. A foto fica um pouco maior que a janela
-     e corre devagar dentro dela enquanto a página rola. */
-  gsap.utils.toArray(".gallery__ph").forEach((ph) => {
-    const img = ph.querySelector("img");
-    if (!img) return;
-    gsap.fromTo(img, { yPercent: -5, scale: 1.1 }, {
-      yPercent: 5, scale: 1.1, ease: "none",
-      scrollTrigger: { trigger: ph, start: "top bottom", end: "bottom top", scrub: true }
-    });
-  });
+  /* Galeria do produto: sem parallax, as fotos ficam paradas no quadro. */
 
   /* Índice: o fio de cada linha se desenha da esquerda para a direita quando ela entra. */
   gsap.utils.toArray(".index__list li").forEach((li) => {

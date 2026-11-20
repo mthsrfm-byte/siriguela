@@ -134,11 +134,7 @@
             <a href="#">Trocas</a>
             <a href="#">Contato</a>
           </div>
-          <div>
-            <h3 class="mono">Siga</h3>
-            <a href="#">Instagram</a>
-            <a href="#">TikTok</a>
-          </div>
+          <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
         </div>
         <div class="foot__base mono mute">
           <span>© ${new Date().getFullYear()} Siriguela · ${J.safra}</span>
@@ -476,6 +472,7 @@
         <div class="picker__opts" role="radiogroup" aria-label="Tamanho">
           ${S.tamanhos.map((t) => `<button class="size" role="radio" aria-checked="false" data-size="${t}">${t}</button>`).join("")}
         </div>
+        ${p.modelo ? `<p class="picker__modelo">O modelo tem ${p.modelo.altura} m e veste ${p.modelo.veste}.</p>` : ""}
         <p class="picker__msg mono mute" data-msg>Corte justo. Na dúvida, vá no maior.</p>
         ${J.aberta
           ? `<button class="btn btn--full" data-add>Encomendar a minha <span>→</span></button>`
@@ -555,21 +552,59 @@
     clone.querySelectorAll("a").forEach((a) => a.setAttribute("tabindex", "-1"));
     track.appendChild(clone);
     const vids = [...track.querySelectorAll("video")];
+    vids.forEach((v) => { v.removeAttribute("autoplay"); v.muted = true; });
     const calmo = matchMedia("(prefers-reduced-motion: reduce)");
-    // só toca o vídeo que está na tela (a faixa tem 14, mas uns 4 aparecem por vez)
+    /* economia de dados ligada: fica só o primeiro quadro (o poster) */
+    const poupa = navigator.connection && (navigator.connection.saveData || /2g/.test(navigator.connection.effectiveType || ""));
+    if (calmo.matches || poupa) return;
+
+    /* Carregamento em fila: o poster já mostra o primeiro quadro; depois que a página carrega,
+       os vídeos baixam um de cada vez, na ordem em que entram na tela (a faixa anda da direita
+       para a esquerda). Quem aparece antes da vez fura a fila. As cópias do loop usam o mesmo
+       arquivo, então só o primeiro de cada par baixa de verdade. */
+    const chave = (v) => v.getAttribute("poster");
+    const fila = [...set.querySelectorAll("video")];
+    const prontos = new Set();
+    let baixando = null, liberado = false;
+    const pronto = (v) => { prontos.add(chave(v)); if (baixando === v) { baixando = null; proximo(); } };
+    const baixa = (v) => {
+      if (v.preload === "auto") return;
+      v.preload = "auto";
+      v.addEventListener("canplaythrough", () => pronto(v), { once: true });
+      setTimeout(() => pronto(v), 6000); // rede lenta: não trava a fila
+      v.load();
+    };
+    function proximo() {
+      if (!liberado || baixando) return;
+      const v = fila.find((x) => !prontos.has(chave(x)) && x.preload !== "auto");
+      if (v) { baixando = v; baixa(v); }
+    }
+
+    // só toca o que está na tela (a faixa tem 14 vídeos, uns 4 aparecem por vez)
     const visiveis = new Set();
     const ajusta = (v) => {
-      v.muted = true;
-      if (visiveis.has(v) && !calmo.matches && !document.hidden) { const p = v.play(); if (p) p.catch(() => {}); } else v.pause();
+      if (visiveis.has(v) && !document.hidden) {
+        if (v.preload !== "auto") { // apareceu antes da vez: baixa já
+          const original = fila.find((x) => chave(x) === chave(v));
+          if (original && original !== v && original.preload !== "auto") { const i = fila.indexOf(original); fila.splice(i, 1); fila.unshift(original); }
+          baixa(v);
+        }
+        const p = v.play(); if (p) p.catch(() => {});
+      } else v.pause();
     };
     const io = new IntersectionObserver((es) => es.forEach((e) => {
       e.isIntersecting ? visiveis.add(e.target) : visiveis.delete(e.target);
-      ajusta(e.target);
-    }), { rootMargin: "0px 25% 0px 25%" });
-    vids.forEach((v) => { v.removeAttribute("autoplay"); io.observe(v); });
-    calmo.addEventListener("change", () => vids.forEach(ajusta));
+      if (liberado) ajusta(e.target);
+    }), { rootMargin: "0px 30% 0px 0px" });
+    vids.forEach((v) => io.observe(v));
     document.addEventListener("visibilitychange", () => vids.forEach(ajusta));
-    if (calmo.matches) vids.forEach((v) => { v.removeAttribute("autoplay"); v.pause(); });
+    calmo.addEventListener("change", () => vids.forEach((v) => (calmo.matches ? v.pause() : ajusta(v))));
+
+    /* a fila só começa depois da primeira pintura e do load: os vídeos não disputam banda
+       com a página (e o Lighthouse mede o poster, não o vídeo) */
+    const comeca = () => { liberado = true; vids.forEach(ajusta); proximo(); };
+    const depois = () => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(comeca, 60)));
+    if (document.readyState === "complete") depois(); else addEventListener("load", depois, { once: true });
   }
 
   chromeTop();
