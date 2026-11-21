@@ -12,6 +12,7 @@
 <div data-update="buy-{{ section_id }}">
   {%- form 'product', product, id: form_id, class: 'product-form', novalidate: 'novalidate', data-cart-form: '' -%}
     <input type="hidden" name="id" value="{{ variant.id }}" class="product-variant-id"{% unless variant.available %} disabled{% endunless %}>
+    {% render 'selling-plan-picker', product: product, variant: variant, form_id: form_id, section_id: section_id %}
     {%- if show_recipient and product.gift_card? -%}
       {% render 'gift-card-recipient', form: form, section_id: section_id %}
     {%- endif -%}

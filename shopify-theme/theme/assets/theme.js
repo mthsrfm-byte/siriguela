@@ -465,7 +465,7 @@
         const fresh = $('product-page', doc);
         if (!fresh) return;
         const focusedId = document.activeElement && document.activeElement.id;
-        ['price', 'picker', 'buy'].forEach((key) => {
+        ['price', 'picker', 'buy', 'plans'].forEach((key) => {
           const sel = `[data-update="${key}-${this.sectionId}"]`;
           const now = $(sel, this);
           const next = $(sel, fresh);

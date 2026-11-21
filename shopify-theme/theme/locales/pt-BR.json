@@ -121,6 +121,8 @@
   "products": {
     "product": {
       "add_to_cart": "Adicionar à sacola",
+      "purchase_options": "Opções de compra",
+      "one_time_purchase": "Compra avulsa",
       "add_variant": "Adicionar {{ variant }} à sacola",
       "choose_options": "Escolher opções",
       "quick_add_label": "Adicionar rápido {{ title }}",

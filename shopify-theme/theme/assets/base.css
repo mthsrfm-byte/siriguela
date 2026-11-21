@@ -693,3 +693,12 @@ deferred-media iframe, deferred-media video, deferred-media model-viewer { posit
   .section-head__aside { width: 100%; justify-content: space-between; }
 }
 .story__text > .button, .statement > .link-arrow { align-self: flex-start; justify-self: start; }
+
+/* Selling plans */
+.plans { border: 0; margin: 0 0 16px; padding: 0; display: grid; gap: 8px; }
+.plans__option { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px; min-height: 52px; padding: 10px 14px; border: 1px solid var(--color-line); border-radius: var(--radius-input); cursor: pointer; }
+.plans__option:has(input:checked) { border-color: var(--color-text); }
+.plans__option input { width: 18px; height: 18px; accent-color: var(--color-text); margin: 0; }
+.plans__text { display: grid; gap: 2px; }
+.plans__desc { color: var(--color-muted); }
+.plans__price { font-variant-numeric: tabular-nums; }
