@@ -15,11 +15,12 @@
       assign one_time = false
     endif
   -%}
-  <fieldset class="plans" data-update="plans-{{ section_id }}">
-    <legend class="meta picker__label">{{ 'products.product.purchase_options' | t }}</legend>
+  <selling-plan-picker class="plans" role="radiogroup" aria-labelledby="Plans-{{ section_id }}" data-update="plans-{{ section_id }}">
+    <p class="meta picker__label" id="Plans-{{ section_id }}">{{ 'products.product.purchase_options' | t }}</p>
+    <input type="hidden" name="selling_plan" value="{{ selected_plan.id }}" form="{{ form_id }}" data-selling-plan>
     {%- unless product.requires_selling_plan -%}
       <label class="plans__option">
-        <input type="radio" name="selling_plan" value="" form="{{ form_id }}"{% if one_time %} checked{% endif %}>
+        <input type="radio" name="purchase_option-{{ section_id }}" value=""{% if one_time %} checked{% endif %}>
         <span class="plans__text">{{ 'products.product.one_time_purchase' | t }}</span>
         <span class="plans__price">{{ variant.price | money }}</span>
       </label>
@@ -28,7 +29,7 @@
       {%- for plan in group.selling_plans -%}
         {%- assign allocation = variant.selling_plan_allocations | where: 'selling_plan.id', plan.id | first -%}
         <label class="plans__option">
-          <input type="radio" name="selling_plan" value="{{ plan.id }}" form="{{ form_id }}"{% if selected_plan.id == plan.id %} checked{% elsif product.requires_selling_plan and selected_plan == null and forloop.first %} checked{% endif %}>
+          <input type="radio" name="purchase_option-{{ section_id }}" value="{{ plan.id }}"{% if selected_plan.id == plan.id %} checked{% elsif product.requires_selling_plan and selected_plan == null and forloop.first %} checked{% endif %}>
           <span class="plans__text">
             {%- if product.selling_plan_groups.size > 1 -%}<span class="meta">{{ group.name | escape }}</span> {% endif -%}
             {{ plan.name | escape }}
@@ -43,5 +44,5 @@
         </label>
       {%- endfor -%}
     {%- endfor -%}
-  </fieldset>
+  </selling-plan-picker>
 {%- endif -%}

@@ -574,6 +574,15 @@
     }
   });
 
+  define('selling-plan-picker', class extends HTMLElement {
+    connectedCallback() {
+      const hidden = $('[data-selling-plan]', this);
+      this.addEventListener('change', (e) => {
+        if (e.target.type === 'radio' && hidden) hidden.value = e.target.value;
+      });
+    }
+  });
+
   define('recipient-form', class extends HTMLElement {
     connectedCallback() {
       const toggle = $('[data-recipient-toggle]', this);

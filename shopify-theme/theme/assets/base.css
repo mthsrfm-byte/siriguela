@@ -702,3 +702,18 @@ deferred-media iframe, deferred-media video, deferred-media model-viewer { posit
 .plans__text { display: grid; gap: 2px; }
 .plans__desc { color: var(--color-muted); }
 .plans__price { font-variant-numeric: tabular-nums; }
+
+/* Customer account component (Shopify web component) */
+shopify-account {
+  display: inline-flex;
+  --shopify-account-color-accent: var(--color-button);
+  --shopify-account-color-background: var(--color-bg);
+  --shopify-account-color-text: var(--color-text);
+  --shopify-account-font-body: var(--font-body);
+  --shopify-account-font-heading: var(--font-heading);
+  --shopify-account-radius-base: var(--radius-button);
+  --shopify-account-avatar-size: 28px;
+  --shopify-account-dialog-position-top: calc(var(--header-height) + 8px);
+}
+shopify-account::part(signed-out-avatar) { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; background: none; border: 0; color: inherit; cursor: pointer; }
+.plans__option { position: relative; }

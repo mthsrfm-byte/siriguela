@@ -469,6 +469,10 @@
         "menu": {
           "label": "Menu"
         },
+        "customer_account_menu": {
+          "label": "Customer account menu",
+          "info": "Shown in the account sheet for signed-in customers"
+        },
         "logo_position": {
           "label": "Logo position",
           "options__1": {

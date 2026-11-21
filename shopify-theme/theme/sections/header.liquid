@@ -70,7 +70,9 @@
       <div class="header__actions">
         <a href="{{ routes.search_url }}" class="icon-button" data-search-open aria-label="{{ 'sections.header.search' | t }}">{% render 'icon', name: 'search' %}</a>
         {%- if shop.customer_accounts_enabled -%}
-          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="icon-button header__account" aria-label="{{ 'sections.header.account' | t }}">{% render 'icon', name: 'account' %}</a>
+          <shopify-account class="header__account" menu="{{ section.settings.customer_account_menu }}">
+            <span slot="signed-out-avatar" class="icon-button" aria-hidden="true">{% render 'icon', name: 'account' %}</span>
+          </shopify-account>
         {%- endif -%}
         <a href="{{ routes.cart_url }}" class="icon-button header__cart" data-cart-open aria-label="{{ 'sections.header.cart' | t }}">
           {% render 'icon', name: 'bag' %}
@@ -159,6 +161,7 @@
   "class": "section-header",
   "settings": [
     { "type": "link_list", "id": "menu", "default": "main-menu", "label": "t:sections.header.settings.menu.label" },
+    { "type": "link_list", "id": "customer_account_menu", "default": "customer-account-main-menu", "label": "t:sections.header.settings.customer_account_menu.label", "info": "t:sections.header.settings.customer_account_menu.info" },
     {
       "type": "select", "id": "logo_position", "default": "left", "label": "t:sections.header.settings.logo_position.label",
       "options": [

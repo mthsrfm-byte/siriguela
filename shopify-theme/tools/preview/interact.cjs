@@ -24,7 +24,7 @@ const fs = require('node:fs'); const path = require('node:path'); const http = r
   page = await (await b.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
   page.on('pageerror', (e) => errs.push(e.message));
   await page.goto('http://localhost:5197/vereda-home.html');
-  await page.focus('.nav__disclosure summary'); await page.keyboard.press('Enter');
+  await page.focus('.nav__disclosure summary'); await page.keyboard.press('Enter'); await page.waitForTimeout(100);
   ok('dropdown opens with keyboard', await page.isVisible('.nav__dropdown'));
   ok('summary aria-expanded', (await page.getAttribute('.nav__disclosure summary', 'aria-expanded')) === 'true');
   await page.keyboard.press('Escape'); ok('Escape closes dropdown', !(await page.isVisible('.nav__dropdown')));

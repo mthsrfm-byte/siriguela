@@ -469,6 +469,10 @@
         "menu": {
           "label": "Menu"
         },
+        "customer_account_menu": {
+          "label": "Menu da conta do cliente",
+          "info": "Exibido na janela da conta para clientes conectados"
+        },
         "logo_position": {
           "label": "Posição do logo",
           "options__1": {

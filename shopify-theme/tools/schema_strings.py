@@ -156,6 +156,8 @@ for k, en, pt in [
  ("sections.footer.settings.show_follow_on_shop.info","Requires Shop Pay to be enabled","Requer Shop Pay ativo"),
  ("sections.header.name","Header","Cabeçalho"),
  ("sections.header.settings.menu.label","Menu","Menu"),
+ ("sections.header.settings.customer_account_menu.label","Customer account menu","Menu da conta do cliente"),
+ ("sections.header.settings.customer_account_menu.info","Shown in the account sheet for signed-in customers","Exibido na janela da conta para clientes conectados"),
  ("sections.header.settings.logo_position.label","Logo position","Posição do logo"),
  ("sections.header.settings.logo_position.options__1.label","Left","Esquerda"),
  ("sections.header.settings.logo_position.options__2.label","Center","Centro"),

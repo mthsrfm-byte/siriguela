@@ -9,22 +9,22 @@ Source: shopify.dev Theme Store requirements, test and submit pages, read 21 Nov
 - ✅ Header and footer are section groups; Custom Liquid section and blocks; `@app` blocks in main product, featured product, footer and Apps section.
 - ✅ `lang="{{ request.locale.iso_code }}"`; `content_for_header` untouched; `powered_by_link` unchanged.
 - ✅ `shopify theme check`: 82 files, 0 offenses (CLI 5.0.2).
-- ⚠️ `product-recommendations` is limited to the product template (needs a product); confirm reviewers accept this.
-- ❌ `<shopify-account>` component in desktop and mobile headers: currently a plain account link. Implement once the component API is confirmed in a dev store.
+- ✅ `product-recommendations` limited to the product template: allowed (only Custom Liquid must be available everywhere).
+- ⚠️ `<shopify-account>` in the header (visible on desktop and mobile), menu setting `customer-account-main-menu`, theme tokens mapped to its CSS custom properties. Follows shopify.dev; confirm rendering in the dev store.
 
 ## Features
 - ✅ Line and order discounts (cart items + summary).
 - ✅ Accelerated checkout on product (on by default) and cart.
 - ✅ Faceted filtering (availability, price, type, vendor, options via Search and Discovery) and sorting; works without JavaScript.
 - ✅ Gift cards: recipient form on product page; gift card page with QR code (160px) and Apple Wallet link.
-- ⚠️ Image focal points: images use `image_tag`; confirm Shopify applies `object-position` from focal point in hero, cards and mosaic.
+- ✅ Image focal points: `image_tag` applies `object-position` automatically (shopify.dev); images use `object-fit: cover`.
 - ✅ `page_image` used for social sharing.
 - ✅ Country and language selectors (header drawer, footer, optional announcement bar).
 - ✅ Multi-level menus (3 levels desktop and mobile); newsletter forms.
 - ✅ Pickup availability; related and complementary recommendations.
 - ✅ Rich media in product template and featured product: images, Shopify video, YouTube/Vimeo, 3D (model-viewer UI loaded on demand).
 - ✅ Predictive search (products, collections, pages, articles, queries) with keyboard navigation.
-- ⚠️ Selling plans: shown in cart lines. A selling plan picker on the product page is **not** implemented; confirm whether reviewers require it.
+- ✅ Selling plans: shown in cart lines (the requirement). Optional purchase-options picker also added to the product page.
 - ✅ Shop Pay Installments banner (`payment_terms`).
 - ✅ Unit pricing on cards, product, cart.
 - ✅ Variant images (gallery jumps to the variant's media).
@@ -58,5 +58,4 @@ Source: shopify.dev Theme Store requirements, test and submit pages, read 21 Nov
 ## What would block approval today
 1. No demo store or real photography.
 2. Placeholder documentation and support URLs.
-3. `<shopify-account>` header component missing.
-4. Runtime behaviour (cart, variants, filters, predictive search, pickup) not yet verified on Shopify.
+3. Runtime behaviour (cart, variants, filters, predictive search, pickup) not yet verified on Shopify.

@@ -15,10 +15,16 @@
 - `theme/`: 36 seções, 25 snippets, 13 templates, 2 presets, locales en + pt-BR (loja e editor), `base.css` e `theme.js` próprios sem dependências.
 - Bugs achados e corrigidos pelo preview: filtros encadeados após `image_tag` (escapariam o `<img>` na Shopify), datas e valores no vale-presente, contraste do sinal no preset Murta, landmark duplicado no carrinho, ordem de títulos.
 
+## Madrugada (sem loja conectada)
+- `<shopify-account>` no cabeçalho (requisito obrigatório desde jul/2026).
+- Seletor de assinatura (selling plans) no produto, padrão oficial.
+- Catálogo demo pronto para importar: `demo-store/products.csv` (12 produtos, 47 variantes, todos os casos de teste) + textos de páginas, blog e menus em `demo-store/content.md`.
+- Roteiro da loja dev: `docs/dev-store-runbook.md`.
+
 ## Etapa 5 — Testes
 | Teste | Resultado |
 |---|---|
-| `shopify theme check` (CLI 5.0.2) | 82 arquivos, 0 ofensas |
+| `shopify theme check` (CLI 5.0.2) | 83 arquivos, 0 ofensas |
 | axe-core WCAG 2.1 AA (preview) | 0 violações, 9 páginas × 2 telas × 2 presets |
 | Interação teclado/drawers (preview) | 15/15 |
 | Lighthouse (preview, indicativo) | Perf 87–100 · A11y 100 · CLS ≈ 0 |
