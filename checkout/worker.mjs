@@ -40,7 +40,7 @@ export default {
         name: `Sunga ${produto.nome} · tamanho ${item.size}`,
         amount: Math.round(catalogo.preco * 100),
         quantity: item.qty,
-        image: `${origem}/assets/produtos/${produto.slug}/frente.w640.webp`
+        image: `${origem}/assets/produtos/${produto.slug}/${produto.recorte ? "solta" : "frente"}.w640.webp`
       });
     }
     const utm = {};
