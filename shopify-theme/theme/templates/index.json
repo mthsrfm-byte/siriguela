@@ -5,7 +5,7 @@
       "settings": {
         "layout": "margin",
         "height": "full",
-        "heading": "Made to stay.",
+        "heading": "Made to stay",
         "kicker": "Autumn edit",
         "show_signal": true,
         "color_scheme": "scheme-4",
@@ -41,7 +41,7 @@
         "l": {
           "type": "lead",
           "settings": {
-            "text": "Quiet in every place but one.",
+            "text": "Quiet in every place but one",
             "size": "lg",
             "show_signal": true
           }

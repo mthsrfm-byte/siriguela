@@ -12,7 +12,7 @@
     {%- assign link = collection.url | default: routes.all_products_collection_url -%}
     {%- assign heading_id = 'Heading-' | append: section.id -%}
     {% render 'section-heading', heading: s.heading, caption: s.caption, link_label: s.link_label, link_url: link, id: heading_id, signal: s.show_signal %}
-    <div class="product-grid product-grid--{{ s.layout }}" style="--cols: {{ cols }}; --cols-mobile: {{ s.columns_mobile }};"{% if s.layout == 'rail' %} tabindex="0" role="region" aria-label="{{ s.heading | escape }}"{% endif %}>
+    <div class="product-grid product-grid--{{ s.layout }}" style="--cols: {{ cols }}; --cols-mobile: {{ s.columns_mobile }};"{% if s.layout == 'rail' %} tabindex="0" role="region" aria-label="{{ 'accessibility.scrollable_products' | t }}"{% endif %}>
       {%- if collection != blank and collection.products_count > 0 -%}
         {%- for product in collection.products limit: s.limit -%}
           {% render 'product-card', product: product, index: forloop.index, sizes: sizes %}

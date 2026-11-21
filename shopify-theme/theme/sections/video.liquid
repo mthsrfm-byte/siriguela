@@ -3,6 +3,7 @@
   YouTube/Vimeo URL loaded only after the visitor presses play.
 {%- endcomment -%}
 {%- assign s = section.settings -%}
+{%- assign video_title = s.description | default: s.heading | default: shop.name -%}
 <section class="section color-{{ s.color_scheme }}">
   <div class="page-width">
     {% render 'section-heading', heading: s.heading, caption: s.caption %}
@@ -20,15 +21,15 @@
         {%- endif -%}
       {%- elsif s.video_url != blank -%}
         <deferred-media class="video-frame__inner">
-          <button type="button" class="deferred-media__poster" aria-label="{{ 'sections.video.play' | t: title: s.description | default: s.heading | escape }}">
+          <button type="button" class="deferred-media__poster" aria-label="{{ 'sections.video.play' | t: title: video_title | escape }}">
             {% render 'media', image: s.cover, ratio: s.ratio, sizes: '100vw', placeholder: 'lifestyle-2' %}
             <span class="deferred-media__btn">{% render 'icon', name: 'play' %}</span>
           </button>
           <template>
             {%- if s.video_url.type == 'youtube' -%}
-              <iframe src="https://www.youtube-nocookie.com/embed/{{ s.video_url.id }}?autoplay=1&rel=0" title="{{ s.description | default: s.heading | escape }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+              <iframe src="https://www.youtube-nocookie.com/embed/{{ s.video_url.id }}?autoplay=1&rel=0" title="{{ video_title | escape }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             {%- else -%}
-              <iframe src="https://player.vimeo.com/video/{{ s.video_url.id }}?autoplay=1" title="{{ s.description | default: s.heading | escape }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+              <iframe src="https://player.vimeo.com/video/{{ s.video_url.id }}?autoplay=1" title="{{ video_title | escape }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
             {%- endif -%}
           </template>
         </deferred-media>

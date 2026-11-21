@@ -1,11 +1,15 @@
 {% layout none %}
+{%- liquid
+  assign initial = gift_card.initial_value | money
+  assign expires = gift_card.expires_on | date: format: 'date'
+-%}
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="robots" content="noindex">
-    <title>{{ 'gift_card.title' | t: value: gift_card.initial_value | money }} &ndash; {{ shop.name }}</title>
+    <title>{{ 'gift_card.title' | t: value: initial }} &ndash; {{ shop.name }}</title>
     {% render 'css-variables' %}
     {{ 'base.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'vendor/qrcode.js' | shopify_asset_url }}" defer></script>
@@ -19,10 +23,10 @@
       {%- if gift_card.enabled == false or gift_card.expired -%}
         <p class="badge badge--muted">{{ 'gift_card.expired' | t }}</p>
       {%- elsif gift_card.expires_on -%}
-        <p class="meta">{{ 'gift_card.expires_on' | t: expires_on: gift_card.expires_on | date: format: 'date' }}</p>
+        <p class="meta">{{ 'gift_card.expires_on' | t: expires_on: expires }}</p>
       {%- endif -%}
       {%- if gift_card.initial_value != gift_card.balance -%}
-        <p class="meta">{{ 'gift_card.initial_value' | t: value: gift_card.initial_value | money }}</p>
+        <p class="meta">{{ 'gift_card.initial_value' | t: value: initial }}</p>
       {%- endif -%}
       <div class="gift-card__code">
         <label for="GiftCardCode" class="meta">{{ 'gift_card.code_label' | t }}</label>

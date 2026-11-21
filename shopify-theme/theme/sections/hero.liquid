@@ -27,7 +27,7 @@
       </hero-video>
     {%- elsif s.image != blank -%}
       <div class="hero__img{% if s.image_mobile != blank or s.video_mobile != blank %} hero__img--desktop{% endif %}">
-        {{ s.image | image_url: width: 3000 | image_tag: widths: '750, 1100, 1500, 1800, 2200, 2600, 3000', sizes: '100vw', loading: loading, fetchpriority: priority, alt: s.image.alt | escape }}
+        {{ s.image | image_url: width: 3000 | image_tag: widths: '750, 1100, 1500, 1800, 2200, 2600, 3000', sizes: '100vw', loading: loading, fetchpriority: priority, alt: s.image.alt }}
       </div>
     {%- endif -%}
     {%- if s.video_mobile != blank -%}
@@ -36,7 +36,7 @@
       </hero-video>
     {%- elsif s.image_mobile != blank -%}
       <div class="hero__img hero__img--mobile">
-        {{ s.image_mobile | image_url: width: 1400 | image_tag: widths: '450, 650, 900, 1200, 1400', sizes: '100vw', loading: loading, fetchpriority: priority, alt: s.image_mobile.alt | escape }}
+        {{ s.image_mobile | image_url: width: 1400 | image_tag: widths: '450, 650, 900, 1200, 1400', sizes: '100vw', loading: loading, fetchpriority: priority, alt: s.image_mobile.alt }}
       </div>
     {%- endif -%}
     {%- unless has_media -%}
@@ -102,7 +102,7 @@
     },
     { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-4" },
     { "type": "header", "content": "t:sections.hero.settings.header_text.content" },
-    { "type": "text", "id": "heading", "default": "Made to stay.", "label": "t:common.heading" },
+    { "type": "text", "id": "heading", "default": "Made to stay", "label": "t:common.heading" },
     {
       "type": "select", "id": "heading_size", "default": "xl", "label": "t:common.heading_size",
       "options": [

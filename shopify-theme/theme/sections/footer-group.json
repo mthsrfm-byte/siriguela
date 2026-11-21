@@ -8,7 +8,7 @@
         "brand": {
           "type": "brand",
           "settings": {
-            "heading": "Made slowly, worn often.",
+            "heading": "Made slowly, worn often",
             "show_social": true
           }
         },

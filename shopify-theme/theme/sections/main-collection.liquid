@@ -27,6 +27,7 @@
           {% render 'facets', results: collection, section_id: section.id %}
         {%- endif -%}
         {%- if collection.products.size > 0 -%}
+          <h2 class="visually-hidden">{{ 'accessibility.products_heading' | t }}</h2>
           <div class="product-grid" style="--cols: {{ cols }}; --cols-mobile: {{ s.columns_mobile }};">
             {%- for product in collection.products -%}
               {%- assign i = paginate.current_offset | plus: forloop.index -%}

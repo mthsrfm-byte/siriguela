@@ -7,7 +7,7 @@
   {%- if recommendations.performed? and recommendations.products_count > 0 -%}
     <div class="page-width">
       {% render 'section-heading', heading: s.heading, caption: s.caption %}
-      <div class="product-grid product-grid--{{ s.layout }}" style="--cols: {{ s.columns }}; --cols-mobile: 2;">
+      <div class="product-grid product-grid--{{ s.layout }}" style="--cols: {{ s.columns }}; --cols-mobile: 2;"{% if s.layout == 'rail' %} tabindex="0" role="region" aria-label="{{ 'accessibility.scrollable_products' | t }}"{% endif %}>
         {%- for product in recommendations.products -%}
           {% render 'product-card', product: product, index: forloop.index, sizes: '(min-width: 990px) 25vw, 45vw' %}
         {%- endfor -%}

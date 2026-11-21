@@ -2,7 +2,9 @@
   "accessibility": {
     "close": "Fechar",
     "skip_to_content": "Pular para o conteúdo",
-    "unit_price_separator": "por"
+    "unit_price_separator": "por",
+    "scrollable_products": "Lista rolável de produtos",
+    "products_heading": "Produtos"
   },
   "blogs": {
     "all": "Todos",

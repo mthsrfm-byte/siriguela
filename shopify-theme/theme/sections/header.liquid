@@ -19,8 +19,11 @@
       {%- if is_home -%}<h1 class="header__logo">{%- else -%}<div class="header__logo">{%- endif -%}
         <a href="{{ routes.root_url }}" class="header__logo-link">
           {%- if settings.logo != blank -%}
-            {%- assign logo_2x = settings.logo_width | times: 2 -%}
-            {{ settings.logo | image_url: width: logo_2x | image_tag: width: settings.logo_width, height: settings.logo.height | times: settings.logo_width | divided_by: settings.logo.width, alt: shop.name, class: 'header__logo-img', widths: '', loading: 'eager' }}
+            {%- liquid
+              assign logo_2x = settings.logo_width | times: 2
+              assign logo_h = settings.logo.height | times: settings.logo_width | divided_by: settings.logo.width
+            -%}
+            {{ settings.logo | image_url: width: logo_2x | image_tag: width: settings.logo_width, height: logo_h, alt: shop.name, class: 'header__logo-img', loading: 'eager' }}
           {%- else -%}
             <span class="header__wordmark">{{ shop.name | escape }}</span>{% render 'signal' %}
           {%- endif -%}
