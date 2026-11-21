@@ -1,0 +1,97 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+            "size": "lg",
+            "show_signal": true
+          }
+        },
+        "price": {
+          "type": "price"
+        },
+        "picker": {
+          "type": "variant_picker",
+          "settings": {
+            "style": "buttons"
+          }
+        },
+        "qty": {
+          "type": "quantity"
+        },
+        "buy": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "pickup": {
+          "type": "pickup"
+        },
+        "desc": {
+          "type": "description"
+        },
+        "care": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Materials and care",
+            "content": "<p>Add material and care details with a page or metafield.</p>"
+          }
+        },
+        "ship": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping and returns",
+            "content": "<p>Describe delivery times and your return policy.</p>"
+          }
+        },
+        "share": {
+          "type": "share"
+        }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "picker",
+        "qty",
+        "buy",
+        "pickup",
+        "desc",
+        "care",
+        "ship",
+        "share"
+      ],
+      "settings": {
+        "layout": "cover",
+        "color_scheme": "scheme-1"
+      }
+    },
+    "complementary": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "Pairs well with",
+        "intent": "complementary",
+        "limit": 4,
+        "columns": 4
+      }
+    },
+    "related": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "You may also like",
+        "intent": "related",
+        "limit": 4,
+        "columns": 4
+      }
+    }
+  },
+  "order": [
+    "main",
+    "complementary",
+    "related"
+  ]
+}

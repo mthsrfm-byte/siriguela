@@ -1,0 +1,18 @@
+{%- comment -%}
+  Custom Liquid section for app snippets and advanced customizations.
+{%- endcomment -%}
+<div class="section color-{{ section.settings.color_scheme }}">
+  <div class="page-width">{{ section.settings.custom_liquid }}</div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.custom_liquid.name",
+  "class": "section-custom-liquid",
+  "settings": [
+    { "type": "liquid", "id": "custom_liquid", "label": "t:sections.custom_liquid.settings.custom_liquid.label", "info": "t:sections.custom_liquid.settings.custom_liquid.info" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "t:sections.custom_liquid.name" }]
+}
+{% endschema %}

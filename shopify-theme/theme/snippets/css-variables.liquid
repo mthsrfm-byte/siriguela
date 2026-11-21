@@ -1,0 +1,86 @@
+{%- doc -%}
+  Outputs font faces, global design tokens and one class per color scheme.
+  Every visual decision of the theme reads these custom properties.
+{%- enddoc -%}
+{%- liquid
+  assign heading_bold = settings.type_heading_font | font_modify: 'weight', 'bolder'
+  assign body_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+  assign body_italic = settings.type_body_font | font_modify: 'style', 'italic'
+  case settings.heading_tracking
+    when 'tight'
+      assign tracking = '-0.035em'
+    when 'wide'
+      assign tracking = '0.02em'
+    else
+      assign tracking = '-0.01em'
+  endcase
+  case settings.section_spacing
+    when 'compact'
+      assign sect = 'clamp(40px, 6vw, 88px)'
+    when 'balanced'
+      assign sect = 'clamp(56px, 8vw, 128px)'
+    else
+      assign sect = 'clamp(72px, 10vw, 168px)'
+  endcase
+-%}
+{% style %}
+  {{ settings.type_heading_font | font_face: font_display: 'swap' }}
+  {{ heading_bold | font_face: font_display: 'swap' }}
+  {{ settings.type_body_font | font_face: font_display: 'swap' }}
+  {{ body_bold | font_face: font_display: 'swap' }}
+  {{ body_italic | font_face: font_display: 'swap' }}
+  {{ settings.type_meta_font | font_face: font_display: 'swap' }}
+
+  :root {
+    --font-heading: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
+    --font-heading-weight: {{ settings.type_heading_font.weight }};
+    --font-heading-style: {{ settings.type_heading_font.style }};
+    --font-body: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+    --font-body-weight: {{ settings.type_body_font.weight }};
+    --font-body-weight-bold: {{ body_bold.weight | default: 700 }};
+    --font-meta: {{ settings.type_meta_font.family }}, {{ settings.type_meta_font.fallback_families }};
+    --heading-scale: {{ settings.heading_scale | divided_by: 100.0 }};
+    --body-scale: {{ settings.body_scale | divided_by: 100.0 }};
+    --heading-tracking: {{ tracking }};
+    --heading-case: {{ settings.heading_case }};
+    --meta-case: {% if settings.meta_uppercase %}uppercase{% else %}none{% endif %};
+    --meta-tracking: {% if settings.meta_uppercase %}0.12em{% else %}0.02em{% endif %};
+
+    --page-width: {{ settings.page_width }}px;
+    --page-margin: clamp(16px, 4vw, {{ settings.page_margin }}px);
+    --gap: {{ settings.grid_gap }}px;
+    --section-space: {{ sect }};
+    --rule-width: {% if settings.show_rules %}1px{% else %}0px{% endif %};
+
+    --radius-button: {{ settings.button_radius }}px;
+    --radius-input: {{ settings.input_radius }}px;
+    --radius-media: {{ settings.media_radius }}px;
+    --signal-radius: {% if settings.signal_shape == 'square' %}0{% else %}50%{% endif %};
+    --signal-display: {% if settings.signal_shape == 'none' %}none{% else %}inline-block{% endif %};
+
+    --card-fit: {{ settings.card_fit }};
+    --header-height: 64px;
+    --ease: cubic-bezier(.2, .7, .1, 1);
+  }
+
+  {% for scheme in settings.color_schemes -%}
+    {%- assign s = scheme.settings -%}
+    .color-{{ scheme.id }} {
+      --color-bg: {{ s.background }};
+      --color-bg-rgb: {{ s.background.red }}, {{ s.background.green }}, {{ s.background.blue }};
+      --color-surface: {{ s.surface }};
+      --color-text: {{ s.text }};
+      --color-text-rgb: {{ s.text.red }}, {{ s.text.green }}, {{ s.text.blue }};
+      --color-muted: {{ s.muted }};
+      --color-line: {{ s.line }};
+      --color-button: {{ s.button }};
+      --color-button-label: {{ s.button_label }};
+      --color-signal: {{ s.signal }};
+      {%- if s.background_gradient != blank %}
+        --gradient-bg: {{ s.background_gradient }};
+      {%- else %}
+        --gradient-bg: {{ s.background }};
+      {%- endif %}
+    }
+  {% endfor %}
+{% endstyle %}

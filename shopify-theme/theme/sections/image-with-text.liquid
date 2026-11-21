@@ -1,0 +1,93 @@
+{%- comment -%}
+  Storytelling: one large image beside a text column. Blocks build the text.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}">
+  <div class="page-width">
+    <div class="story story--{{ s.layout }} story--w-{{ s.image_width }}">
+      <div class="story__media" data-reveal>
+        {% render 'media', image: s.image, ratio: s.ratio, sizes: '(min-width: 990px) 60vw, 100vw', placeholder: 'lifestyle-1' %}
+      </div>
+      <div class="story__text story__text--{{ s.align }}" data-reveal>
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'kicker' -%}
+              <p class="meta" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+            {%- when 'heading' -%}
+              <h2 class="story__heading display display--{{ block.settings.size }}" {{ block.shopify_attributes }}>{{ block.settings.heading | escape }}{% if block.settings.show_signal %}{% render 'signal' %}{% endif %}</h2>
+            {%- when 'text' -%}
+              <div class="rte story__body" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+            {%- when 'button' -%}
+              {%- if block.settings.label != blank -%}
+                <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %} class="button{% if block.settings.style == 'secondary' %} button--secondary{% elsif block.settings.style == 'link' %} button--link{% endif %}" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}</a>
+              {%- endif -%}
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.image_with_text.name",
+  "class": "section-image-with-text",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "t:common.image" },
+    {
+      "type": "select", "id": "layout", "default": "image-first", "label": "t:common.layout",
+      "options": [
+        { "value": "image-first", "label": "t:sections.image_with_text.settings.layout.options__1.label" },
+        { "value": "text-first", "label": "t:sections.image_with_text.settings.layout.options__2.label" }
+      ]
+    },
+    {
+      "type": "select", "id": "image_width", "default": "wide", "label": "t:sections.image_with_text.settings.image_width.label",
+      "options": [
+        { "value": "half", "label": "t:sections.image_with_text.settings.image_width.options__1.label" },
+        { "value": "wide", "label": "t:sections.image_with_text.settings.image_width.options__2.label" }
+      ]
+    },
+    {
+      "type": "select", "id": "ratio", "default": "4 / 5", "label": "t:common.image_ratio",
+      "options": [
+        { "value": "4 / 5", "label": "t:common.ratios.portrait" },
+        { "value": "1 / 1", "label": "t:common.ratios.square" },
+        { "value": "3 / 2", "label": "t:common.ratios.landscape" }
+      ]
+    },
+    {
+      "type": "select", "id": "align", "default": "bottom", "label": "t:sections.image_with_text.settings.align.label",
+      "options": [
+        { "value": "top", "label": "t:common.positions.top" },
+        { "value": "center", "label": "t:common.positions.center" },
+        { "value": "bottom", "label": "t:common.positions.bottom" }
+      ]
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    { "type": "kicker", "name": "t:common.caption", "limit": 1, "settings": [{ "type": "text", "id": "text", "default": "The studio", "label": "t:common.text" }] },
+    {
+      "type": "heading", "name": "t:common.heading", "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Fewer things, chosen well", "label": "t:common.heading" },
+        { "type": "select", "id": "size", "default": "md", "label": "t:common.heading_size", "options": [{ "value": "sm", "label": "t:common.sizes.small" }, { "value": "md", "label": "t:common.sizes.medium" }, { "value": "lg", "label": "t:common.sizes.large" }] },
+        { "type": "checkbox", "id": "show_signal", "default": true, "label": "t:common.show_signal" }
+      ]
+    },
+    { "type": "text", "name": "t:common.text", "settings": [{ "type": "richtext", "id": "text", "default": "<p>Tell the story behind your products: the materials, the makers and the reasons they exist.</p>", "label": "t:common.text" }] },
+    {
+      "type": "button", "name": "t:common.button_label", "limit": 2,
+      "settings": [
+        { "type": "text", "id": "label", "default": "Read the story", "label": "t:common.button_label" },
+        { "type": "url", "id": "link", "label": "t:common.button_link" },
+        { "type": "select", "id": "style", "default": "link", "label": "t:common.button_style", "options": [{ "value": "primary", "label": "t:common.button_styles.primary" }, { "value": "secondary", "label": "t:common.button_styles.secondary" }, { "value": "link", "label": "t:common.button_styles.link" }] }
+      ]
+    }
+  ],
+  "presets": [{ "name": "t:sections.image_with_text.name", "blocks": [{ "type": "kicker" }, { "type": "heading" }, { "type": "text" }, { "type": "button" }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

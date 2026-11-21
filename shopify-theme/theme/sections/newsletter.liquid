@@ -1,0 +1,29 @@
+{%- comment -%}
+  Signup section with a large statement and the native customer form.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}">
+  <div class="page-width signup">
+    {%- if s.heading != blank -%}<h2 class="signup__heading display display--md" data-reveal>{{ s.heading | escape }}{% if s.show_signal %}{% render 'signal' %}{% endif %}</h2>{%- endif -%}
+    <div class="signup__aside">
+      {%- if s.text != blank -%}<div class="rte">{{ s.text }}</div>{%- endif -%}
+      {%- assign signup_id = 'Signup-' | append: section.id -%}
+      {% render 'newsletter-form', id: signup_id, large: true %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.newsletter.name",
+  "class": "section-newsletter",
+  "settings": [
+    { "type": "text", "id": "heading", "default": "Letters, not noise", "label": "t:common.heading" },
+    { "type": "checkbox", "id": "show_signal", "default": true, "label": "t:common.show_signal" },
+    { "type": "richtext", "id": "text", "default": "<p>One email a month with new pieces and stories from the studio.</p>", "label": "t:common.text" },
+    { "type": "paragraph", "content": "t:sections.newsletter.settings.info.content" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-2" }
+  ],
+  "presets": [{ "name": "t:sections.newsletter.name" }]
+}
+{% endschema %}

@@ -1,0 +1,66 @@
+{%- comment -%}
+  Lookbook mosaic: images on an asymmetric editorial grid. Each tile can
+  carry a caption, a link and a tagged product.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    {%- assign heading_id = 'Heading-' | append: section.id -%}
+    {% render 'section-heading', heading: s.heading, caption: s.caption, id: heading_id, signal: s.show_signal %}
+    <div class="mosaic mosaic--{{ s.pattern }}">
+      {%- for block in section.blocks -%}
+        {%- assign b = block.settings -%}
+        <figure class="mosaic__item mosaic__item--{{ forloop.index | modulo: 6 }}" {{ block.shopify_attributes }} data-reveal>
+          {%- assign url = b.link | default: b.product.url -%}
+          {%- if url != blank -%}<a href="{{ url }}" class="mosaic__link">{%- endif -%}
+            {% render 'media', image: b.image, sizes: '(min-width: 990px) 50vw, 100vw', placeholder: 'lifestyle-2', class: 'mosaic__media' %}
+          {%- if url != blank -%}</a>{%- endif -%}
+          {%- if b.caption != blank or b.product != blank -%}
+            <figcaption class="mosaic__caption">
+              <span class="meta">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+              {%- if b.caption != blank -%}<span>{{ b.caption | escape }}</span>{%- endif -%}
+              {%- if b.product != blank -%}
+                <a href="{{ b.product.url }}" class="mosaic__product link-quiet">{{ b.product.title | escape }} — {{ b.product.price | money }}</a>
+              {%- endif -%}
+            </figcaption>
+          {%- endif -%}
+        </figure>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.mosaic.name",
+  "class": "section-mosaic",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "heading", "default": "Lookbook", "label": "t:common.heading" },
+    { "type": "checkbox", "id": "show_signal", "default": false, "label": "t:common.show_signal" },
+    { "type": "text", "id": "caption", "label": "t:common.caption" },
+    {
+      "type": "select", "id": "pattern", "default": "staggered", "label": "t:sections.mosaic.settings.pattern.label",
+      "options": [
+        { "value": "staggered", "label": "t:sections.mosaic.settings.pattern.options__1.label" },
+        { "value": "feature", "label": "t:sections.mosaic.settings.pattern.options__2.label" },
+        { "value": "even", "label": "t:sections.mosaic.settings.pattern.options__3.label" }
+      ]
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "image", "name": "t:common.image",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "t:common.image" },
+        { "type": "text", "id": "caption", "default": "Morning, north light", "label": "t:common.caption" },
+        { "type": "product", "id": "product", "label": "t:sections.mosaic.blocks.image.settings.product.label" },
+        { "type": "url", "id": "link", "label": "t:common.link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "t:sections.mosaic.name", "blocks": [{ "type": "image" }, { "type": "image" }, { "type": "image" }, { "type": "image" }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

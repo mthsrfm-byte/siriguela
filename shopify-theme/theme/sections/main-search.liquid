@@ -1,0 +1,60 @@
+{%- comment -%}
+  Search results with filters, sorting and mixed result types.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<div class="section section--top color-{{ s.color_scheme }}">
+  <div class="page-width">
+    <h1 class="display display--lg page-title">{{ 'search.title' | t }}{% render 'signal' %}</h1>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form search-form--page">
+      <label for="SearchPage" class="visually-hidden">{{ 'search.label' | t }}</label>
+      <input type="search" id="SearchPage" name="q" class="search-form__input" value="{{ search.terms | escape }}" placeholder="{{ 'search.placeholder' | t }}">
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" class="icon-button" aria-label="{{ 'search.submit' | t }}">{% render 'icon', name: 'search' %}</button>
+    </form>
+
+    {%- if search.performed -%}
+      {%- paginate search.results by 24 -%}
+        <div data-results="{{ section.id }}" id="Results-{{ section.id }}">
+          {%- if search.filters != empty -%}
+            {% render 'facets', results: search, section_id: section.id %}
+          {%- else -%}
+            <p class="meta" role="status">{{ 'search.results_count' | t: count: search.results_count, terms: search.terms }}</p>
+          {%- endif -%}
+          {%- if search.results_count > 0 -%}
+            <div class="product-grid" style="--cols: 4; --cols-mobile: 2;">
+              {%- for item in search.results -%}
+                {%- case item.object_type -%}
+                  {%- when 'product' -%}
+                    {% render 'product-card', product: item, index: forloop.index, sizes: '(min-width: 990px) 25vw, 45vw' %}
+                  {%- else -%}
+                    <article class="card card--text" data-reveal>
+                      <a href="{{ item.url }}" class="card__text-link">
+                        <span class="meta">{{ item.object_type | capitalize }}</span>
+                        <h3 class="card__title">{{ item.title | escape }}</h3>
+                        <p class="meta">{{ item.content | strip_html | truncatewords: 18 }}</p>
+                      </a>
+                    </article>
+                {%- endcase -%}
+              {%- endfor -%}
+            </div>
+          {%- else -%}
+            <div class="empty-state">
+              <p class="empty-state__lead">{{ 'search.no_results' | t: terms: search.terms }}</p>
+              <a href="{{ routes.all_products_collection_url }}" class="button button--secondary">{{ 'cart.continue' | t }}</a>
+            </div>
+          {%- endif -%}
+          {% render 'pagination', paginate: paginate %}
+        </div>
+      {%- endpaginate -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_search.name",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

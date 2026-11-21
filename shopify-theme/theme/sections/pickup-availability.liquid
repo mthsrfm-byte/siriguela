@@ -1,0 +1,38 @@
+{%- comment -%}
+  Rendered on demand (?section_id=pickup-availability) for the selected variant.
+{%- endcomment -%}
+{%- assign variant = product.selected_or_first_available_variant -%}
+{%- assign pickups = variant.store_availabilities | where: 'pick_up_enabled', true -%}
+{%- if pickups.size > 0 -%}
+  <div class="pickup__inner">
+    {%- assign first = pickups.first -%}
+    <p class="pickup__status">
+      {%- if first.available -%}
+        {{ 'products.product.pickup.available_at_html' | t: location: first.location.name }}
+        <span class="meta">{{ first.pick_up_time }}</span>
+      {%- else -%}
+        {{ 'products.product.pickup.unavailable_at_html' | t: location: first.location.name }}
+      {%- endif -%}
+    </p>
+    <details class="pickup__more">
+      <summary class="link-quiet meta">{{ 'products.product.pickup.view_all' | t }}</summary>
+      <ul class="pickup__list" role="list">
+        {%- for availability in pickups -%}
+          <li>
+            <strong>{{ availability.location.name | escape }}</strong>
+            <span class="meta">{% if availability.available %}{{ 'products.product.pickup.ready' | t }} · {{ availability.pick_up_time }}{% else %}{{ 'products.product.pickup.not_ready' | t }}{% endif %}</span>
+            {%- assign address = availability.location.address -%}
+            <address class="meta">{{ address | format_address }}</address>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </details>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.pickup_availability.name",
+  "settings": []
+}
+{% endschema %}

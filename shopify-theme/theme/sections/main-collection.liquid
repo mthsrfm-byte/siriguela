@@ -1,0 +1,74 @@
+{%- comment -%}
+  Collection page: editorial banner, native filters and sorting, product grid.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign cols = s.columns
+  assign sizes = '(min-width: 990px) calc((100vw - 96px) / ' | append: cols | append: '), 45vw'
+-%}
+<div class="section section--top color-{{ s.color_scheme }}">
+  <div class="page-width">
+    <header class="collection-hero{% if s.show_image and collection.image %} collection-hero--image{% endif %}">
+      <div class="collection-hero__text">
+        <p class="meta">{{ 'collections.products_count' | t: count: collection.all_products_count }}</p>
+        <h1 class="display display--lg">{{ collection.title | escape }}{% if s.show_signal %}{% render 'signal' %}{% endif %}</h1>
+        {%- if s.show_description and collection.description != blank -%}
+          <div class="rte collection-hero__desc">{{ collection.description }}</div>
+        {%- endif -%}
+      </div>
+      {%- if s.show_image and collection.image -%}
+        {% render 'media', image: collection.image, ratio: '3 / 2', sizes: '(min-width: 990px) 50vw, 100vw', eager: true, class: 'collection-hero__media' %}
+      {%- endif -%}
+    </header>
+
+    {%- paginate collection.products by s.per_page -%}
+      <div data-results="{{ section.id }}" id="Results-{{ section.id }}">
+        {%- if s.enable_filtering -%}
+          {% render 'facets', results: collection, section_id: section.id %}
+        {%- endif -%}
+        {%- if collection.products.size > 0 -%}
+          <div class="product-grid" style="--cols: {{ cols }}; --cols-mobile: {{ s.columns_mobile }};">
+            {%- for product in collection.products -%}
+              {%- assign i = paginate.current_offset | plus: forloop.index -%}
+              {%- liquid
+                assign eager = false
+                if forloop.index <= cols
+                  assign eager = true
+                endif
+              -%}
+              {% render 'product-card', product: product, index: i, sizes: sizes, eager: eager %}
+            {%- endfor -%}
+          </div>
+        {%- else -%}
+          <div class="empty-state">
+            {%- if collection.filters.size > 0 and collection.all_products_count > 0 -%}
+              <p class="empty-state__lead">{{ 'collections.empty_filtered' | t }}</p>
+              <a href="{{ collection.url }}" class="button button--secondary" data-facet-link>{{ 'collections.filters.clear_all' | t }}</a>
+            {%- else -%}
+              <p class="empty-state__lead">{{ 'collections.empty' | t }}<span class="signal" aria-hidden="true"></span></p>
+              <a href="{{ routes.all_products_collection_url }}" class="button button--secondary">{{ 'cart.continue' | t }}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+        {% render 'pagination', paginate: paginate %}
+      </div>
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_collection.name",
+  "class": "section-main-collection",
+  "settings": [
+    { "type": "checkbox", "id": "show_description", "default": true, "label": "t:sections.main_collection.settings.show_description.label" },
+    { "type": "checkbox", "id": "show_image", "default": false, "label": "t:sections.main_collection.settings.show_image.label" },
+    { "type": "checkbox", "id": "show_signal", "default": true, "label": "t:common.show_signal" },
+    { "type": "checkbox", "id": "enable_filtering", "default": true, "label": "t:sections.main_collection.settings.enable_filtering.label", "info": "t:sections.main_collection.settings.enable_filtering.info" },
+    { "type": "range", "id": "per_page", "min": 8, "max": 48, "step": 4, "default": 24, "label": "t:sections.main_collection.settings.per_page.label" },
+    { "type": "range", "id": "columns", "min": 2, "max": 5, "step": 1, "default": 4, "label": "t:common.columns_desktop" },
+    { "type": "range", "id": "columns_mobile", "min": 1, "max": 2, "step": 1, "default": 2, "label": "t:common.columns_mobile" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

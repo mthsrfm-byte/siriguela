@@ -1,0 +1,61 @@
+{%- comment -%}
+  Collections as large editorial tiles with numbered captions.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    {%- assign heading_id = 'Heading-' | append: section.id -%}
+    {% render 'section-heading', heading: s.heading, caption: s.caption, id: heading_id, signal: s.show_signal %}
+    <ul class="tiles" role="list" style="--cols: {{ s.columns }};">
+      {%- for block in section.blocks -%}
+        {%- assign c = block.settings.collection -%}
+        <li class="tile" {{ block.shopify_attributes }} data-reveal>
+          <a href="{{ c.url | default: '#' }}" class="tile__link">
+            {%- assign img = block.settings.image | default: c.featured_image -%}
+            {% render 'media', image: img, ratio: s.ratio, sizes: '(min-width: 990px) 33vw, 100vw', placeholder: 'collection-1', class: 'tile__media' %}
+            <span class="tile__caption">
+              <span class="meta">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+              <span class="tile__title">{{ block.settings.title | default: c.title | default: 'Collection' | escape }}</span>
+              {%- if c.products_count -%}<span class="meta">{{ 'collections.products_count' | t: count: c.products_count }}</span>{%- endif -%}
+            </span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.collection_list.name",
+  "class": "section-collection-list",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "text", "id": "heading", "default": "Shop by category", "label": "t:common.heading" },
+    { "type": "checkbox", "id": "show_signal", "default": false, "label": "t:common.show_signal" },
+    { "type": "text", "id": "caption", "label": "t:common.caption" },
+    { "type": "range", "id": "columns", "min": 2, "max": 4, "step": 1, "default": 3, "label": "t:common.columns_desktop" },
+    {
+      "type": "select", "id": "ratio", "default": "3 / 4", "label": "t:common.image_ratio",
+      "options": [
+        { "value": "3 / 4", "label": "t:common.ratios.portrait" },
+        { "value": "1 / 1", "label": "t:common.ratios.square" },
+        { "value": "4 / 3", "label": "t:common.ratios.landscape" }
+      ]
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "collection", "name": "t:common.collection",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "t:common.collection" },
+        { "type": "text", "id": "title", "label": "t:sections.collection_list.blocks.collection.settings.title.label" },
+        { "type": "image_picker", "id": "image", "label": "t:sections.collection_list.blocks.collection.settings.image.label" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "t:sections.collection_list.name", "blocks": [{ "type": "collection" }, { "type": "collection" }, { "type": "collection" }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

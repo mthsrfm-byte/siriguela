@@ -1,0 +1,39 @@
+{%- comment -%}
+  Cart page. Works as a plain form without JavaScript (update and remove
+  links); with JavaScript, quantities update in place.
+{%- endcomment -%}
+<cart-page class="section section--top color-{{ section.settings.color_scheme }}" data-section-id="{{ section.id }}">
+  <div class="page-width">
+    <h1 class="display display--lg page-title">{{ 'cart.title' | t }}{% render 'signal' %}</h1>
+    <div data-cart-body>
+      {%- if cart.empty? -%}
+        <div class="empty-state">
+          <p class="empty-state__lead">{{ 'cart.empty' | t }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'cart.continue' | t }}</a>
+          {%- if shop.customer_accounts_enabled and customer == null -%}
+            <p class="meta">{{ 'cart.login_html' | t: link: routes.account_login_url }}</p>
+          {%- endif -%}
+        </div>
+      {%- else -%}
+        <div class="cart-page">
+          <form action="{{ routes.cart_url }}" method="post" id="CartForm" class="cart-page__items" novalidate>
+            {% render 'cart-items', section_id: section.id %}
+            <noscript><button type="submit" name="update" class="button button--secondary">{{ 'cart.update' | t }}</button></noscript>
+          </form>
+          <aside class="cart-page__summary" aria-label="{{ 'cart.summary' | t }}">
+            {% render 'cart-summary' %}
+          </aside>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</cart-page>
+
+{% schema %}
+{
+  "name": "t:sections.main_cart.name",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

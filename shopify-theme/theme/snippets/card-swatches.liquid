@@ -1,0 +1,20 @@
+{%- doc -%}
+  Compact swatches for the first option that has swatch data (color/pattern).
+
+  @param {product} product - The product.
+{%- enddoc -%}
+{%- for option in product.options_with_values -%}
+  {%- if option.values.first.swatch -%}
+    <ul class="card-swatches" aria-label="{{ option.name | escape }}">
+      {%- for value in option.values limit: 6 -%}
+        <li>
+          <span class="swatch swatch--sm" style="{% render 'swatch-style', swatch: value.swatch %}" title="{{ value | escape }}"><span class="visually-hidden">{{ value | escape }}</span></span>
+        </li>
+      {%- endfor -%}
+      {%- if option.values.size > 6 -%}
+        <li class="meta">+{{ option.values.size | minus: 6 }}</li>
+      {%- endif -%}
+    </ul>
+    {%- break -%}
+  {%- endif -%}
+{%- endfor -%}

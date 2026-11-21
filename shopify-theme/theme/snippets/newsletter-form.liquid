@@ -1,0 +1,22 @@
+{%- doc -%}
+  Native Shopify customer signup form.
+
+  @param {string} id - Unique id for the form.
+  @param {boolean} [large] - Larger input styling.
+{%- enddoc -%}
+{%- form 'customer', id: id, class: 'newsletter-form' -%}
+  <input type="hidden" name="contact[tags]" value="newsletter">
+  {%- if form.posted_successfully? -%}
+    <p class="newsletter-form__ok" role="status" tabindex="-1" autofocus>{{ 'newsletter.success' | t }}</p>
+  {%- else -%}
+    <div class="newsletter-form__row{% if large %} newsletter-form__row--large{% endif %}">
+      <label for="{{ id }}-email" class="visually-hidden">{{ 'newsletter.label' | t }}</label>
+      <input id="{{ id }}-email" type="email" name="contact[email]" class="field__input" required autocomplete="email" autocapitalize="off" spellcheck="false"
+        placeholder="{{ 'newsletter.label' | t }}"{% if form.errors %} aria-invalid="true" aria-describedby="{{ id }}-error"{% endif %}>
+      <button type="submit" class="button">{{ 'newsletter.button' | t }}</button>
+    </div>
+    {%- if form.errors -%}
+      <p id="{{ id }}-error" class="form-error meta" role="alert">{{ form.errors.translated_fields.email | capitalize }} {{ form.errors.messages.email }}</p>
+    {%- endif -%}
+  {%- endif -%}
+{%- endform -%}

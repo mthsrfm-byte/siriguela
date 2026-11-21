@@ -1,0 +1,66 @@
+{%- comment -%}
+  Signature section: a numbered editorial index. Each row reveals its image
+  on hover (pointer devices) and shows it inline on touch screens.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    {%- assign heading_id = 'Heading-' | append: section.id -%}
+    {% render 'section-heading', heading: s.heading, caption: s.caption, id: heading_id, signal: s.show_signal %}
+    <ol class="index-list" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign b = block.settings
+          assign url = b.link
+          if url == blank and b.product != blank
+            assign url = b.product.url
+          endif
+          assign img = b.image
+          if img == blank and b.product != blank
+            assign img = b.product.featured_image
+          endif
+          assign title = b.title | default: b.product.title
+        -%}
+        <li class="index-row" {{ block.shopify_attributes }} data-reveal>
+          {%- if url != blank -%}<a href="{{ url }}" class="index-row__link">{%- else -%}<div class="index-row__link">{%- endif -%}
+            <span class="index-row__num meta">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+            <span class="index-row__title">{{ title | escape }}</span>
+            <span class="index-row__detail meta">{{ b.detail | escape }}</span>
+            <span class="index-row__thumb">
+              {% render 'media', image: img, ratio: '4 / 5', sizes: '240px', placeholder: 'product-2', max_width: 600 %}
+            </span>
+            {%- if url != blank -%}<span class="index-row__go" aria-hidden="true">{% render 'icon', name: 'arrow' %}</span>{%- endif -%}
+          {%- if url != blank -%}</a>{%- else -%}</div>{%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.editorial_index.name",
+  "class": "section-editorial-index",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "text", "id": "heading", "default": "Index", "label": "t:common.heading" },
+    { "type": "checkbox", "id": "show_signal", "default": false, "label": "t:common.show_signal" },
+    { "type": "text", "id": "caption", "default": "Where each piece begins", "label": "t:common.caption" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "row", "name": "t:sections.editorial_index.blocks.row.name",
+      "settings": [
+        { "type": "product", "id": "product", "label": "t:common.product", "info": "t:sections.editorial_index.blocks.row.settings.product.info" },
+        { "type": "text", "id": "title", "default": "Linen overshirt", "label": "t:common.title" },
+        { "type": "text", "id": "detail", "default": "Washed linen · Portugal", "label": "t:sections.editorial_index.blocks.row.settings.detail.label" },
+        { "type": "image_picker", "id": "image", "label": "t:common.image" },
+        { "type": "url", "id": "link", "label": "t:common.link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "t:sections.editorial_index.name", "blocks": [{ "type": "row" }, { "type": "row", "settings": { "title": "Cord trouser", "detail": "Cotton corduroy · Italy" } }, { "type": "row", "settings": { "title": "Field tote", "detail": "Waxed canvas · Spain" } }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

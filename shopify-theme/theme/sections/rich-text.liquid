@@ -1,0 +1,48 @@
+{%- comment -%}
+  Statement text: a large lead sentence plus optional columns of body text.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}">
+  <div class="page-width statement statement--{{ s.align }}">
+    {%- for block in section.blocks -%}
+      {%- case block.type -%}
+        {%- when 'kicker' -%}
+          <p class="meta statement__kicker" {{ block.shopify_attributes }}>{{ block.settings.text | escape }}</p>
+        {%- when 'lead' -%}
+          <p class="statement__lead display display--{{ block.settings.size }}" {{ block.shopify_attributes }} data-reveal>{{ block.settings.text | escape }}{% if block.settings.show_signal %}{% render 'signal' %}{% endif %}</p>
+        {%- when 'text' -%}
+          <div class="statement__cols rte" {{ block.shopify_attributes }} data-reveal>{{ block.settings.text }}</div>
+        {%- when 'button' -%}
+          {%- if block.settings.label != blank -%}
+            <a {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% else %}role="link" aria-disabled="true"{% endif %} class="link-arrow" {{ block.shopify_attributes }}>{{ block.settings.label | escape }}{% render 'icon', name: 'arrow' %}</a>
+          {%- endif -%}
+      {%- endcase -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.rich_text.name",
+  "class": "section-rich-text",
+  "settings": [
+    { "type": "select", "id": "align", "default": "left", "label": "t:common.alignment", "options": [{ "value": "left", "label": "t:common.positions.left" }, { "value": "center", "label": "t:common.positions.center" }] },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    { "type": "kicker", "name": "t:common.caption", "limit": 1, "settings": [{ "type": "text", "id": "text", "default": "About", "label": "t:common.text" }] },
+    {
+      "type": "lead", "name": "t:sections.rich_text.blocks.lead.name",
+      "settings": [
+        { "type": "textarea", "id": "text", "default": "Good design is quiet in every place but one.", "label": "t:common.text" },
+        { "type": "select", "id": "size", "default": "md", "label": "t:common.heading_size", "options": [{ "value": "sm", "label": "t:common.sizes.small" }, { "value": "md", "label": "t:common.sizes.medium" }, { "value": "lg", "label": "t:common.sizes.large" }] },
+        { "type": "checkbox", "id": "show_signal", "default": true, "label": "t:common.show_signal" }
+      ]
+    },
+    { "type": "text", "name": "t:common.text", "settings": [{ "type": "richtext", "id": "text", "default": "<p>Use this space to describe your brand in your own voice. Long paragraphs flow into two columns on large screens.</p>", "label": "t:common.text" }] },
+    { "type": "button", "name": "t:common.link", "limit": 1, "settings": [{ "type": "text", "id": "label", "default": "Our story", "label": "t:common.link_label" }, { "type": "url", "id": "link", "label": "t:common.link" }] }
+  ],
+  "presets": [{ "name": "t:sections.rich_text.name", "blocks": [{ "type": "kicker" }, { "type": "lead" }, { "type": "text" }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

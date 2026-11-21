@@ -1,0 +1,66 @@
+{%- doc -%}
+  Option selectors. Each value knows its own availability; changing a value
+  re-renders the product section for that combination (option_values API).
+  Without JavaScript, a plain variant select inside <noscript> is used.
+
+  @param {product} product - The product.
+  @param {string} style - "buttons" or "dropdown".
+  @param {string} form_id - Product form id.
+  @param {string} section_id - Section id.
+{%- enddoc -%}
+{%- unless product.has_only_default_variant -%}
+  <variant-picker class="picker" data-section-id="{{ section_id }}" data-url="{{ product.url }}">
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign has_swatch = false
+        if option.values.first.swatch.color or option.values.first.swatch.image
+          assign has_swatch = true
+        endif
+      -%}
+      {%- if style == 'dropdown' and has_swatch == false -%}
+        <div class="picker__field">
+          <label class="meta picker__label" for="Option-{{ section_id }}-{{ forloop.index0 }}">{{ option.name | escape }}</label>
+          <div class="select">
+            <select id="Option-{{ section_id }}-{{ forloop.index0 }}" class="select__input" data-option-select>
+              {%- for value in option.values -%}
+                <option value="{{ value.id }}"{% if value.selected %} selected{% endif %}>
+                  {{ value | escape }}{% unless value.available %} — {{ 'products.product.sold_out' | t }}{% endunless %}
+                </option>
+              {%- endfor -%}
+            </select>
+            {% render 'icon', name: 'chevron' %}
+          </div>
+        </div>
+      {%- else -%}
+        <fieldset class="picker__field">
+          <legend class="meta picker__label">{{ option.name | escape }}: <span class="picker__current">{{ option.selected_value | escape }}</span></legend>
+          <div class="picker__values{% if has_swatch %} picker__values--swatch{% endif %}">
+            {%- for value in option.values -%}
+              {%- assign input_id = 'Opt-' | append: section_id | append: '-' | append: option.position | append: '-' | append: forloop.index0 -%}
+              <input type="radio" class="picker__input visually-hidden" id="{{ input_id }}" name="{{ option.name | escape }}-{{ section_id }}" value="{{ value.id }}" data-option-value{% if value.selected %} checked{% endif %}>
+              <label for="{{ input_id }}" class="picker__value{% unless value.available %} is-unavailable{% endunless %}{% if has_swatch %} picker__value--swatch{% endif %}">
+                {%- if has_swatch -%}
+                  <span class="swatch" style="{% render 'swatch-style', swatch: value.swatch %}"></span>
+                  <span class="visually-hidden">{{ value | escape }}</span>
+                {%- else -%}
+                  {{ value | escape }}
+                {%- endif -%}
+                {%- unless value.available -%}<span class="visually-hidden">, {{ 'products.product.sold_out' | t }}</span>{%- endunless -%}
+              </label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endif -%}
+    {%- endfor -%}
+  </variant-picker>
+  <noscript>
+    <label class="meta" for="NoJsVariant-{{ section_id }}">{{ 'products.product.variant_label' | t }}</label>
+    <select id="NoJsVariant-{{ section_id }}" name="id" form="{{ form_id }}" class="select__input">
+      {%- for variant in product.variants -%}
+        <option value="{{ variant.id }}"{% if variant == product.selected_or_first_available_variant %} selected{% endif %}{% unless variant.available %} disabled{% endunless %}>
+          {{ variant.title | escape }} — {{ variant.price | money | strip_html }}
+        </option>
+      {%- endfor -%}
+    </select>
+  </noscript>
+{%- endunless -%}

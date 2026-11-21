@@ -1,0 +1,36 @@
+{%- doc -%}
+  Cart totals, discounts, note and checkout button.
+{%- enddoc -%}
+<div class="cart-summary">
+  {%- if cart.cart_level_discount_applications.size > 0 -%}
+    <ul class="cart-summary__discounts meta" role="list">
+      {%- for discount in cart.cart_level_discount_applications -%}
+        <li>{{ discount.title }} (−{{ discount.total_allocated_amount | money }})</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+  <div class="cart-summary__total">
+    <span>{{ 'cart.subtotal' | t }}</span>
+    <strong>{% if settings.currency_code_enabled %}{{ cart.total_price | money_with_currency }}{% else %}{{ cart.total_price | money }}{% endif %}</strong>
+  </div>
+  <p class="cart-summary__note meta">
+    {%- if cart.duties_included and cart.taxes_included -%}
+      {{ 'cart.duties_and_taxes_included_shipping_at_checkout' | t }}
+    {%- elsif cart.taxes_included -%}
+      {{ 'cart.taxes_included_shipping_at_checkout' | t }}
+    {%- else -%}
+      {{ 'cart.taxes_and_shipping_at_checkout' | t }}
+    {%- endif -%}
+  </p>
+  {%- if settings.cart_show_note -%}
+    <details class="cart-note">
+      <summary>{{ 'cart.note' | t }}</summary>
+      <label for="CartNote-{{ section.id }}" class="visually-hidden">{{ 'cart.note' | t }}</label>
+      <textarea id="CartNote-{{ section.id }}" name="note" form="CartForm" class="field__input" data-cart-note>{{ cart.note }}</textarea>
+    </details>
+  {%- endif -%}
+  <button type="submit" name="checkout" form="CartForm" class="button button--full"{% if cart.empty? %} disabled{% endif %}>{{ 'cart.checkout' | t }}</button>
+  {%- if additional_checkout_buttons -%}
+    <div class="cart-summary__dynamic">{{ content_for_additional_checkout_buttons }}</div>
+  {%- endif -%}
+</div>

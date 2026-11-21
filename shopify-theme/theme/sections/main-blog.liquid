@@ -1,0 +1,70 @@
+{%- comment -%}
+  Blog / journal index: first article as a feature, the rest in a grid.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<div class="section section--top color-{{ s.color_scheme }}">
+  <div class="page-width">
+    <header class="section-head section-head--page">
+      <h1 class="display display--lg">{{ blog.title | escape }}{% render 'signal' %}</h1>
+      {%- if blog.all_tags.size > 0 -%}
+        <nav class="tags" aria-label="{{ 'blogs.tags' | t }}">
+          <a href="{{ blog.url }}" class="chip{% if current_tags == blank %} is-active{% endif %}">{{ 'blogs.all' | t }}</a>
+          {%- for tag in blog.all_tags -%}
+            {%- if current_tags contains tag -%}
+              <span class="chip is-active" aria-current="page">{{ tag }}</span>
+            {%- else -%}
+              {{ tag | link_to_tag: tag | replace: '<a ', '<a class="chip" ' }}
+            {%- endif -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+    </header>
+    {%- paginate blog.articles by 12 -%}
+      {%- if blog.articles.size > 0 -%}
+        <div class="journal">
+          {%- for article in blog.articles -%}
+            <article class="journal__item{% if forloop.first and paginate.current_page == 1 %} journal__item--lead{% endif %}" data-reveal>
+              <a href="{{ article.url }}" class="journal__link">
+                {%- if s.show_image -%}
+                  {%- liquid
+                    if forloop.first and paginate.current_page == 1
+                      assign r = '3 / 2'
+                      assign sz = '(min-width: 990px) 66vw, 100vw'
+                    else
+                      assign r = '4 / 3'
+                      assign sz = '(min-width: 990px) 33vw, 100vw'
+                    endif
+                  -%}
+                  {% render 'media', image: article.image, ratio: r, sizes: sz, placeholder: 'lifestyle-1', eager: forloop.first %}
+                {%- endif -%}
+                <div class="journal__text">
+                  <p class="meta">{{ article.published_at | time_tag: format: 'date' }}{% if s.show_author %} · {{ article.author }}{% endif %}</p>
+                  <h2 class="journal__title">{{ article.title | escape }}</h2>
+                  {%- if article.excerpt != blank -%}
+                    <p class="journal__excerpt">{{ article.excerpt | strip_html | truncatewords: 30 }}</p>
+                  {%- else -%}
+                    <p class="journal__excerpt">{{ article.content | strip_html | truncatewords: 30 }}</p>
+                  {%- endif -%}
+                </div>
+              </a>
+            </article>
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="empty-state"><p class="empty-state__lead">{{ 'blogs.empty' | t }}</p></div>
+      {%- endif -%}
+      {% render 'pagination', paginate: paginate %}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_blog.name",
+  "settings": [
+    { "type": "checkbox", "id": "show_image", "default": true, "label": "t:sections.main_blog.settings.show_image.label" },
+    { "type": "checkbox", "id": "show_author", "default": false, "label": "t:sections.main_blog.settings.show_author.label" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

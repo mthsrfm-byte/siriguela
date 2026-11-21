@@ -1,0 +1,42 @@
+{%- doc -%}
+  Responsive image with srcset, focal point support, lazy loading and a
+  placeholder when the image is missing.
+
+  @param {image} [image] - Image object. Renders a placeholder when blank.
+  @param {string} [sizes] - sizes attribute. Defaults to 100vw.
+  @param {string} [ratio] - Aspect ratio as CSS value, e.g. "4 / 5". Defaults to the image ratio.
+  @param {boolean} [eager] - Load eagerly with high fetch priority (above the fold).
+  @param {string} [class] - Extra class for the wrapper.
+  @param {string} [placeholder] - Placeholder name, e.g. "product-1". Defaults to "image".
+  @param {string} [alt] - Alt override.
+  @param {number} [max_width] - Largest width to request. Defaults to 3000.
+{%- enddoc -%}
+{%- liquid
+  assign widths = '360, 540, 720, 900, 1080, 1296, 1512, 1728, 2048, 2400, 3000'
+  assign max = max_width | default: 3000
+  if ratio == blank and image != blank
+    assign ratio = image.aspect_ratio | append: ''
+  endif
+  assign loading = 'lazy'
+  assign priority = 'auto'
+  if eager
+    assign loading = 'eager'
+    assign priority = 'high'
+  endif
+-%}
+<div class="media{% if class %} {{ class }}{% endif %}{% if image == blank %} media--placeholder{% endif %}"{% if ratio != blank %} style="--ratio: {{ ratio }};"{% endif %}>
+  {%- if image != blank -%}
+    {{
+      image
+      | image_url: width: max
+      | image_tag:
+        widths: widths,
+        sizes: sizes | default: '100vw',
+        loading: loading,
+        fetchpriority: priority,
+        alt: alt | default: image.alt | escape
+    }}
+  {%- else -%}
+    {{ placeholder | default: 'image' | placeholder_svg_tag: 'placeholder-svg' }}
+  {%- endif -%}
+</div>

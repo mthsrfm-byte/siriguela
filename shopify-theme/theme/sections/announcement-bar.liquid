@@ -1,0 +1,50 @@
+{%- comment -%}
+  Thin bar with one or more rotating messages.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+  <div class="announcement color-{{ section.settings.color_scheme }}" role="region" aria-label="{{ 'sections.announcement.label' | t }}">
+    <div class="announcement__inner page-width">
+      <announcement-rotator class="announcement__track" data-interval="{{ section.settings.interval }}">
+        {%- for block in section.blocks -%}
+          <p class="announcement__item meta"{% unless forloop.first %} hidden{% endunless %} {{ block.shopify_attributes }}>
+            {%- if block.settings.link != blank -%}
+              <a href="{{ block.settings.link }}">{{ block.settings.text | escape }}</a>
+            {%- else -%}
+              {{ block.settings.text | escape }}
+            {%- endif -%}
+          </p>
+        {%- endfor -%}
+      </announcement-rotator>
+      {%- if section.settings.show_localization -%}
+        <div class="announcement__aside">{% render 'localization', id: 'AnnouncementLocalization' %}</div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.announcement.name",
+  "class": "section-announcement",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-2" },
+    { "type": "range", "id": "interval", "min": 3, "max": 12, "step": 1, "unit": "s", "default": 5, "label": "t:sections.announcement.settings.interval.label" },
+    { "type": "checkbox", "id": "show_localization", "default": false, "label": "t:sections.announcement.settings.show_localization.label", "info": "t:sections.announcement.settings.show_localization.info" }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "t:sections.announcement.blocks.announcement.name",
+      "settings": [
+        { "type": "text", "id": "text", "default": "Free shipping on orders over $150", "label": "t:common.text" },
+        { "type": "url", "id": "link", "label": "t:common.link" }
+      ]
+    }
+  ],
+  "presets": [
+    { "name": "t:sections.announcement.name", "blocks": [{ "type": "announcement" }] }
+  ],
+  "enabled_on": { "groups": ["header"] }
+}
+{% endschema %}

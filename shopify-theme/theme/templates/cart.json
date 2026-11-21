@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart"
+    },
+    "recs": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Before you go",
+        "caption": "",
+        "layout": "rail",
+        "columns": 4,
+        "limit": 8
+      }
+    }
+  },
+  "order": [
+    "main",
+    "recs"
+  ]
+}

@@ -1,0 +1,54 @@
+{%- comment -%}
+  Products from one collection as a grid or a horizontal rail.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign collection = s.collection
+  assign cols = s.columns
+  assign sizes = '(min-width: 990px) calc((100vw - 96px) / ' | append: cols | append: '), (min-width: 750px) 45vw, 80vw'
+-%}
+<section class="section color-{{ s.color_scheme }}" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    {%- assign link = collection.url | default: routes.all_products_collection_url -%}
+    {%- assign heading_id = 'Heading-' | append: section.id -%}
+    {% render 'section-heading', heading: s.heading, caption: s.caption, link_label: s.link_label, link_url: link, id: heading_id, signal: s.show_signal %}
+    <div class="product-grid product-grid--{{ s.layout }}" style="--cols: {{ cols }}; --cols-mobile: {{ s.columns_mobile }};"{% if s.layout == 'rail' %} tabindex="0" role="region" aria-label="{{ s.heading | escape }}"{% endif %}>
+      {%- if collection != blank and collection.products_count > 0 -%}
+        {%- for product in collection.products limit: s.limit -%}
+          {% render 'product-card', product: product, index: forloop.index, sizes: sizes %}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..s.columns) -%}
+          {% render 'product-card', index: i, placeholder_index: i %}
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.featured_collection.name",
+  "class": "section-featured-collection",
+  "settings": [
+    { "type": "text", "id": "heading", "default": "New arrivals", "label": "t:common.heading" },
+    { "type": "checkbox", "id": "show_signal", "default": false, "label": "t:common.show_signal" },
+    { "type": "text", "id": "caption", "default": "Season 01", "label": "t:common.caption" },
+    { "type": "collection", "id": "collection", "label": "t:common.collection" },
+    { "type": "text", "id": "link_label", "default": "View all", "label": "t:common.link_label" },
+    { "type": "range", "id": "limit", "min": 2, "max": 24, "step": 1, "default": 8, "label": "t:sections.featured_collection.settings.limit.label" },
+    {
+      "type": "select", "id": "layout", "default": "grid", "label": "t:common.layout",
+      "options": [
+        { "value": "grid", "label": "t:sections.featured_collection.settings.layout.options__1.label" },
+        { "value": "rail", "label": "t:sections.featured_collection.settings.layout.options__2.label" }
+      ]
+    },
+    { "type": "range", "id": "columns", "min": 2, "max": 5, "step": 1, "default": 4, "label": "t:common.columns_desktop" },
+    { "type": "range", "id": "columns_mobile", "min": 1, "max": 2, "step": 1, "default": 2, "label": "t:common.columns_mobile" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "t:sections.featured_collection.name" }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

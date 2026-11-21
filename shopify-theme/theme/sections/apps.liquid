@@ -1,0 +1,19 @@
+{%- comment -%}
+  Container for app blocks.
+{%- endcomment -%}
+<div class="section">
+  <div class="page-width">
+    {%- for block in section.blocks -%}
+      {% render block %}
+    {%- endfor -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.apps.name",
+  "class": "section-apps",
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "t:sections.apps.name" }]
+}
+{% endschema %}

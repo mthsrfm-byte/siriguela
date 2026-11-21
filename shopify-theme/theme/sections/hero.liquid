@@ -1,0 +1,133 @@
+{%- comment -%}
+  Editorial hero. Separate desktop and mobile media (image or video),
+  live HTML headline with optional signal mark, three composition layouts.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign has_media = false
+  if s.image != blank or s.video != blank
+    assign has_media = true
+  endif
+  assign eager = false
+  if section.index == 1 or section.index == 2
+    assign eager = true
+  endif
+  assign loading = 'lazy'
+  assign priority = 'auto'
+  if eager
+    assign loading = 'eager'
+    assign priority = 'high'
+  endif
+-%}
+<section class="hero hero--{{ s.layout }} hero--h-{{ s.height }} color-{{ s.color_scheme }}{% if has_media %} hero--media{% endif %}" style="--overlay: {{ s.overlay | divided_by: 100.0 }};" aria-labelledby="HeroTitle-{{ section.id }}">
+  <div class="hero__media">
+    {%- if s.video != blank -%}
+      <hero-video class="hero__video{% if s.image_mobile != blank or s.video_mobile != blank %} hero__video--desktop{% endif %}">
+        {{ s.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'none', image_size: '1600x', class: 'hero__video-el' }}
+      </hero-video>
+    {%- elsif s.image != blank -%}
+      <div class="hero__img{% if s.image_mobile != blank or s.video_mobile != blank %} hero__img--desktop{% endif %}">
+        {{ s.image | image_url: width: 3000 | image_tag: widths: '750, 1100, 1500, 1800, 2200, 2600, 3000', sizes: '100vw', loading: loading, fetchpriority: priority, alt: s.image.alt | escape }}
+      </div>
+    {%- endif -%}
+    {%- if s.video_mobile != blank -%}
+      <hero-video class="hero__video hero__video--mobile">
+        {{ s.video_mobile | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'none', image_size: '900x', class: 'hero__video-el' }}
+      </hero-video>
+    {%- elsif s.image_mobile != blank -%}
+      <div class="hero__img hero__img--mobile">
+        {{ s.image_mobile | image_url: width: 1400 | image_tag: widths: '450, 650, 900, 1200, 1400', sizes: '100vw', loading: loading, fetchpriority: priority, alt: s.image_mobile.alt | escape }}
+      </div>
+    {%- endif -%}
+    {%- unless has_media -%}
+      <div class="hero__img">{{ 'hero-apparel-1' | placeholder_svg_tag: 'placeholder-svg' }}</div>
+    {%- endunless -%}
+    {%- if s.video != blank or s.video_mobile != blank -%}
+      <button type="button" class="hero__pause icon-button" data-video-toggle aria-pressed="false" aria-label="{{ 'sections.hero.pause' | t }}">
+        <span class="hero__pause-icon">{% render 'icon', name: 'pause' %}</span><span class="hero__play-icon">{% render 'icon', name: 'play' %}</span>
+      </button>
+    {%- endif -%}
+  </div>
+
+  <div class="hero__content page-width">
+    {%- if s.kicker != blank or s.text != blank or s.button_label != blank -%}
+      <div class="hero__aside" data-reveal>
+        {%- if s.kicker != blank -%}<p class="meta hero__kicker">{{ s.kicker | escape }}</p>{%- endif -%}
+        {%- if s.text != blank -%}<div class="hero__text rte">{{ s.text }}</div>{%- endif -%}
+        {%- if s.button_label != blank -%}
+          <div class="hero__buttons">
+            <a {% if s.button_link != blank %}href="{{ s.button_link }}"{% else %}role="link" aria-disabled="true"{% endif %} class="button{% if s.button_style == 'secondary' %} button--secondary{% elsif s.button_style == 'link' %} button--link{% endif %}">{{ s.button_label | escape }}</a>
+            {%- if s.button_label_2 != blank -%}
+              <a {% if s.button_link_2 != blank %}href="{{ s.button_link_2 }}"{% else %}role="link" aria-disabled="true"{% endif %} class="button button--link">{{ s.button_label_2 | escape }}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    {%- if s.heading != blank -%}
+      <h2 id="HeroTitle-{{ section.id }}" class="hero__title display display--{{ s.heading_size }}" data-reveal>
+        {{- s.heading | escape -}}{%- if s.show_signal -%}{% render 'signal' %}{%- endif -%}
+      </h2>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "class": "section-hero",
+  "settings": [
+    { "type": "header", "content": "t:sections.hero.settings.header_media.content" },
+    { "type": "image_picker", "id": "image", "label": "t:sections.hero.settings.image.label", "info": "t:sections.hero.settings.image.info" },
+    { "type": "video", "id": "video", "label": "t:sections.hero.settings.video.label", "info": "t:sections.hero.settings.video.info" },
+    { "type": "image_picker", "id": "image_mobile", "label": "t:sections.hero.settings.image_mobile.label", "info": "t:sections.hero.settings.image_mobile.info" },
+    { "type": "video", "id": "video_mobile", "label": "t:sections.hero.settings.video_mobile.label" },
+    { "type": "range", "id": "overlay", "min": 0, "max": 80, "step": 5, "unit": "%", "default": 15, "label": "t:sections.hero.settings.overlay.label" },
+    { "type": "header", "content": "t:sections.hero.settings.header_layout.content" },
+    {
+      "type": "select", "id": "layout", "default": "margin", "label": "t:sections.hero.settings.layout.label",
+      "options": [
+        { "value": "margin", "label": "t:sections.hero.settings.layout.options__1.label" },
+        { "value": "center", "label": "t:sections.hero.settings.layout.options__2.label" },
+        { "value": "split", "label": "t:sections.hero.settings.layout.options__3.label" }
+      ]
+    },
+    {
+      "type": "select", "id": "height", "default": "full", "label": "t:sections.hero.settings.height.label",
+      "options": [
+        { "value": "full", "label": "t:sections.hero.settings.height.options__1.label" },
+        { "value": "large", "label": "t:sections.hero.settings.height.options__2.label" },
+        { "value": "medium", "label": "t:sections.hero.settings.height.options__3.label" }
+      ]
+    },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-4" },
+    { "type": "header", "content": "t:sections.hero.settings.header_text.content" },
+    { "type": "text", "id": "heading", "default": "Made to stay.", "label": "t:common.heading" },
+    {
+      "type": "select", "id": "heading_size", "default": "xl", "label": "t:common.heading_size",
+      "options": [
+        { "value": "md", "label": "t:common.sizes.medium" },
+        { "value": "lg", "label": "t:common.sizes.large" },
+        { "value": "xl", "label": "t:common.sizes.extra_large" }
+      ]
+    },
+    { "type": "checkbox", "id": "show_signal", "default": true, "label": "t:common.show_signal" },
+    { "type": "text", "id": "kicker", "default": "Autumn edit", "label": "t:sections.hero.settings.kicker.label" },
+    { "type": "richtext", "id": "text", "default": "<p>Considered pieces in natural fibers, designed to be worn for years and photographed in good light.</p>", "label": "t:common.text" },
+    { "type": "text", "id": "button_label", "default": "Shop the collection", "label": "t:common.button_label" },
+    { "type": "url", "id": "button_link", "label": "t:common.button_link" },
+    {
+      "type": "select", "id": "button_style", "default": "primary", "label": "t:common.button_style",
+      "options": [
+        { "value": "primary", "label": "t:common.button_styles.primary" },
+        { "value": "secondary", "label": "t:common.button_styles.secondary" },
+        { "value": "link", "label": "t:common.button_styles.link" }
+      ]
+    },
+    { "type": "text", "id": "button_label_2", "label": "t:common.button_label_2" },
+    { "type": "url", "id": "button_link_2", "label": "t:common.button_link_2" }
+  ],
+  "presets": [{ "name": "t:sections.hero.name" }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

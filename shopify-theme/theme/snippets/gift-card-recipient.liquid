@@ -1,0 +1,32 @@
+{%- doc -%}
+  Optional recipient fields for gift card products.
+
+  @param {form} form - The product form object.
+  @param {string} section_id - Section id.
+{%- enddoc -%}
+{%- assign p = 'Recipient-' | append: section_id -%}
+<recipient-form class="recipient">
+  <label class="recipient__toggle" for="{{ p }}-checkbox">
+    <input type="checkbox" id="{{ p }}-checkbox" name="properties[__shopify_send_gift_card_to_recipient]" value="on" data-recipient-toggle>
+    <span>{{ 'recipient.checkbox' | t }}</span>
+  </label>
+  <div class="recipient__fields" data-recipient-fields hidden>
+    <div class="field">
+      <label for="{{ p }}-email" class="meta">{{ 'recipient.email_label' | t }}</label>
+      <input id="{{ p }}-email" class="field__input" type="email" name="properties[Recipient email]" value="{{ form.email }}" autocomplete="email" disabled>
+    </div>
+    <div class="field">
+      <label for="{{ p }}-name" class="meta">{{ 'recipient.name_label' | t }}</label>
+      <input id="{{ p }}-name" class="field__input" type="text" name="properties[Recipient name]" value="{{ form.name }}" autocomplete="name" disabled>
+    </div>
+    <div class="field">
+      <label for="{{ p }}-message" class="meta">{{ 'recipient.message_label' | t }}</label>
+      <textarea id="{{ p }}-message" class="field__input" name="properties[Message]" maxlength="200" rows="3" disabled>{{ form.message }}</textarea>
+    </div>
+    <div class="field">
+      <label for="{{ p }}-date" class="meta">{{ 'recipient.send_on_label' | t }}</label>
+      <input id="{{ p }}-date" class="field__input" type="date" name="properties[Send on]" value="{{ form.send_on }}" pattern="\d{4}-\d{2}-\d{2}" disabled>
+    </div>
+    <input type="hidden" name="properties[__shopify_offset]" value="" data-recipient-offset disabled>
+  </div>
+</recipient-form>

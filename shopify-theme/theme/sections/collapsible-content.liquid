@@ -1,0 +1,46 @@
+{%- comment -%}
+  Questions and answers using native details/summary.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width faq">
+    {%- assign heading_id = 'Heading-' | append: section.id -%}
+    {% render 'section-heading', heading: s.heading, caption: s.caption, id: heading_id %}
+    <div class="faq__list">
+      {%- for block in section.blocks -%}
+        <details class="accordion" {{ block.shopify_attributes }}{% if s.open_first and forloop.first %} open{% endif %}>
+          <summary class="accordion__summary">{{ block.settings.heading | escape }}{% render 'icon', name: 'plus' %}</summary>
+          <div class="accordion__body rte">
+            {{ block.settings.text }}
+            {%- if block.settings.page != blank -%}{{ block.settings.page.content }}{%- endif -%}
+          </div>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.collapsible_content.name",
+  "class": "section-collapsible-content",
+  "settings": [
+    { "type": "text", "id": "heading", "default": "Questions", "label": "t:common.heading" },
+    { "type": "text", "id": "caption", "label": "t:common.caption" },
+    { "type": "checkbox", "id": "open_first", "default": false, "label": "t:sections.collapsible_content.settings.open_first.label" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "row", "name": "t:sections.collapsible_content.blocks.row.name",
+      "settings": [
+        { "type": "text", "id": "heading", "default": "How long does shipping take?", "label": "t:common.heading" },
+        { "type": "richtext", "id": "text", "default": "<p>Answer the questions your customers ask most often.</p>", "label": "t:common.text" },
+        { "type": "page", "id": "page", "label": "t:sections.collapsible_content.blocks.row.settings.page.label" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "t:sections.collapsible_content.name", "blocks": [{ "type": "row" }, { "type": "row", "settings": { "heading": "Can I return an item?" } }, { "type": "row", "settings": { "heading": "How should I care for it?" } }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

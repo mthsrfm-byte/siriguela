@@ -1,0 +1,44 @@
+{%- comment -%}
+  Quotes from press or customers, entered by the merchant.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}" aria-labelledby="Heading-{{ section.id }}">
+  <div class="page-width">
+    {%- assign heading_id = 'Heading-' | append: section.id -%}
+    {% render 'section-heading', heading: s.heading, caption: s.caption, id: heading_id %}
+    <ul class="quotes" role="list">
+      {%- for block in section.blocks -%}
+        <li class="quote" {{ block.shopify_attributes }} data-reveal>
+          <figure>
+            <blockquote class="quote__text">{{ block.settings.quote | escape }}</blockquote>
+            {%- if block.settings.author != blank -%}<figcaption class="meta">{{ block.settings.author | escape }}</figcaption>{%- endif -%}
+          </figure>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.quotes.name",
+  "class": "section-quotes",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "heading", "default": "In their words", "label": "t:common.heading" },
+    { "type": "text", "id": "caption", "label": "t:common.caption" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "blocks": [
+    {
+      "type": "quote", "name": "t:sections.quotes.blocks.quote.name",
+      "settings": [
+        { "type": "textarea", "id": "quote", "default": "Share a review or a press mention in its original words.", "label": "t:sections.quotes.blocks.quote.settings.quote.label" },
+        { "type": "text", "id": "author", "default": "Name, publication", "label": "t:sections.quotes.blocks.quote.settings.author.label" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "t:sections.quotes.name", "blocks": [{ "type": "quote" }, { "type": "quote" }, { "type": "quote" }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

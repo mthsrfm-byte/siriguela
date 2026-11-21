@@ -1,0 +1,100 @@
+{%- doc -%}
+  Native storefront filtering and sorting. Works as a plain GET form without
+  JavaScript; with JavaScript, results refresh in place via Section Rendering.
+
+  @param {object} results - collection or search object.
+  @param {string} section_id - Section id to re-render.
+{%- enddoc -%}
+{%- liquid
+  assign sort_by = results.sort_by | default: results.default_sort_by
+  assign active_count = 0
+  for filter in results.filters
+    assign active_count = active_count | plus: filter.active_values.size
+    if filter.type == 'price_range'
+      if filter.min_value.value != null or filter.max_value.value != null
+        assign active_count = active_count | plus: 1
+      endif
+    endif
+  endfor
+-%}
+<facet-filters class="facets" data-section-id="{{ section_id }}">
+  <form class="facets__form" id="Facets-{{ section_id }}" data-facets-form>
+    {%- if results.terms -%}<input type="hidden" name="q" value="{{ results.terms | escape }}"><input type="hidden" name="options[prefix]" value="last">{%- endif -%}
+    <div class="facets__bar">
+      {%- if results.filters != empty -%}
+        <details class="facets__drawer" data-facets-drawer>
+          <summary class="button button--secondary button--small">{{ 'collections.filters.title' | t }}{% if active_count > 0 %} ({{ active_count }}){% endif %}</summary>
+          <div class="facets__panel">
+            {%- for filter in results.filters -%}
+              <details class="facet" {% if filter.active_values.size > 0 or filter.min_value.value or filter.max_value.value %}open{% endif %}>
+                <summary class="facet__summary meta">{{ filter.label | escape }}{% render 'icon', name: 'chevron' %}</summary>
+                <div class="facet__body">
+                  {%- case filter.type -%}
+                    {%- when 'boolean', 'list' -%}
+                      <ul class="facet__list{% if filter.presentation == 'swatch' %} facet__list--swatch{% endif %}" role="list">
+                        {%- for value in filter.values -%}
+                          {%- assign fid = 'Filter-' | append: section_id | append: '-' | append: filter.param_name | handleize | append: '-' | append: forloop.index -%}
+                          <li>
+                            <input type="checkbox" class="facet__checkbox" id="{{ fid }}" name="{{ value.param_name }}" value="{{ value.value }}"{% if value.active %} checked{% endif %}{% if value.count == 0 and value.active == false %} disabled{% endif %}>
+                            <label for="{{ fid }}" class="facet__label{% if value.count == 0 and value.active == false %} is-disabled{% endif %}">
+                              {%- if filter.presentation == 'swatch' and value.swatch -%}
+                                <span class="swatch swatch--sm" style="{% render 'swatch-style', swatch: value.swatch %}"></span>
+                              {%- endif -%}
+                              <span>{{ value.label | escape }}</span> <span class="meta">({{ value.count }})</span>
+                            </label>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {%- when 'price_range' -%}
+                      <div class="facet__price">
+                        <div class="field">
+                          <label for="Min-{{ section_id }}" class="meta">{{ 'collections.filters.from' | t }} ({{ cart.currency.symbol }})</label>
+                          <input class="field__input" id="Min-{{ section_id }}" type="number" inputmode="decimal" name="{{ filter.min_value.param_name }}" value="{{ filter.min_value.value | money_without_currency | remove: ',' }}" min="0" placeholder="0">
+                        </div>
+                        <div class="field">
+                          <label for="Max-{{ section_id }}" class="meta">{{ 'collections.filters.to' | t }} ({{ cart.currency.symbol }})</label>
+                          <input class="field__input" id="Max-{{ section_id }}" type="number" inputmode="decimal" name="{{ filter.max_value.param_name }}" value="{{ filter.max_value.value | money_without_currency | remove: ',' }}" min="0" placeholder="{{ filter.range_max | money_without_currency | remove: ',' }}">
+                        </div>
+                      </div>
+                  {%- endcase -%}
+                </div>
+              </details>
+            {%- endfor -%}
+            <noscript><button type="submit" class="button button--small">{{ 'collections.filters.apply' | t }}</button></noscript>
+          </div>
+        </details>
+      {%- endif -%}
+
+      <div class="facets__sort">
+        <label for="SortBy-{{ section_id }}" class="meta">{{ 'collections.sorting.title' | t }}</label>
+        <div class="select select--quiet">
+          <select name="sort_by" id="SortBy-{{ section_id }}" class="select__input">
+            {%- for option in results.sort_options -%}
+              <option value="{{ option.value | escape }}"{% if option.value == sort_by %} selected{% endif %}>{{ option.name | escape }}</option>
+            {%- endfor -%}
+          </select>
+          {% render 'icon', name: 'chevron' %}
+        </div>
+        <noscript><button type="submit" class="button button--small">{{ 'collections.sorting.apply' | t }}</button></noscript>
+      </div>
+
+      <p class="facets__count meta" role="status" data-facets-count>{{ 'collections.products_count' | t: count: results.products_count }}</p>
+    </div>
+
+    {%- if active_count > 0 -%}
+      <ul class="facets__active" role="list">
+        {%- for filter in results.filters -%}
+          {%- for value in filter.active_values -%}
+            <li><a href="{{ value.url_to_remove }}" class="chip" data-facet-link>{{ filter.label | escape }}: {{ value.label | escape }} {% render 'icon', name: 'close' %}<span class="visually-hidden">{{ 'collections.filters.remove' | t }}</span></a></li>
+          {%- endfor -%}
+          {%- if filter.type == 'price_range' -%}
+            {%- if filter.min_value.value != null or filter.max_value.value != null -%}
+              <li><a href="{{ filter.url_to_remove }}" class="chip" data-facet-link>{{ filter.min_value.value | default: 0 | money }}–{{ filter.max_value.value | default: filter.range_max | money }} {% render 'icon', name: 'close' %}<span class="visually-hidden">{{ 'collections.filters.remove' | t }}</span></a></li>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+        <li><a href="{{ results.url | default: routes.search_url }}{% if results.terms %}?q={{ results.terms | url_encode }}{% endif %}" class="link-quiet meta" data-facet-link>{{ 'collections.filters.clear_all' | t }}</a></li>
+      </ul>
+    {%- endif -%}
+  </form>
+</facet-filters>

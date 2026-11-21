@@ -1,0 +1,65 @@
+{%- doc -%}
+  Product card used by grids and sliders.
+
+  @param {product} [product] - The product. Renders a placeholder card when blank.
+  @param {number} [index] - Position in the list, shown as an editorial index number.
+  @param {string} [sizes] - sizes attribute for the image.
+  @param {boolean} [eager] - Load the first image eagerly.
+  @param {number} [placeholder_index] - Index for placeholder illustration.
+{%- enddoc -%}
+{%- liquid
+  case settings.card_ratio
+    when 'square'
+      assign ratio = '1 / 1'
+    when 'tall'
+      assign ratio = '2 / 3'
+    when 'adapt'
+      assign ratio = product.featured_media.aspect_ratio | default: 0.8 | append: ''
+    else
+      assign ratio = '4 / 5'
+  endcase
+  assign second = product.media[1]
+-%}
+<article class="card" data-reveal>
+  {%- if product != blank -%}
+    <div class="card__media{% if settings.card_show_secondary and second != blank %} card__media--swap{% endif %}">
+      <a href="{{ product.url }}" class="card__link" tabindex="-1" aria-hidden="true">
+        {% render 'media', image: product.featured_media.preview_image, ratio: ratio, sizes: sizes, eager: eager, class: 'card__img' %}
+        {%- if settings.card_show_secondary and second != blank -%}
+          {% render 'media', image: second.preview_image, ratio: ratio, sizes: sizes, class: 'card__img card__img--alt' %}
+        {%- endif -%}
+      </a>
+      <div class="card__badges">{% render 'badges', product: product %}</div>
+      {%- if settings.card_quick_add -%}
+        {% render 'quick-add', product: product %}
+      {%- endif -%}
+    </div>
+    <div class="card__info">
+      {%- if settings.card_show_index and index -%}
+        <span class="card__index meta">{% if index < 10 %}0{% endif %}{{ index }}</span>
+      {%- endif -%}
+      <div class="card__text">
+        {%- if settings.card_show_vendor -%}
+          <span class="card__vendor meta">{{ product.vendor | escape }}</span>
+        {%- endif -%}
+        <h3 class="card__title"><a href="{{ product.url }}" class="card__title-link">{{ product.title | escape }}</a></h3>
+        {% render 'price', product: product, show_range: true %}
+        {%- if settings.card_show_swatches -%}
+          {% render 'card-swatches', product: product %}
+        {%- endif -%}
+      </div>
+    </div>
+  {%- else -%}
+    {%- assign ph = placeholder_index | default: 1 | modulo: 6 | plus: 1 -%}{%- assign ph_name = 'product-' | append: ph -%}
+    <div class="card__media">
+      {% render 'media', ratio: '4 / 5', placeholder: ph_name, class: 'card__img' %}
+    </div>
+    <div class="card__info">
+      {%- if settings.card_show_index and index -%}<span class="card__index meta">{% if index < 10 %}0{% endif %}{{ index }}</span>{%- endif -%}
+      <div class="card__text">
+        <h3 class="card__title">{{ 'products.product.placeholder_title' | t }}</h3>
+        <div class="price"><span class="price__current">{{ 4900 | money }}</span></div>
+      </div>
+    </div>
+  {%- endif -%}
+</article>

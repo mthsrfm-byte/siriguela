@@ -1,0 +1,37 @@
+{%- comment -%}
+  All collections page.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<div class="section section--top color-{{ s.color_scheme }}">
+  <div class="page-width">
+    <h1 class="display display--lg page-title">{{ s.title | escape }}{% render 'signal' %}</h1>
+    {%- paginate collections by 24 -%}
+      <ul class="tiles" role="list" style="--cols: {{ s.columns }};">
+        {%- for c in collections -%}
+          <li class="tile" data-reveal>
+            <a href="{{ c.url }}" class="tile__link">
+              {% render 'media', image: c.featured_image, ratio: '3 / 4', sizes: '(min-width: 990px) 33vw, 100vw', placeholder: 'collection-1', class: 'tile__media' %}
+              <span class="tile__caption">
+                <span class="meta">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span>
+                <span class="tile__title">{{ c.title | escape }}</span>
+                <span class="meta">{{ 'collections.products_count' | t: count: c.products_count }}</span>
+              </span>
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+      {% render 'pagination', paginate: paginate %}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_list_collections.name",
+  "settings": [
+    { "type": "text", "id": "title", "default": "Collections", "label": "t:common.title" },
+    { "type": "range", "id": "columns", "min": 2, "max": 4, "step": 1, "default": 3, "label": "t:common.columns_desktop" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

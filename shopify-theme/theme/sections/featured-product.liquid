@@ -1,0 +1,87 @@
+{%- comment -%}
+  One product with its media and a compact buy panel, for any page.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign product = s.product
+  assign form_id = 'ProductForm-' | append: section.id
+-%}
+<section class="section color-{{ s.color_scheme }}">
+  {%- if product != blank -%}
+    {%- assign current = product.selected_or_first_available_variant -%}
+    <product-page class="feature-product page-width" data-section-id="{{ section.id }}" data-product-url="{{ product.url }}" data-variant-id="{{ current.id }}" data-featured>
+      <div class="feature-product__media" data-gallery>
+        <ul class="gallery gallery--rail" role="list" data-gallery-list tabindex="0" aria-label="{{ 'products.product.media.gallery_label' | t }}">
+          {%- for media in product.media limit: 6 -%}
+            <li class="gallery__item" data-media-id="{{ media.id }}">
+              {%- if media.media_type == 'image' -%}
+                {% render 'media', image: media.preview_image, sizes: '(min-width: 990px) 45vw, 92vw', ratio: '4 / 5' %}
+              {%- else -%}
+                <deferred-media class="gallery__deferred" style="--ratio: 0.8;">
+                  <button type="button" class="deferred-media__poster" aria-label="{{ 'products.product.media.play_video' | t }}">
+                    {% render 'media', image: media.preview_image, sizes: '(min-width: 990px) 45vw, 92vw', ratio: '4 / 5' %}
+                    <span class="deferred-media__btn">{% if media.media_type == 'model' %}<span class="meta">3D</span>{% else %}{% render 'icon', name: 'play' %}{% endif %}</span>
+                  </button>
+                  <template>{{ media | media_tag: image_size: '1600x', autoplay: true }}</template>
+                </deferred-media>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </div>
+      <div class="feature-product__info">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+            {%- when 'title' -%}
+              <h2 class="display display--md" {{ block.shopify_attributes }}><a href="{{ product.url }}">{{ product.title | escape }}</a>{% render 'signal' %}</h2>
+            {%- when 'price' -%}
+              <div {{ block.shopify_attributes }} data-update="price-{{ section.id }}">{% render 'price', product: product, variant: current %}</div>
+            {%- when 'text' -%}
+              <div class="rte" {{ block.shopify_attributes }}>{{ block.settings.text }}</div>
+            {%- when 'variant_picker' -%}
+              <div {{ block.shopify_attributes }} data-update="picker-{{ section.id }}">{% render 'variant-picker', product: product, style: 'buttons', form_id: form_id, section_id: section.id %}</div>
+            {%- when 'buy_buttons' -%}
+              <div {{ block.shopify_attributes }}>{% render 'buy-buttons', product: product, variant: current, form_id: form_id, section_id: section.id, show_dynamic: block.settings.show_dynamic_checkout %}</div>
+            {%- when 'custom_liquid' -%}
+              <div {{ block.shopify_attributes }}>{{ block.settings.custom_liquid }}</div>
+            {%- when '@app' -%}
+              {% render block %}
+          {%- endcase -%}
+        {%- endfor -%}
+        <a href="{{ product.url }}" class="link-arrow">{{ 'products.product.view_details' | t }}{% render 'icon', name: 'arrow' %}</a>
+      </div>
+    </product-page>
+  {%- else -%}
+    <div class="feature-product page-width">
+      <div class="feature-product__media">{% render 'media', ratio: '4 / 5', placeholder: 'product-3' %}</div>
+      <div class="feature-product__info">
+        <h2 class="display display--md">{{ 'products.product.placeholder_title' | t }}{% render 'signal' %}</h2>
+        <div class="price"><span class="price__current">{{ 12000 | money }}</span></div>
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.featured_product.name",
+  "class": "section-featured-product",
+  "settings": [
+    { "type": "product", "id": "product", "label": "t:common.product" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-2" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    { "type": "title", "name": "t:common.title", "limit": 1, "settings": [] },
+    { "type": "price", "name": "t:sections.main_product.blocks.price.name", "limit": 1, "settings": [] },
+    { "type": "text", "name": "t:common.text", "settings": [{ "type": "richtext", "id": "text", "label": "t:common.text" }] },
+    { "type": "variant_picker", "name": "t:sections.main_product.blocks.variant_picker.name", "limit": 1, "settings": [] },
+    { "type": "buy_buttons", "name": "t:sections.main_product.blocks.buy_buttons.name", "limit": 1, "settings": [
+      { "type": "checkbox", "id": "show_dynamic_checkout", "default": true, "label": "t:sections.main_product.blocks.buy_buttons.settings.show_dynamic_checkout.label" }
+    ] },
+    { "type": "custom_liquid", "name": "t:sections.custom_liquid.name", "settings": [{ "type": "liquid", "id": "custom_liquid", "label": "t:sections.custom_liquid.settings.custom_liquid.label" }] }
+  ],
+  "presets": [{ "name": "t:sections.featured_product.name", "blocks": [{ "type": "title" }, { "type": "price" }, { "type": "variant_picker" }, { "type": "buy_buttons" }] }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}

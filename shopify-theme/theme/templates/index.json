@@ -1,0 +1,230 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "layout": "margin",
+        "height": "full",
+        "heading": "Made to stay.",
+        "kicker": "Autumn edit",
+        "show_signal": true,
+        "color_scheme": "scheme-4",
+        "overlay": 15,
+        "text": "<p>Considered pieces in natural fibers, designed to be worn for years.</p>",
+        "button_label": "Shop the collection",
+        "button_link": "shopify://collections/all",
+        "button_style": "primary",
+        "heading_size": "xl"
+      }
+    },
+    "new": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "New arrivals",
+        "caption": "Season 01",
+        "link_label": "View all",
+        "limit": 8,
+        "columns": 4,
+        "columns_mobile": 2,
+        "layout": "grid"
+      }
+    },
+    "statement": {
+      "type": "rich-text",
+      "blocks": {
+        "k": {
+          "type": "kicker",
+          "settings": {
+            "text": "The studio"
+          }
+        },
+        "l": {
+          "type": "lead",
+          "settings": {
+            "text": "Quiet in every place but one.",
+            "size": "lg",
+            "show_signal": true
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We make a small number of things in natural materials, with partners we visit every season. Every product page tells you where it was made and by whom.</p><p>Nothing is produced for a sale rack. When a piece sells out, it may come back in the next season, slightly better.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "k",
+        "l",
+        "t"
+      ]
+    },
+    "story": {
+      "type": "image-with-text",
+      "blocks": {
+        "k": {
+          "type": "kicker",
+          "settings": {
+            "text": "Materials"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "Linen, wool, waxed canvas",
+            "size": "md",
+            "show_signal": true
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Three materials that age well. Washed for softness, finished by hand, chosen for how they look after the tenth wear, not the first.</p>"
+          }
+        },
+        "b": {
+          "type": "button",
+          "settings": {
+            "label": "Read the journal",
+            "link": "shopify://blogs/journal",
+            "style": "link"
+          }
+        }
+      },
+      "block_order": [
+        "k",
+        "h",
+        "t",
+        "b"
+      ]
+    },
+    "index": {
+      "type": "editorial-index",
+      "blocks": {
+        "r1": {
+          "type": "row",
+          "settings": {
+            "title": "Linen overshirt",
+            "detail": "Washed linen \u00b7 Portugal"
+          }
+        },
+        "r2": {
+          "type": "row",
+          "settings": {
+            "title": "Cord trouser",
+            "detail": "Cotton corduroy \u00b7 Italy"
+          }
+        },
+        "r3": {
+          "type": "row",
+          "settings": {
+            "title": "Field tote",
+            "detail": "Waxed canvas \u00b7 Spain"
+          }
+        },
+        "r4": {
+          "type": "row",
+          "settings": {
+            "title": "Merino crew",
+            "detail": "Fine merino \u00b7 Peru"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "settings": {
+        "heading": "Index",
+        "caption": "Where each piece begins"
+      }
+    },
+    "look": {
+      "type": "mosaic",
+      "blocks": {
+        "a": {
+          "type": "image",
+          "settings": {
+            "caption": "Morning, north light"
+          }
+        },
+        "b": {
+          "type": "image",
+          "settings": {
+            "caption": "Studio table"
+          }
+        },
+        "c": {
+          "type": "image",
+          "settings": {
+            "caption": "Field day"
+          }
+        },
+        "d": {
+          "type": "image",
+          "settings": {
+            "caption": "Late summer"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "settings": {
+        "heading": "Lookbook",
+        "pattern": "staggered"
+      }
+    },
+    "facts": {
+      "type": "facts",
+      "blocks": {
+        "a": {
+          "type": "fact"
+        },
+        "b": {
+          "type": "fact",
+          "settings": {
+            "label": "Shipping",
+            "title": "Carbon-neutral delivery",
+            "text": "<p>Orders ship in recycled packaging within two business days.</p>"
+          }
+        },
+        "c": {
+          "type": "fact",
+          "settings": {
+            "label": "Returns",
+            "title": "30 days to decide",
+            "text": "<p>Free returns on unworn pieces with the original tags.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c"
+      ],
+      "settings": {
+        "heading": "",
+        "columns": 3
+      }
+    },
+    "signup": {
+      "type": "newsletter"
+    }
+  },
+  "order": [
+    "hero",
+    "new",
+    "statement",
+    "story",
+    "index",
+    "look",
+    "facts",
+    "signup"
+  ]
+}

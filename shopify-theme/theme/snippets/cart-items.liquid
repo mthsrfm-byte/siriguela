@@ -1,0 +1,65 @@
+{%- doc -%}
+  Line items list shared by the cart drawer and the cart page.
+
+  @param {string} section_id - Section to re-render after changes.
+{%- enddoc -%}
+<ul class="cart-items" role="list" data-cart-items>
+  {%- for item in cart.items -%}
+    {%- assign line = item.index | plus: 1 -%}
+    <li class="cart-item" id="CartItem-{{ section_id }}-{{ item.index | plus: 1 }}" data-line="{{ item.index | plus: 1 }}">
+      <a href="{{ item.url }}" class="cart-item__media" tabindex="-1" aria-hidden="true">
+        {%- if item.image -%}
+          {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', widths: '120, 240', sizes: '120px', alt: '' }}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+        {%- endif -%}
+      </a>
+      <div class="cart-item__body">
+        <div class="cart-item__head">
+          <a href="{{ item.url }}" class="cart-item__title">{{ item.product.title | escape }}</a>
+          <span class="cart-item__total">
+            {%- if item.original_line_price != item.final_line_price -%}
+              <s class="price__compare">{{ item.original_line_price | money }}</s>
+            {%- endif -%}
+            {{ item.final_line_price | money }}
+          </span>
+        </div>
+        {%- unless item.product.has_only_default_variant -%}
+          <dl class="cart-item__options meta">
+            {%- for option in item.options_with_values -%}
+              <div><dt>{{ option.name }}:</dt> <dd>{{ option.value }}</dd></div>
+            {%- endfor -%}
+          </dl>
+        {%- endunless -%}
+        {%- for property in item.properties -%}
+          {%- assign first_char = property.first | slice: 0 -%}
+          {%- if property.last != blank and first_char != '_' -%}
+            <p class="cart-item__prop meta">{{ property.first }}: {{ property.last }}</p>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- if item.selling_plan_allocation -%}
+          <p class="cart-item__prop meta">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+        {%- endif -%}
+        {%- for discount in item.line_level_discount_allocations -%}
+          <p class="cart-item__discount meta">{{ discount.discount_application.title }} (−{{ discount.amount | money }})</p>
+        {%- endfor -%}
+        {%- if item.unit_price_measurement -%}
+          <p class="cart-item__prop meta">{{ item.unit_price | money }}/{{ item.unit_price_measurement.reference_unit }}</p>
+        {%- endif -%}
+        <div class="cart-item__actions">
+          {% render 'quantity-input',
+            name: 'updates[]',
+            value: item.quantity,
+            line: line,
+            label: item.product.title,
+            min: item.variant.quantity_rule.min,
+            max: item.variant.quantity_rule.max,
+            step: item.variant.quantity_rule.increment
+          %}
+          <a href="{{ item.url_to_remove }}" class="cart-item__remove link-quiet" data-remove="{{ item.index | plus: 1 }}" aria-label="{{ 'cart.remove_item' | t: title: item.title | escape }}">{{ 'cart.remove' | t }}</a>
+        </div>
+        <p class="cart-item__error meta" role="alert" data-line-error></p>
+      </div>
+    </li>
+  {%- endfor -%}
+</ul>

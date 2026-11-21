@@ -1,0 +1,32 @@
+{%- doc -%}
+  Quick add on product cards. Single-variant products add directly;
+  products with one option show each value as an add button; anything
+  more complex links to the product page.
+
+  @param {product} product - The product.
+{%- enddoc -%}
+{%- if product.available -%}
+  <div class="quick-add">
+    {%- if product.has_only_default_variant -%}
+      {%- form 'product', product, class: 'quick-add__form', data-cart-form: '' -%}
+        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+        <button type="submit" class="quick-add__btn">
+          {% render 'icon', name: 'plus' %}<span>{{ 'products.product.add_to_cart' | t }}</span>
+        </button>
+      {%- endform -%}
+    {%- elsif product.options.size == 1 and product.variants.size <= 10 -%}
+      <div class="quick-add__options" role="group" aria-label="{{ 'products.product.quick_add_label' | t: title: product.title | escape }}">
+        {%- for variant in product.variants -%}
+          {%- form 'product', product, class: 'quick-add__form', data-cart-form: '' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}">
+            <button type="submit" class="quick-add__value"{% unless variant.available %} disabled{% endunless %} aria-label="{{ 'products.product.add_variant' | t: variant: variant.title | escape }}">{{ variant.title | escape }}</button>
+          {%- endform -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <a href="{{ product.url }}" class="quick-add__btn">
+        {% render 'icon', name: 'arrow' %}<span>{{ 'products.product.choose_options' | t }}</span>
+      </a>
+    {%- endif -%}
+  </div>
+{%- endif -%}

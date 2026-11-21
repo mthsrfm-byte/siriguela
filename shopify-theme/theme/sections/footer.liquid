@@ -1,0 +1,116 @@
+{%- comment -%}
+  Footer with flexible blocks: brand statement, menus, newsletter, social.
+  The base row holds localization, payment icons, policies and copyright.
+{%- endcomment -%}
+<footer class="footer color-{{ section.settings.color_scheme }}">
+  <div class="footer__inner page-width">
+    {%- if section.blocks.size > 0 -%}
+      <div class="footer__grid">
+        {%- for block in section.blocks -%}
+          <div class="footer__block footer__block--{{ block.type }}" {{ block.shopify_attributes }}>
+            {%- case block.type -%}
+              {%- when 'brand' -%}
+                {%- if block.settings.heading != blank -%}
+                  <p class="footer__statement">{{ block.settings.heading | escape }}{% render 'signal' %}</p>
+                {%- endif -%}
+                {%- if block.settings.text != blank -%}<div class="footer__text rte">{{ block.settings.text }}</div>{%- endif -%}
+                {%- if block.settings.show_social -%}{% render 'social-icons' %}{%- endif -%}
+              {%- when 'menu' -%}
+                {%- if block.settings.heading != blank -%}<h2 class="footer__heading meta">{{ block.settings.heading | escape }}</h2>{%- endif -%}
+                {%- if block.settings.menu != blank -%}
+                  <ul class="footer__links" role="list">
+                    {%- for link in block.settings.menu.links -%}
+                      <li><a href="{{ link.url }}" class="link-quiet"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              {%- when 'newsletter' -%}
+                {%- if block.settings.heading != blank -%}<h2 class="footer__heading meta">{{ block.settings.heading | escape }}</h2>{%- endif -%}
+                {%- if block.settings.text != blank -%}<div class="footer__text rte">{{ block.settings.text }}</div>{%- endif -%}
+                {% render 'newsletter-form', id: block.id %}
+              {%- when 'text' -%}
+                {%- if block.settings.heading != blank -%}<h2 class="footer__heading meta">{{ block.settings.heading | escape }}</h2>{%- endif -%}
+                <div class="footer__text rte">{{ block.settings.text }}</div>
+              {%- when '@app' -%}
+                {% render block %}
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="footer__base">
+      {%- if section.settings.show_localization -%}
+        {% render 'localization', id: 'FooterLocalization' %}
+      {%- endif -%}
+      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        <ul class="footer__payments" role="list">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+      {%- if section.settings.show_follow_on_shop -%}
+        <div class="footer__follow">{{ shop | login_button: action: 'follow' }}</div>
+      {%- endif -%}
+      <div class="footer__legal meta">
+        <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}</span>
+        {%- if section.settings.show_policies -%}
+          {%- for policy in shop.policies -%}
+            {%- if policy != blank -%}<a href="{{ policy.url }}" class="link-quiet">{{ policy.title | escape }}</a>{%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+        <span>{{ powered_by_link }}</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "class": "section-footer",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-3" },
+    { "type": "checkbox", "id": "show_localization", "default": true, "label": "t:sections.footer.settings.show_localization.label" },
+    { "type": "checkbox", "id": "show_payment_icons", "default": true, "label": "t:sections.footer.settings.show_payment_icons.label" },
+    { "type": "checkbox", "id": "show_policies", "default": true, "label": "t:sections.footer.settings.show_policies.label" },
+    { "type": "checkbox", "id": "show_follow_on_shop", "default": true, "label": "t:sections.footer.settings.show_follow_on_shop.label", "info": "t:sections.footer.settings.show_follow_on_shop.info" }
+  ],
+  "blocks": [
+    {
+      "type": "brand", "name": "t:sections.footer.blocks.brand.name", "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Made slowly, worn often.", "label": "t:common.heading" },
+        { "type": "richtext", "id": "text", "label": "t:common.text" },
+        { "type": "checkbox", "id": "show_social", "default": true, "label": "t:sections.footer.blocks.brand.settings.show_social.label" }
+      ]
+    },
+    {
+      "type": "menu", "name": "t:sections.footer.blocks.menu.name",
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Shop", "label": "t:common.heading" },
+        { "type": "link_list", "id": "menu", "default": "footer", "label": "t:common.menu" }
+      ]
+    },
+    {
+      "type": "newsletter", "name": "t:sections.footer.blocks.newsletter.name", "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Newsletter", "label": "t:common.heading" },
+        { "type": "richtext", "id": "text", "default": "<p>New pieces and journal stories, once a month.</p>", "label": "t:common.text" },
+        { "type": "paragraph", "content": "t:sections.newsletter.settings.info.content" }
+      ]
+    },
+    {
+      "type": "text", "name": "t:sections.footer.blocks.text.name",
+      "settings": [
+        { "type": "text", "id": "heading", "default": "Visit", "label": "t:common.heading" },
+        { "type": "richtext", "id": "text", "default": "<p>Share your studio address, opening hours or support details.</p>", "label": "t:common.text" }
+      ]
+    },
+    { "type": "@app" }
+  ],
+  "enabled_on": { "groups": ["footer"] }
+}
+{% endschema %}

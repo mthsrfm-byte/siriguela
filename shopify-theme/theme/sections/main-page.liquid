@@ -1,0 +1,19 @@
+{%- comment -%}
+  Generic content page.
+{%- endcomment -%}
+<div class="section section--top color-{{ section.settings.color_scheme }}">
+  <div class="page-width prose-page">
+    <h1 class="display display--lg page-title">{{ page.title | escape }}{% if section.settings.show_signal %}{% render 'signal' %}{% endif %}</h1>
+    <div class="rte prose">{{ page.content }}</div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_page.name",
+  "settings": [
+    { "type": "checkbox", "id": "show_signal", "default": true, "label": "t:common.show_signal" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

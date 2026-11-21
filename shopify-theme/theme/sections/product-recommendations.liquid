@@ -1,0 +1,40 @@
+{%- comment -%}
+  Related or complementary products, loaded after page render from the
+  native recommendations endpoint.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<product-recommendations class="section color-{{ s.color_scheme }}" data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ s.limit }}&intent={{ s.intent }}">
+  {%- if recommendations.performed? and recommendations.products_count > 0 -%}
+    <div class="page-width">
+      {% render 'section-heading', heading: s.heading, caption: s.caption %}
+      <div class="product-grid product-grid--{{ s.layout }}" style="--cols: {{ s.columns }}; --cols-mobile: 2;">
+        {%- for product in recommendations.products -%}
+          {% render 'product-card', product: product, index: forloop.index, sizes: '(min-width: 990px) 25vw, 45vw' %}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+</product-recommendations>
+
+{% schema %}
+{
+  "name": "t:sections.product_recommendations.name",
+  "class": "section-product-recommendations",
+  "settings": [
+    { "type": "text", "id": "heading", "default": "You may also like", "label": "t:common.heading" },
+    { "type": "text", "id": "caption", "label": "t:common.caption" },
+    {
+      "type": "select", "id": "intent", "default": "related", "label": "t:sections.product_recommendations.settings.intent.label", "info": "t:sections.product_recommendations.settings.intent.info",
+      "options": [
+        { "value": "related", "label": "t:sections.product_recommendations.settings.intent.options__1.label" },
+        { "value": "complementary", "label": "t:sections.product_recommendations.settings.intent.options__2.label" }
+      ]
+    },
+    { "type": "range", "id": "limit", "min": 2, "max": 10, "step": 1, "default": 4, "label": "t:sections.featured_collection.settings.limit.label" },
+    { "type": "range", "id": "columns", "min": 2, "max": 5, "step": 1, "default": 4, "label": "t:common.columns_desktop" },
+    { "type": "select", "id": "layout", "default": "grid", "label": "t:common.layout", "options": [{ "value": "grid", "label": "t:sections.featured_collection.settings.layout.options__1.label" }, { "value": "rail", "label": "t:sections.featured_collection.settings.layout.options__2.label" }] },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "enabled_on": { "templates": ["product"] }
+}
+{% endschema %}

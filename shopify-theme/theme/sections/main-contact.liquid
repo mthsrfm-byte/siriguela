@@ -1,0 +1,44 @@
+{%- comment -%}
+  Contact page: page content plus the native contact form.
+{%- endcomment -%}
+<div class="section section--top color-{{ section.settings.color_scheme }}">
+  <div class="page-width contact">
+    <div class="contact__intro">
+      <h1 class="display display--lg page-title">{{ page.title | escape }}{% render 'signal' %}</h1>
+      <div class="rte">{{ page.content }}</div>
+    </div>
+    {%- form 'contact', id: 'ContactForm', class: 'contact__form' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="form-success" role="status" tabindex="-1" autofocus>{{ 'contact.success' | t }}</p>
+      {%- elsif form.errors -%}
+        <div class="form-error" role="alert" tabindex="-1" autofocus>{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+      <div class="field">
+        <label for="ContactForm-name" class="meta">{{ 'contact.name' | t }}</label>
+        <input id="ContactForm-name" class="field__input" type="text" name="contact[{{ 'contact.name' | t }}]" autocomplete="name" value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}">
+      </div>
+      <div class="field">
+        <label for="ContactForm-email" class="meta">{{ 'contact.email' | t }} <span aria-hidden="true">*</span></label>
+        <input id="ContactForm-email" class="field__input" type="email" name="contact[email]" autocomplete="email" required aria-required="true" value="{% if form.email %}{{ form.email }}{% elsif customer %}{{ customer.email }}{% endif %}"{% if form.errors contains 'email' %} aria-invalid="true"{% endif %}>
+      </div>
+      <div class="field">
+        <label for="ContactForm-phone" class="meta">{{ 'contact.phone' | t }}</label>
+        <input id="ContactForm-phone" class="field__input" type="tel" name="contact[{{ 'contact.phone' | t }}]" autocomplete="tel" value="{% if form.phone %}{{ form.phone }}{% elsif customer %}{{ customer.phone }}{% endif %}">
+      </div>
+      <div class="field">
+        <label for="ContactForm-body" class="meta">{{ 'contact.message' | t }}</label>
+        <textarea id="ContactForm-body" class="field__input" rows="6" name="contact[{{ 'contact.message' | t }}]">{{ form.body }}</textarea>
+      </div>
+      <button type="submit" class="button">{{ 'contact.send' | t }}</button>
+    {%- endform -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_contact.name",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

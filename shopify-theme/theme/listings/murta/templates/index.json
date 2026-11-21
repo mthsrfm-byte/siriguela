@@ -1,0 +1,222 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "layout": "center",
+        "height": "large",
+        "heading": "Rituals for slow mornings",
+        "kicker": "Skin, body, home",
+        "show_signal": true,
+        "color_scheme": "scheme-4",
+        "overlay": 20,
+        "heading_size": "lg",
+        "text": "<p>Small-batch care made with plant oils and clays, in refillable glass.</p>",
+        "button_label": "Shop the rituals",
+        "button_link": "shopify://collections/all",
+        "button_style": "primary"
+      }
+    },
+    "cats": {
+      "type": "collection-list",
+      "blocks": {
+        "a": {
+          "type": "collection",
+          "settings": {
+            "title": "Face"
+          }
+        },
+        "b": {
+          "type": "collection",
+          "settings": {
+            "title": "Body"
+          }
+        },
+        "c": {
+          "type": "collection",
+          "settings": {
+            "title": "Home"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c"
+      ],
+      "settings": {
+        "heading": "Shop by ritual",
+        "columns": 3,
+        "ratio": "1 / 1"
+      }
+    },
+    "best": {
+      "type": "featured-collection",
+      "settings": {
+        "heading": "Most loved",
+        "caption": "Refillable",
+        "link_label": "View all",
+        "limit": 8,
+        "columns": 4,
+        "columns_mobile": 2,
+        "layout": "rail"
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "text-first",
+        "image_width": "half",
+        "ratio": "1 / 1",
+        "align": "center",
+        "color_scheme": "scheme-3"
+      },
+      "blocks": {
+        "k": {
+          "type": "kicker",
+          "settings": {
+            "text": "Ingredients"
+          }
+        },
+        "h": {
+          "type": "heading",
+          "settings": {
+            "heading": "What goes in, and why",
+            "size": "md",
+            "show_signal": true
+          }
+        },
+        "t": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every formula lists each ingredient with its purpose and origin. No fillers, no fragrance you cannot name.</p>"
+          }
+        },
+        "b": {
+          "type": "button",
+          "settings": {
+            "label": "Read the ingredient index",
+            "style": "link"
+          }
+        }
+      },
+      "block_order": [
+        "k",
+        "h",
+        "t",
+        "b"
+      ]
+    },
+    "facts": {
+      "type": "facts",
+      "blocks": {
+        "a": {
+          "type": "fact",
+          "settings": {
+            "label": "Refill",
+            "title": "Glass that comes back",
+            "text": "<p>Return empty jars for a refill credit.</p>"
+          }
+        },
+        "b": {
+          "type": "fact",
+          "settings": {
+            "label": "Made",
+            "title": "In batches of 200",
+            "text": "<p>Poured by hand in our studio each week.</p>"
+          }
+        },
+        "c": {
+          "type": "fact",
+          "settings": {
+            "label": "Tested",
+            "title": "On people, never animals",
+            "text": "<p>Dermatologist reviewed for sensitive skin.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c"
+      ],
+      "settings": {
+        "columns": 3
+      }
+    },
+    "quotes": {
+      "type": "quotes",
+      "blocks": {
+        "a": {
+          "type": "quote",
+          "settings": {
+            "quote": "Add a real customer review here, in their own words.",
+            "author": "Customer name"
+          }
+        },
+        "b": {
+          "type": "quote",
+          "settings": {
+            "quote": "Add a press mention here, quoted exactly.",
+            "author": "Publication"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b"
+      ],
+      "settings": {
+        "heading": "Notes from customers"
+      }
+    },
+    "faq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "a": {
+          "type": "row",
+          "settings": {
+            "heading": "How do refills work?"
+          }
+        },
+        "b": {
+          "type": "row",
+          "settings": {
+            "heading": "Are your products safe for sensitive skin?"
+          }
+        },
+        "c": {
+          "type": "row",
+          "settings": {
+            "heading": "How long does an order take to arrive?"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c"
+      ],
+      "settings": {
+        "heading": "Questions"
+      }
+    },
+    "signup": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "A letter each season",
+        "color_scheme": "scheme-2"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "cats",
+    "best",
+    "story",
+    "facts",
+    "quotes",
+    "faq",
+    "signup"
+  ]
+}

@@ -1,0 +1,10 @@
+{%- doc -%}
+  Sale / sold out badges for a product.
+
+  @param {product} product - The product.
+{%- enddoc -%}
+{%- if product.available == false -%}
+  <span class="badge badge--muted">{{ 'products.product.sold_out' | t }}</span>
+{%- elsif product.compare_at_price > product.price -%}
+  <span class="badge badge--signal">{{ 'products.product.on_sale' | t }}</span>
+{%- endif -%}

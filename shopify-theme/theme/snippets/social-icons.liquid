@@ -1,0 +1,24 @@
+{%- doc -%}
+  Social links from theme settings. Renders nothing when none are set.
+{%- enddoc -%}
+{%- liquid
+  assign networks = 'instagram,tiktok,pinterest,facebook,youtube,x' | split: ','
+  assign has_any = false
+  for n in networks
+    assign key = 'social_' | append: n | append: '_link'
+    if settings[key] != blank
+      assign has_any = true
+    endif
+  endfor
+-%}
+{%- if has_any -%}
+  <ul class="social" role="list">
+    {%- for n in networks -%}
+      {%- assign key = 'social_' | append: n | append: '_link' -%}
+      {%- if settings[key] != blank -%}
+        {%- assign label_key = 'social.' | append: n -%}
+        <li><a href="{{ settings[key] }}" class="icon-button" target="_blank" rel="noopener">{% render 'icon', name: n %}<span class="visually-hidden">{{ label_key | t }}</span></a></li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- endif -%}

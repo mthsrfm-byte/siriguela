@@ -1,0 +1,25 @@
+{%- comment -%}
+  Not found page.
+{%- endcomment -%}
+<div class="section section--top color-{{ section.settings.color_scheme }}">
+  <div class="page-width not-found">
+    <p class="meta">404</p>
+    <h1 class="display display--xl">{{ 'general.404.title' | t }}{% render 'signal' %}</h1>
+    <p>{{ 'general.404.subtext' | t }}</p>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="search-form search-form--page">
+      <label for="Search404" class="visually-hidden">{{ 'search.label' | t }}</label>
+      <input type="search" id="Search404" name="q" class="search-form__input" placeholder="{{ 'search.placeholder' | t }}">
+      <button type="submit" class="icon-button" aria-label="{{ 'search.submit' | t }}">{% render 'icon', name: 'search' %}</button>
+    </form>
+    <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'cart.continue' | t }}</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main_404.name",
+  "settings": [
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,37 @@
+{%- doc -%}
+  Accessible quantity stepper.
+
+  @param {string} name - Input name.
+  @param {number} value - Current value.
+  @param {string} label - Product title for the accessible label.
+  @param {number} [line] - Cart line (1-based) when used in the cart.
+  @param {number} [min] - Minimum. Defaults to 1 (0 in the cart).
+  @param {number} [max] - Maximum.
+  @param {number} [step] - Increment.
+  @param {string} [form] - Associated form id.
+  @param {string} [id] - Input id.
+{%- enddoc -%}
+{%- liquid
+  assign q_min = min | default: 1
+  if line
+    assign q_min = 0
+  endif
+-%}
+<quantity-input class="qty">
+  <button type="button" class="qty__btn" name="minus" aria-label="{{ 'products.product.quantity.decrease' | t: product: label | escape }}">{% render 'icon', name: 'minus' %}</button>
+  <input
+    class="qty__input"
+    {% if id %}id="{{ id }}"{% endif %}
+    type="number"
+    name="{{ name }}"
+    value="{{ value }}"
+    min="{{ q_min }}"
+    {% if max %}max="{{ max }}"{% endif %}
+    step="{{ step | default: 1 }}"
+    inputmode="numeric"
+    {% if line %}data-line="{{ line }}"{% endif %}
+    {% if form %}form="{{ form }}"{% endif %}
+    aria-label="{{ 'products.product.quantity.input_label' | t: product: label | escape }}"
+  >
+  <button type="button" class="qty__btn" name="plus" aria-label="{{ 'products.product.quantity.increase' | t: product: label | escape }}">{% render 'icon', name: 'plus' %}</button>
+</quantity-input>

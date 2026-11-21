@@ -1,0 +1,38 @@
+{%- doc -%}
+  Product form with add to cart, accelerated checkout, Shop Pay
+  Installments banner and gift card recipient fields.
+
+  @param {product} product - The product.
+  @param {variant} variant - Current variant.
+  @param {string} form_id - Form id.
+  @param {string} section_id - Section id.
+  @param {boolean} [show_dynamic] - Show accelerated checkout buttons.
+  @param {boolean} [show_recipient] - Show gift card recipient form.
+{%- enddoc -%}
+<div data-update="buy-{{ section_id }}">
+  {%- form 'product', product, id: form_id, class: 'product-form', novalidate: 'novalidate', data-cart-form: '' -%}
+    <input type="hidden" name="id" value="{{ variant.id }}" class="product-variant-id"{% unless variant.available %} disabled{% endunless %}>
+    {%- if show_recipient and product.gift_card? -%}
+      {% render 'gift-card-recipient', form: form, section_id: section_id %}
+    {%- endif -%}
+    <div class="product-form__payment-terms">{{ form | payment_terms }}</div>
+    <div class="product-form__buttons">
+      <button type="submit" name="add" class="button button--full product-form__submit"{% unless variant.available %} disabled{% endunless %}>
+        <span>
+          {%- if variant.available -%}
+            {{ 'products.product.add_to_cart' | t }}
+          {%- elsif variant == null -%}
+            {{ 'products.product.unavailable' | t }}
+          {%- else -%}
+            {{ 'products.product.sold_out' | t }}
+          {%- endif -%}
+        </span>
+        <span class="spinner" aria-hidden="true"></span>
+      </button>
+      {%- if show_dynamic -%}
+        {{ form | payment_button }}
+      {%- endif -%}
+    </div>
+    <p class="form-error meta" role="alert" data-form-error hidden></p>
+  {%- endform -%}
+</div>

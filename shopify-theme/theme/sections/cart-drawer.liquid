@@ -1,0 +1,36 @@
+{%- comment -%}
+  Slide-in cart. Re-rendered through the Section Rendering API after every cart change.
+{%- endcomment -%}
+<cart-drawer class="drawer" id="CartDrawer" data-section-id="{{ section.id }}" hidden>
+  <div class="drawer__scrim" data-close></div>
+  <div class="drawer__panel color-{{ settings.color_schemes.first.id }}" role="dialog" aria-modal="true" aria-labelledby="CartDrawerTitle" tabindex="-1">
+    <div class="drawer__head">
+      <h2 id="CartDrawerTitle" class="drawer__title">{{ 'cart.title' | t }} <span class="meta">({{ cart.item_count }})</span></h2>
+      <button type="button" class="icon-button" data-close aria-label="{{ 'accessibility.close' | t }}">{% render 'icon', name: 'close' %}</button>
+    </div>
+    <div class="drawer__body" data-cart-body>
+      {%- if cart.empty? -%}
+        <div class="cart-empty">
+          <p class="cart-empty__lead">{{ 'cart.empty' | t }}<span class="signal" aria-hidden="true"></span></p>
+          <a href="{{ routes.all_products_collection_url }}" class="button button--secondary">{{ 'cart.continue' | t }}</a>
+        </div>
+      {%- else -%}
+        <form action="{{ routes.cart_url }}" method="post" id="CartForm" novalidate>
+          {% render 'cart-items', section_id: section.id %}
+        </form>
+      {%- endif -%}
+    </div>
+    {%- unless cart.empty? -%}
+      <div class="drawer__foot">
+        {% render 'cart-summary' %}
+      </div>
+    {%- endunless -%}
+  </div>
+</cart-drawer>
+
+{% schema %}
+{
+  "name": "t:sections.cart_drawer.name",
+  "settings": []
+}
+{% endschema %}

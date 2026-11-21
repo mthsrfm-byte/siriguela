@@ -1,0 +1,23 @@
+{%- doc -%}
+  Section heading row: title (with optional signal), meta caption and link.
+
+  @param {string} [heading] - Title text.
+  @param {string} [caption] - Small meta caption on the right.
+  @param {string} [link_label] - Link label.
+  @param {string} [link_url] - Link URL.
+  @param {string} [id] - id for the heading element.
+  @param {boolean} [signal] - Show the signal mark.
+{%- enddoc -%}
+{%- if heading != blank or caption != blank or link_label != blank -%}
+  <header class="section-head" data-reveal>
+    {%- if heading != blank -%}
+      <h2 class="section-head__title"{% if id %} id="{{ id }}"{% endif %}>{{ heading | escape }}{% if signal %}{% render 'signal' %}{% endif %}</h2>
+    {%- endif -%}
+    <div class="section-head__aside">
+      {%- if caption != blank -%}<span class="meta">{{ caption | escape }}</span>{%- endif -%}
+      {%- if link_label != blank and link_url != blank -%}
+        <a href="{{ link_url }}" class="link-arrow">{{ link_label | escape }}{% render 'icon', name: 'arrow' %}</a>
+      {%- endif -%}
+    </div>
+  </header>
+{%- endif -%}

@@ -1,0 +1,172 @@
+{%- comment -%}
+  Site header: logo, multi-level menu, predictive search, account, cart.
+  Mobile uses a full-height drawer with nested disclosure menus.
+{%- endcomment -%}
+{%- liquid
+  assign menu = section.settings.menu
+  assign is_home = false
+  if request.page_type == 'index'
+    assign is_home = true
+  endif
+-%}
+<sticky-header class="header-wrap{% if section.settings.sticky %} header-wrap--sticky{% endif %}{% if section.settings.transparent and is_home %} header-wrap--overlay{% endif %}">
+  <header class="header color-{{ section.settings.color_scheme }} header--{{ section.settings.logo_position }}">
+    <div class="header__inner page-width">
+      <button type="button" class="icon-button header__menu-toggle" aria-controls="MenuDrawer" aria-expanded="false" data-menu-open>
+        {% render 'icon', name: 'menu' %}<span class="visually-hidden">{{ 'sections.header.menu' | t }}</span>
+      </button>
+
+      {%- if is_home -%}<h1 class="header__logo">{%- else -%}<div class="header__logo">{%- endif -%}
+        <a href="{{ routes.root_url }}" class="header__logo-link">
+          {%- if settings.logo != blank -%}
+            {%- assign logo_2x = settings.logo_width | times: 2 -%}
+            {{ settings.logo | image_url: width: logo_2x | image_tag: width: settings.logo_width, height: settings.logo.height | times: settings.logo_width | divided_by: settings.logo.width, alt: shop.name, class: 'header__logo-img', widths: '', loading: 'eager' }}
+          {%- else -%}
+            <span class="header__wordmark">{{ shop.name | escape }}</span>{% render 'signal' %}
+          {%- endif -%}
+        </a>
+      {%- if is_home -%}</h1>{%- else -%}</div>{%- endif -%}
+
+      {%- if menu != blank -%}
+        <nav class="header__nav" aria-label="{{ 'sections.header.primary_nav' | t }}">
+          <ul class="nav" role="list">
+            {%- for link in menu.links -%}
+              <li class="nav__item">
+                {%- if link.links != blank -%}
+                  <details-disclosure class="nav__disclosure">
+                    <details>
+                      <summary class="nav__link{% if link.child_active or link.active %} is-active{% endif %}">{{ link.title | escape }}{% render 'icon', name: 'chevron' %}</summary>
+                      <div class="nav__dropdown color-{{ section.settings.color_scheme }}">
+                        <ul class="nav__sub page-width" role="list">
+                          <li class="nav__col nav__col--all"><a href="{{ link.url }}" class="meta">{{ 'sections.header.view_all' | t: title: link.title | escape }}</a></li>
+                          {%- for child in link.links -%}
+                            <li class="nav__col">
+                              <a href="{{ child.url }}" class="nav__sublink{% if child.active %} is-active{% endif %}"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
+                              {%- if child.links != blank -%}
+                                <ul class="nav__third" role="list">
+                                  {%- for grandchild in child.links -%}
+                                    <li><a href="{{ grandchild.url }}" class="link-quiet"{% if grandchild.current %} aria-current="page"{% endif %}>{{ grandchild.title | escape }}</a></li>
+                                  {%- endfor -%}
+                                </ul>
+                              {%- endif -%}
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    </details>
+                  </details-disclosure>
+                {%- else -%}
+                  <a href="{{ link.url }}" class="nav__link{% if link.active %} is-active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      {%- endif -%}
+
+      <div class="header__actions">
+        <a href="{{ routes.search_url }}" class="icon-button" data-search-open aria-label="{{ 'sections.header.search' | t }}">{% render 'icon', name: 'search' %}</a>
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="icon-button header__account" aria-label="{{ 'sections.header.account' | t }}">{% render 'icon', name: 'account' %}</a>
+        {%- endif -%}
+        <a href="{{ routes.cart_url }}" class="icon-button header__cart" data-cart-open aria-label="{{ 'sections.header.cart' | t }}">
+          {% render 'icon', name: 'bag' %}
+          <span class="cart-count meta" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>
+            <span aria-hidden="true">{{ cart.item_count }}</span>
+            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  {%- comment -%} Mobile menu drawer {%- endcomment -%}
+  <menu-drawer class="drawer drawer--left" id="MenuDrawer" hidden>
+    <div class="drawer__scrim" data-close></div>
+    <div class="drawer__panel color-{{ section.settings.color_scheme }}" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.menu' | t }}" tabindex="-1">
+      <div class="drawer__head">
+        <span class="meta">{{ 'sections.header.menu' | t }}</span>
+        <button type="button" class="icon-button" data-close aria-label="{{ 'accessibility.close' | t }}">{% render 'icon', name: 'close' %}</button>
+      </div>
+      <div class="drawer__body">
+        {%- if menu != blank -%}
+          <nav aria-label="{{ 'sections.header.primary_nav' | t }}">
+            <ul class="mnav" role="list">
+              {%- for link in menu.links -%}
+                <li class="mnav__item">
+                  {%- if link.links != blank -%}
+                    <details>
+                      <summary class="mnav__link">{{ link.title | escape }}{% render 'icon', name: 'plus' %}</summary>
+                      <ul class="mnav__sub" role="list">
+                        <li><a href="{{ link.url }}" class="mnav__sublink meta">{{ 'sections.header.view_all' | t: title: link.title | escape }}</a></li>
+                        {%- for child in link.links -%}
+                          <li>
+                            <a href="{{ child.url }}" class="mnav__sublink"{% if child.current %} aria-current="page"{% endif %}>{{ child.title | escape }}</a>
+                            {%- if child.links != blank -%}
+                              <ul class="mnav__third" role="list">
+                                {%- for grandchild in child.links -%}
+                                  <li><a href="{{ grandchild.url }}" class="link-quiet"{% if grandchild.current %} aria-current="page"{% endif %}>{{ grandchild.title | escape }}</a></li>
+                                {%- endfor -%}
+                              </ul>
+                            {%- endif -%}
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    </details>
+                  {%- else -%}
+                    <a href="{{ link.url }}" class="mnav__link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title | escape }}</a>
+                  {%- endif -%}
+                </li>
+              {%- endfor -%}
+            </ul>
+          </nav>
+        {%- endif -%}
+      </div>
+      <div class="drawer__foot mnav__foot">
+        {%- if shop.customer_accounts_enabled -%}
+          <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="mnav__account">{% render 'icon', name: 'account' %}<span>{%- if customer -%}{{ 'customer.account.title' | t }}{%- else -%}{{ 'customer.log_in' | t }}{%- endif -%}</span></a>
+        {%- endif -%}
+        {% render 'localization', id: 'MenuLocalization' %}
+        {% render 'social-icons' %}
+      </div>
+    </div>
+  </menu-drawer>
+
+  {%- comment -%} Search overlay {%- endcomment -%}
+  <search-overlay class="search-overlay color-{{ section.settings.color_scheme }}" id="SearchOverlay" hidden>
+    <div class="search-overlay__inner page-width" role="dialog" aria-modal="true" aria-label="{{ 'sections.header.search' | t }}">
+      <form action="{{ routes.search_url }}" method="get" role="search" class="search-form">
+        <label for="HeaderSearch" class="visually-hidden">{{ 'search.label' | t }}</label>
+        <input type="search" id="HeaderSearch" name="q" class="search-form__input" placeholder="{{ 'search.placeholder' | t }}" autocomplete="off"
+          {% if settings.predictive_search_enabled %}role="combobox" aria-expanded="false" aria-owns="PredictiveResults" aria-controls="PredictiveResults" aria-autocomplete="list" data-predictive{% endif %}>
+        <input type="hidden" name="options[prefix]" value="last">
+        <button type="submit" class="icon-button" aria-label="{{ 'search.submit' | t }}">{% render 'icon', name: 'search' %}</button>
+        <button type="button" class="icon-button" data-close aria-label="{{ 'accessibility.close' | t }}">{% render 'icon', name: 'close' %}</button>
+      </form>
+      {%- if settings.predictive_search_enabled -%}
+        <div id="PredictiveResults" class="predictive" data-predictive-results aria-live="polite"></div>
+      {%- endif -%}
+    </div>
+  </search-overlay>
+</sticky-header>
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "class": "section-header",
+  "settings": [
+    { "type": "link_list", "id": "menu", "default": "main-menu", "label": "t:sections.header.settings.menu.label" },
+    {
+      "type": "select", "id": "logo_position", "default": "left", "label": "t:sections.header.settings.logo_position.label",
+      "options": [
+        { "value": "left", "label": "t:sections.header.settings.logo_position.options__1.label" },
+        { "value": "center", "label": "t:sections.header.settings.logo_position.options__2.label" }
+      ]
+    },
+    { "type": "checkbox", "id": "sticky", "default": true, "label": "t:sections.header.settings.sticky.label" },
+    { "type": "checkbox", "id": "transparent", "default": false, "label": "t:sections.header.settings.transparent.label", "info": "t:sections.header.settings.transparent.info" },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "enabled_on": { "groups": ["header"] }
+}
+{% endschema %}

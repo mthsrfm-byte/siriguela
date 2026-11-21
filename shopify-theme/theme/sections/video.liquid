@@ -1,0 +1,60 @@
+{%- comment -%}
+  Video section: Shopify-hosted video (muted loop or with controls) or a
+  YouTube/Vimeo URL loaded only after the visitor presses play.
+{%- endcomment -%}
+{%- assign s = section.settings -%}
+<section class="section color-{{ s.color_scheme }}">
+  <div class="page-width">
+    {% render 'section-heading', heading: s.heading, caption: s.caption %}
+    <div class="video-frame" style="--ratio: {{ s.ratio }};" data-reveal>
+      {%- if s.video != blank -%}
+        {%- if s.autoplay -%}
+          <hero-video class="video-frame__inner">
+            {{ s.video | video_tag: autoplay: true, loop: true, muted: true, playsinline: true, controls: false, preload: 'none', image_size: '1600x', class: 'video-frame__el' }}
+          </hero-video>
+          <button type="button" class="hero__pause icon-button" data-video-toggle aria-pressed="false" aria-label="{{ 'sections.hero.pause' | t }}">
+            <span class="hero__pause-icon">{% render 'icon', name: 'pause' %}</span><span class="hero__play-icon">{% render 'icon', name: 'play' %}</span>
+          </button>
+        {%- else -%}
+          {{ s.video | video_tag: controls: true, playsinline: true, preload: 'none', image_size: '1600x', class: 'video-frame__el' }}
+        {%- endif -%}
+      {%- elsif s.video_url != blank -%}
+        <deferred-media class="video-frame__inner">
+          <button type="button" class="deferred-media__poster" aria-label="{{ 'sections.video.play' | t: title: s.description | default: s.heading | escape }}">
+            {% render 'media', image: s.cover, ratio: s.ratio, sizes: '100vw', placeholder: 'lifestyle-2' %}
+            <span class="deferred-media__btn">{% render 'icon', name: 'play' %}</span>
+          </button>
+          <template>
+            {%- if s.video_url.type == 'youtube' -%}
+              <iframe src="https://www.youtube-nocookie.com/embed/{{ s.video_url.id }}?autoplay=1&rel=0" title="{{ s.description | default: s.heading | escape }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            {%- else -%}
+              <iframe src="https://player.vimeo.com/video/{{ s.video_url.id }}?autoplay=1" title="{{ s.description | default: s.heading | escape }}" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+            {%- endif -%}
+          </template>
+        </deferred-media>
+      {%- else -%}
+        {% render 'media', ratio: s.ratio, placeholder: 'lifestyle-2' %}
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "t:sections.video.name",
+  "class": "section-video",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "t:common.heading" },
+    { "type": "text", "id": "caption", "label": "t:common.caption" },
+    { "type": "video", "id": "video", "label": "t:sections.video.settings.video.label" },
+    { "type": "checkbox", "id": "autoplay", "default": true, "label": "t:sections.video.settings.autoplay.label", "info": "t:sections.video.settings.autoplay.info" },
+    { "type": "video_url", "id": "video_url", "accept": ["youtube", "vimeo"], "label": "t:sections.video.settings.video_url.label" },
+    { "type": "image_picker", "id": "cover", "label": "t:sections.video.settings.cover.label" },
+    { "type": "text", "id": "description", "label": "t:sections.video.settings.description.label", "info": "t:sections.video.settings.description.info" },
+    { "type": "select", "id": "ratio", "default": "16 / 9", "label": "t:common.image_ratio", "options": [{ "value": "16 / 9", "label": "t:common.ratios.landscape" }, { "value": "21 / 9", "label": "t:common.ratios.cinema" }, { "value": "4 / 5", "label": "t:common.ratios.portrait" }] },
+    { "type": "color_scheme", "id": "color_scheme", "label": "t:common.color_scheme", "default": "scheme-1" }
+  ],
+  "presets": [{ "name": "t:sections.video.name" }],
+  "disabled_on": { "groups": ["header", "footer"] }
+}
+{% endschema %}
