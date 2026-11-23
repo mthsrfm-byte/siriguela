@@ -9,7 +9,10 @@ function proximaAbertura() {
 }
 // Peças fora do catálogo que só recolhem interesse: o e-mail recebe a confirmação e mais nada.
 // A data distante impede o aviso automático de "safra aberta", que é das sungas.
-const PRE_VENDA = { "camiseta-azulejo": { nome: "camiseta azulejo", url: "/camiseta/azulejo/", foto: "/assets/camisetas/azulejo/email-1x1.jpg" } };
+const PRE_VENDA = {
+  "camiseta-azulejo": { nome: "camiseta azulejo", url: "/camiseta/azulejo/", foto: "/assets/camisetas/azulejo/email-1x1.jpg" },
+  "camiseta-catavento": { nome: "camiseta catavento", url: "/camiseta/catavento/", foto: "/assets/camisetas/catavento/email-1x1.jpg" }
+};
 const SEM_DATA = "9999-12-31";
 const preVenda = (slug) => (typeof slug === "string" && Object.hasOwn(PRE_VENDA, slug) ? PRE_VENDA[slug] : null);
 const json = (ok, status) => Response.json({ ok }, { status, headers: { "Cache-Control": "no-store" } });
