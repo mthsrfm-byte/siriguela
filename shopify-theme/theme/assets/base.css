@@ -717,3 +717,12 @@ shopify-account {
 }
 shopify-account::part(signed-out-avatar) { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; background: none; border: 0; color: inherit; cursor: pointer; }
 .plans__option { position: relative; }
+
+/* Accelerated checkout: unbranded button follows theme tokens (branded buttons keep their own colors) */
+.shopify-payment-button__button--unbranded {
+  min-height: 48px; border-radius: var(--radius-button);
+  background: transparent !important; color: var(--color-text) !important; border: 1px solid var(--color-text) !important;
+  font-family: var(--font-meta); font-size: 12px; letter-spacing: var(--meta-tracking); text-transform: var(--meta-case);
+}
+.shopify-payment-button__button--unbranded:hover:not([disabled]) { background: var(--color-text) !important; color: var(--color-bg) !important; }
+.shopify-payment-button__more-options { color: var(--color-text); text-decoration: underline; }

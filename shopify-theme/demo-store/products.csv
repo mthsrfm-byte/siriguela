@@ -9,13 +9,13 @@ linen-overshirt,,,,,,,,,Ink,,S,,,FS-LINEN-OVER-07,400,shopify,12,deny,manual,168
 linen-overshirt,,,,,,,,,Ink,,M,,,FS-LINEN-OVER-08,400,shopify,12,deny,manual,168.00,,TRUE,TRUE,,,,,
 linen-overshirt,,,,,,,,,Ink,,L,,,FS-LINEN-OVER-09,400,shopify,12,deny,manual,168.00,,TRUE,TRUE,,,,,
 linen-overshirt,,,,,,,,,Ink,,XL,,,FS-LINEN-OVER-10,400,shopify,0,deny,manual,168.00,,TRUE,TRUE,,,,,
-cord-trouser,Cord Trouser,<p>Wide-wale cotton corduroy with a relaxed straight leg and a high rise. Finished with a button fly and deep side pockets.</p>,Ferra Studio,,Trousers,"clothing, cotton",TRUE,Waist,28,,,,,FS-CORD-TROUS-01,400,shopify,12,deny,manual,145.00,,TRUE,TRUE,,,,FALSE,active
+cord-trouser,Cord Trouser,<p>Wide-wale cotton corduroy with a relaxed straight leg and a high rise. Finished with a button fly and deep side pockets.</p>,Ferra Studio,,Trousers,"clothing, cotton, new",TRUE,Waist,28,,,,,FS-CORD-TROUS-01,400,shopify,12,deny,manual,145.00,,TRUE,TRUE,,,,FALSE,active
 cord-trouser,,,,,,,,,30,,,,,FS-CORD-TROUS-02,400,shopify,12,deny,manual,145.00,,TRUE,TRUE,,,,,
 cord-trouser,,,,,,,,,32,,,,,FS-CORD-TROUS-03,400,shopify,12,deny,manual,145.00,,TRUE,TRUE,,,,,
 cord-trouser,,,,,,,,,34,,,,,FS-CORD-TROUS-04,400,shopify,12,deny,manual,145.00,,TRUE,TRUE,,,,,
 cord-trouser,,,,,,,,,36,,,,,FS-CORD-TROUS-05,400,shopify,12,deny,manual,145.00,,TRUE,TRUE,,,,,
-field-tote,Field Tote,"<p>Waxed cotton canvas that shrugs off rain, with vegetable-tanned leather handles that darken over time. Fits a laptop, a jumper and lunch.</p>",Ferra Studio,,Bags,"accessories, canvas, sale",TRUE,Title,Default Title,,,,,FS-FIELD-TOTE-01,400,shopify,12,deny,manual,98.00,128.00,TRUE,TRUE,,,,FALSE,active
-merino-crew,Merino Crew,"<p>Fine-gauge merino knitted to a close, clean fit. Warm without bulk, soft enough to wear against the skin.</p>",Ferra Studio,,Knitwear,"clothing, wool",TRUE,Color,Oat,Size,S,,,FS-MERINO-CRE-01,400,shopify,12,deny,manual,132.00,,TRUE,TRUE,,,,FALSE,active
+field-tote,Field Tote,"<p>Waxed cotton canvas that shrugs off rain, with vegetable-tanned leather handles that darken over time. Fits a laptop, a jumper and lunch.</p>",Ferra Studio,,Bags,"accessories, canvas, sale, new",TRUE,Title,Default Title,,,,,FS-FIELD-TOTE-01,400,shopify,12,deny,manual,98.00,128.00,TRUE,TRUE,,,,FALSE,active
+merino-crew,Merino Crew,"<p>Fine-gauge merino knitted to a close, clean fit. Warm without bulk, soft enough to wear against the skin.</p>",Ferra Studio,,Knitwear,"clothing, wool, new",TRUE,Color,Oat,Size,S,,,FS-MERINO-CRE-01,400,shopify,12,deny,manual,132.00,,TRUE,TRUE,,,,FALSE,active
 merino-crew,,,,,,,,,Oat,,M,,,FS-MERINO-CRE-02,400,shopify,12,deny,manual,132.00,,TRUE,TRUE,,,,,
 merino-crew,,,,,,,,,Oat,,L,,,FS-MERINO-CRE-03,400,shopify,12,deny,manual,132.00,,TRUE,TRUE,,,,,
 merino-crew,,,,,,,,,Ink,,S,,,FS-MERINO-CRE-04,400,shopify,12,deny,manual,132.00,,TRUE,TRUE,,,,,
@@ -26,7 +26,7 @@ merino-crew,,,,,,,,,Rust,,M,,,FS-MERINO-CRE-08,400,shopify,12,deny,manual,132.00
 merino-crew,,,,,,,,,Rust,,L,,,FS-MERINO-CRE-09,400,shopify,12,deny,manual,132.00,,TRUE,TRUE,,,,,
 stoneware-carafe,Stoneware Carafe,<p>Wheel-thrown stoneware with a matte glaze outside and a gloss glaze inside. Holds one litre.</p>,Ferra Studio,,Objects,"home, ceramics",TRUE,Title,Default Title,,,,,FS-STONEWARE--01,400,shopify,0,deny,manual,64.00,,TRUE,TRUE,,,,FALSE,active
 herringbone-scarf,Herringbone Scarf,"<p>Woven lambswool in a quiet herringbone, finished with a short fringe. 190 × 35 cm.</p>",Ferra Studio,,Accessories,"accessories, wool",TRUE,Title,Default Title,,,,,FS-HERRINGBON-01,400,shopify,12,deny,manual,89.00,,TRUE,TRUE,,,,FALSE,active
-card-sleeve,Card Sleeve,"<p>A single piece of vegetable-tanned leather, folded and hand-stitched. Holds six cards and a few notes.</p>",Ferra Studio,,Accessories,"accessories, leather, sale",TRUE,Color,Tan,,,,,FS-CARD-SLEEV-01,400,shopify,12,deny,manual,52.00,65.00,TRUE,TRUE,,,,FALSE,active
+card-sleeve,Card Sleeve,"<p>A single piece of vegetable-tanned leather, folded and hand-stitched. Holds six cards and a few notes.</p>",Ferra Studio,,Accessories,"accessories, leather, sale, new",TRUE,Color,Tan,,,,,FS-CARD-SLEEV-01,400,shopify,12,deny,manual,52.00,65.00,TRUE,TRUE,,,,FALSE,active
 card-sleeve,,,,,,,,,Black,,,,,FS-CARD-SLEEV-02,400,shopify,12,deny,manual,52.00,65.00,TRUE,TRUE,,,,,
 heavy-tee-long-name,Heavyweight Cotton Tee with Dropped Shoulder and Ribbed Collar,<p>Dense 260 gsm cotton jersey that holds its shape. The long product name is intentional: it tests how cards and pages wrap.</p>,Ferra Studio,,Tees,"clothing, cotton",TRUE,Size,XS,,,,,FS-HEAVY-TEE--01,400,shopify,12,deny,manual,48.00,,TRUE,TRUE,,,,FALSE,active
 heavy-tee-long-name,,,,,,,,,S,,,,,FS-HEAVY-TEE--02,400,shopify,12,deny,manual,48.00,,TRUE,TRUE,,,,,
@@ -37,7 +37,7 @@ wool-overcoat,Wool Overcoat,"<p>A single-breasted overcoat in boiled wool, unlin
 wool-overcoat,,,,,,,,,M,,,,,FS-WOOL-OVERC-02,400,shopify,12,deny,manual,420.00,,TRUE,TRUE,,,,,
 wool-overcoat,,,,,,,,,L,,,,,FS-WOOL-OVERC-03,400,shopify,0,deny,manual,420.00,,TRUE,TRUE,,,,,
 linen-napkins,"Linen Napkins, Set of Four",<p>Stonewashed linen napkins with mitred corners. 45 × 45 cm.</p>,Ferra Studio,,Objects,"home, linen",TRUE,Title,Default Title,,,,,FS-LINEN-NAPK-01,400,shopify,12,deny,manual,38.00,,TRUE,TRUE,,,,FALSE,active
-canvas-cap,Canvas Cap,<p>Six-panel cap in washed canvas with a brass buckle. Eight colours to test swatch overflow.</p>,Ferra Studio,,Accessories,"accessories, canvas",TRUE,Color,Olive,,,,,FS-CANVAS-CAP-01,400,shopify,12,deny,manual,42.00,,TRUE,TRUE,,,,FALSE,active
+canvas-cap,Canvas Cap,<p>Six-panel cap in washed canvas with a brass buckle. Eight colours to test swatch overflow.</p>,Ferra Studio,,Accessories,"accessories, canvas, new",TRUE,Color,Olive,,,,,FS-CANVAS-CAP-01,400,shopify,12,deny,manual,42.00,,TRUE,TRUE,,,,FALSE,active
 canvas-cap,,,,,,,,,Sand,,,,,FS-CANVAS-CAP-02,400,shopify,12,deny,manual,42.00,,TRUE,TRUE,,,,,
 canvas-cap,,,,,,,,,Ink,,,,,FS-CANVAS-CAP-03,400,shopify,12,deny,manual,42.00,,TRUE,TRUE,,,,,
 canvas-cap,,,,,,,,,Clay,,,,,FS-CANVAS-CAP-04,400,shopify,12,deny,manual,42.00,,TRUE,TRUE,,,,,

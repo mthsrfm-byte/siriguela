@@ -43,7 +43,7 @@ Source: shopify.dev Theme Store requirements, test and submit pages, read 21 Nov
 - ✅ Local preview: axe-core (WCAG 2.1 AA + best practice) 0 violations, 9 pages × 2 viewports × 2 presets.
 - ✅ Keyboard: drawers trap focus, Escape closes, focus returns; dropdowns, zoom dialog and quantity tested (15/15 passing).
 - ✅ Reduced motion respected (reveal, reel, autoplay video, announcement rotation).
-- ⚠️ Lighthouse on the local preview (not valid for review): performance 87–100, accessibility 100. **Must be re-run on the real demo store** (home, collection, product; desktop and mobile; average ≥ 60 performance, ≥ 90 accessibility).
+- ✅ Lighthouse on the dev store (home, collection, product × mobile/desktop, placeholder images): average performance 100, accessibility 93. Re-run on the final demo with real photos.
 - ❌ Browser matrix not run (Safari, Firefox, Edge, Samsung Internet, Instagram/Facebook/Pinterest in-app).
 
 ## Demo, listing and business
@@ -58,4 +58,4 @@ Source: shopify.dev Theme Store requirements, test and submit pages, read 21 Nov
 ## What would block approval today
 1. No demo store or real photography.
 2. Placeholder documentation and support URLs.
-3. Runtime behaviour (cart, variants, filters, predictive search, pickup) not yet verified on Shopify.
+

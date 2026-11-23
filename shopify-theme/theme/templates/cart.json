@@ -10,7 +10,8 @@
         "caption": "",
         "layout": "rail",
         "columns": 4,
-        "limit": 8
+        "limit": 8,
+        "collection": "new-arrivals"
       }
     }
   },

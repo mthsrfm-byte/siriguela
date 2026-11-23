@@ -28,7 +28,16 @@
 | axe-core WCAG 2.1 AA (preview) | 0 violações, 9 páginas × 2 telas × 2 presets |
 | Interação teclado/drawers (preview) | 15/15 |
 | Lighthouse (preview, indicativo) | Perf 87–100 · A11y 100 · CLS ≈ 0 |
-| Loja Shopify real | **não feito** (sem loja dev) |
+| Envio para a Shopify (`theme push`) | sucesso, 0 erros (após corrigir 2 problemas que só a Shopify detecta) |
+| E2E na loja real (Playwright, desktop + celular) | **50/50** |
+| axe-core na loja real (5 páginas × 2 telas) | 0 violações do tema (só o iframe da barra de prévia da Shopify) |
+| Lighthouse na loja real | performance média **100**, acessibilidade **93** (mín. 60/90); pontos perdidos vêm da barra de prévia e da falta de descrição da loja |
+
+## Loja de desenvolvimento
+- `vereda-theme-dev.myshopify.com` (criada pela CLI), tema "Vereda 0.1.0" id 166970097923 (não publicado).
+- Populada por `demo-store/seed.py`: 11 produtos, 6 coleções, 5 páginas, blog com 3 artigos, menus. Fotos são placeholders de layout.
+- Bugs reais achados e corrigidos: `settings.color_schemes.first` não existe na Shopify (corpo e gaveta sem fundo); range com 2 passos recusado pelo editor; botão "Buy it now" sem contraste.
+- Manual pendente: ativar cartões-presente no admin; amostras de cor exigem metafield de categoria.
 
 ## Etapa 6 — Submissão: **documentação pronta, submissão não**
 - `docs/submission-checklist.md` lista o que bloqueia hoje.
