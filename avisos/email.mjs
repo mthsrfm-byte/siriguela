@@ -1,18 +1,21 @@
 const site = "https://siriguela.site";
 
-export function mensagem(nome, slug, abertura, aberta = false) {
-  const data = new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long", timeZone: "UTC" })
+export function mensagem(nome, slug, abertura, aberta = false, pre = null) {
+  // pre: peça em pré-venda, fora do catálogo ({ nome, url, foto }); ainda não tem data de abertura
+  const data = pre ? "em breve" : new Intl.DateTimeFormat("pt-BR", { day: "numeric", month: "long", timeZone: "UTC" })
     .format(new Date(abertura + "T12:00:00Z")).replace(/^1 de/, "1º de");
   const titulo = aberta ? "a safra abriu." : "seu e-mail tá anotado.";
   const descricao = aberta
     ? "as encomendas desta safra estão abertas. você já pode escolher o tamanho e pedir a sua."
+    : pre ? "quando a pré-venda abrir, você fica sabendo primeiro, por aqui."
     : "quando as encomendas abrirem, a gente te avisa por aqui.";
-  const peca = nome ? "sunga " + nome.toLowerCase() : "coleção de sungas";
-  const url = nome ? site + "/colecao1/sunga/" + slug + "/" : site + "/";
-  const acao = aberta ? "encomendar agora" : nome ? "rever a estampa" : "ver a coleção";
+  const peca = pre ? pre.nome : nome ? "sunga " + nome.toLowerCase() : "coleção de sungas";
+  const url = pre ? site + pre.url : nome ? site + "/colecao1/sunga/" + slug + "/" : site + "/";
+  const acao = aberta ? "encomendar agora" : pre || nome ? "rever a estampa" : "ver a coleção";
   const meta = "font:11px/16px 'Courier New',monospace;letter-spacing:1.3px;color:#5e5953";
-  const foto = nome ? `<td width="100" valign="middle" style="padding:14px 0 14px 14px">
-    <a href="${url}"><img src="${site}/assets/produtos/${slug}/email-1x1.jpg" width="100" height="100" alt="${peca}" style="display:block;border:0"></a></td>` : "";
+  const imagem = pre ? site + pre.foto : `${site}/assets/produtos/${slug}/email-1x1.jpg`;
+  const foto = pre || nome ? `<td width="100" valign="middle" style="padding:14px 0 14px 14px">
+    <a href="${url}"><img src="${imagem}" width="100" height="100" alt="${peca}" style="display:block;border:0"></a></td>` : "";
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark">
 <style>
@@ -34,7 +37,7 @@ export function mensagem(nome, slug, abertura, aberta = false) {
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:584px;text-align:left"><tr><td class="linha" style="padding:28px 24px 22px;border-bottom:1px solid #d9d1c4">
 <img src="${site}/assets/img/etiqueta-email.png" width="144" height="48" alt="siriguela." style="display:block"></td></tr>
 <tr><td style="padding:36px 24px 28px">
-<p class="secundario" style="margin:0 0 16px;${meta}">ENCOMENDAS</p>
+<p class="secundario" style="margin:0 0 16px;${meta}">${pre ? "PRÉ-VENDA" : "ENCOMENDAS"}</p>
 <h1 style="max-width:410px;margin:0;font:normal 46px/1.02 Arial,Helvetica,sans-serif;letter-spacing:-2.2px">${titulo}</h1>
 <p style="max-width:355px;margin:18px 0 0;font-size:17px;line-height:1.5">${descricao}</p></td></tr>
 <tr><td style="padding:0 24px"><table class="info" role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#e4dccf;color:#121212"><tr>${foto}

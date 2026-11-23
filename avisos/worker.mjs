@@ -7,6 +7,11 @@ function proximaAbertura() {
   const [ano, mes, dia] = diaLocal().split("-").map(Number);
   return new Date(Date.UTC(ano, mes - 1 + Number(dia >= catalogo.janela.diaInicio), catalogo.janela.diaInicio)).toISOString().slice(0, 10);
 }
+// Peças fora do catálogo que só recolhem interesse: o e-mail recebe a confirmação e mais nada.
+// A data distante impede o aviso automático de "safra aberta", que é das sungas.
+const PRE_VENDA = { "camiseta-azulejo": { nome: "camiseta azulejo", url: "/camiseta/azulejo/", foto: "/assets/camisetas/azulejo/email-1x1.jpg" } };
+const SEM_DATA = "9999-12-31";
+const preVenda = (slug) => (typeof slug === "string" && Object.hasOwn(PRE_VENDA, slug) ? PRE_VENDA[slug] : null);
 const json = (ok, status) => Response.json({ ok }, { status, headers: { "Cache-Control": "no-store" } });
 
 export default {
@@ -22,9 +27,9 @@ export default {
     const email = typeof data?.email === "string" ? data.email.trim().toLowerCase() : "";
     if (email.length > 254 || !/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(email)) return json(false, 400);
     const slug = data.produto;
-    if (slug !== "" && !catalogo.produtos.some(p => p.slug === slug)) return json(false, 400);
+    if (slug !== "" && !preVenda(slug) && !catalogo.produtos.some(p => p.slug === slug)) return json(false, 400);
     await env.DB.prepare("INSERT INTO avisos(email, produto, abertura) VALUES(?,?,?) ON CONFLICT(email,produto,abertura) DO NOTHING")
-      .bind(email, slug, proximaAbertura()).run();
+      .bind(email, slug, preVenda(slug) ? SEM_DATA : proximaAbertura()).run();
     return json(true, 200);
   },
   async scheduled(event, env) {
@@ -43,7 +48,7 @@ export default {
       if (!claim.meta.changes) continue;
       const nome = catalogo.produtos.find(p => p.slug === item.produto)?.nome;
       try {
-        await env.EMAIL.send({ from: { email: "ola@siriguela.site", name: "siriguela" }, to: item.email, ...mensagem(nome, item.produto, item.abertura, aberta) });
+        await env.EMAIL.send({ from: { email: "ola@siriguela.site", name: "siriguela" }, to: item.email, ...mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto)) });
       } catch {
         console.error("Falha no envio do aviso", item.id);
         continue;
