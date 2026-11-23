@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <base href="../../">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Camiseta Azulejo · Siriguela</title>
+  <meta name="description" content="Camiseta Azulejo: dezesseis azulejos e dois azuis, tirados dos painéis dos prédios modernistas. Estudo, ainda fora de venda.">
+  <meta name="theme-color" content="#F3EFE8">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Siriguela">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:title" content="Camiseta Azulejo · Siriguela">
+  <meta property="og:description" content="Dezesseis azulejos e dois azuis, tirados dos painéis dos prédios modernistas. Estudo, ainda fora de venda.">
+  <meta property="og:url" content="https://siriguela.site/camiseta/azulejo/">
+  <meta property="og:image" content="https://siriguela.site/assets/camisetas/azulejo/troncos.w1080.webp">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" as="image" fetchpriority="high" imagesrcset="assets/camisetas/azulejo/recorte.w640.webp 640w, assets/camisetas/azulejo/recorte.w1080.webp 1080w, assets/camisetas/azulejo/recorte.w1600.webp 1600w" imagesizes="(max-width: 700px) 100vw, 56vw">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/instrument-sans-normal-latin-5.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/ibm-plex-mono-normal-latin-1.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="assets/css/fonts.css">
+  <link rel="stylesheet" href="assets/css/tokens.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    /* Página da camiseta: mesma grade de 12 colunas e os mesmos tokens da loja */
+    .tee { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); padding: 0 var(--pad); align-items: end; }
+    .tee__capa { grid-column: 1 / span 7; margin: 0; background: var(--soft); }
+    .tee__capa img, .tee__fotos img, .tee__origem img { width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+    .tee__info { grid-column: 9 / span 4; display: grid; gap: 22px; padding-bottom: 8px; }
+    .tee__nome { margin: 0; font-size: var(--t-h1); font-weight: var(--w-title); line-height: .95; letter-spacing: var(--track-tight); }
+    .tee__chamada { margin: 0; font-size: var(--t-title); font-weight: var(--w-title); line-height: 1.15; letter-spacing: var(--track-title); }
+    .tee__texto { margin: 0; color: var(--mute); }
+    .tee__fatos { margin: 0; display: grid; border-top: 1px solid var(--line); }
+    .tee__fatos div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .tee__fatos dd { margin: 0; text-align: right; }
+    .tee__estado { display: grid; gap: 12px; justify-items: start; }
+    .tee__fotos { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); }
+    .tee__fotos figure { margin: 0; background: var(--soft); }
+    .tee__fotos .alta { grid-column: span 3; }
+    .tee__fotos .larga { grid-column: span 6; }
+    .tee__fotos .cheia { grid-column: 1 / -1; }
+    .tee__origem { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); align-items: center; }
+    .tee__origem > .block__head { grid-column: 1 / -1; }
+    .tee__origem figure { grid-column: 1 / span 4; margin: 0; padding: clamp(20px, 4vw, 56px); background: var(--surface); }
+    .tee__origem div { grid-column: 6 / span 6; display: grid; gap: 18px; }
+    .tee__origem p { margin: 0; }
+    .tee__origem .tee__chamada { font-size: var(--t-lead); line-height: 1.08; }
+    .tee__nota { padding: var(--sect) var(--pad); margin: 0; }
+    @media (max-width: 900px) {
+      .tee__capa, .tee__info, .tee__origem figure, .tee__origem div { grid-column: 1 / -1; }
+      .tee__info { padding-top: 20px; }
+      .tee__fotos .alta { grid-column: span 6; }
+      .tee__fotos .larga { grid-column: 1 / -1; }
+    }
+  </style>
+</head>
+<body data-page="camiseta">
+  <script src="assets/js/produtos.js"></script>
+  <script src="assets/js/app.js"></script>
+
+  <main>
+    <nav class="crumbs" aria-label="Você está em">
+      <a href="index.html">Siriguela</a><span class="mute">/</span><span>Camiseta Azulejo</span>
+    </nav>
+
+    <section class="tee">
+      <figure class="tee__capa">
+        <img src="assets/camisetas/azulejo/recorte.w1080.webp" srcset="assets/camisetas/azulejo/recorte.w640.webp 640w, assets/camisetas/azulejo/recorte.w1080.webp 1080w, assets/camisetas/azulejo/recorte.w1600.webp 1600w" sizes="(max-width: 900px) 100vw, 56vw" width="1776" height="2368" alt="Camiseta branca com a estampa Azulejo no peito: um quadrado de dezesseis azulejos em dois azuis" draggable="false" fetchpriority="high">
+      </figure>
+      <div class="tee__info">
+        <span class="idx">Camiseta · estudo</span>
+        <h1 class="tee__nome">Azulejo<span class="ponto" aria-hidden="true"></span></h1>
+        <p class="tee__chamada">Dezesseis azulejos, dois azuis.</p>
+        <p class="tee__texto">A primeira camiseta da Siriguela. A estampa sai dos painéis de azulejo dos prédios modernistas: quartos de círculo e triângulos que nunca se repetem na mesma ordem.</p>
+        <dl class="tee__fatos">
+          <div><dt class="idx">Peça</dt><dd>Camiseta oversized, manga curta</dd></div>
+          <div><dt class="idx">Cor</dt><dd>Branca</dd></div>
+          <div><dt class="idx">Estampa</dt><dd>Só na frente, no peito</dd></div>
+          <div><dt class="idx">Tintas</dt><dd>Azul-cobalto e azul-claro</dd></div>
+        </dl>
+        <div class="tee__estado">
+          <button class="btn btn--ghost" disabled>Em breve</button>
+          <span class="mono mute">Ainda fora de venda. Preço e tamanhos saem com a peça.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <header class="block__head">
+        <h2 class="block__title">Ensaio</h2>
+        <span class="idx">Estúdio e rua</span>
+      </header>
+      <div class="tee__fotos">
+        <figure class="alta"><img src="assets/camisetas/azulejo/davi.w1080.webp" srcset="assets/camisetas/azulejo/davi.w640.webp 640w, assets/camisetas/azulejo/davi.w1080.webp 1080w, assets/camisetas/azulejo/davi.w1600.webp 1600w" sizes="(max-width: 900px) 50vw, 25vw" width="1776" height="2368" alt="Homem de pé, de frente, com a camiseta Azulejo e calça preta, em fundo azul-cobalto" draggable="false" loading="lazy" decoding="async"></figure>
+        <figure class="alta"><img src="assets/camisetas/azulejo/passada.w1080.webp" srcset="assets/camisetas/azulejo/passada.w640.webp 640w, assets/camisetas/azulejo/passada.w1080.webp 1080w, assets/camisetas/azulejo/passada.w1600.webp 1600w" sizes="(max-width: 900px) 50vw, 25vw" width="1776" height="2368" alt="Homem dando um passo largo com a camiseta Azulejo, em fundo azul-cobalto" draggable="false" loading="lazy" decoding="async"></figure>
+        <figure class="alta"><img src="assets/camisetas/azulejo/yumi.w1080.webp" srcset="assets/camisetas/azulejo/yumi.w640.webp 640w, assets/camisetas/azulejo/yumi.w1080.webp 1080w, assets/camisetas/azulejo/yumi.w1600.webp 1600w" sizes="(max-width: 900px) 50vw, 25vw" width="1776" height="2368" alt="Mulher de pé, com a mão na nuca, de camiseta Azulejo e calça crua, em fundo azul-cobalto" draggable="false" loading="lazy" decoding="async"></figure>
+        <figure class="alta"><img src="assets/camisetas/azulejo/agachada.w1080.webp" srcset="assets/camisetas/azulejo/agachada.w640.webp 640w, assets/camisetas/azulejo/agachada.w1080.webp 1080w, assets/camisetas/azulejo/agachada.w1600.webp 1600w" sizes="(max-width: 900px) 50vw, 25vw" width="1776" height="2368" alt="Mulher agachada de frente, com a camiseta Azulejo, em fundo azul-cobalto" draggable="false" loading="lazy" decoding="async"></figure>
+        <figure class="cheia"><img src="assets/camisetas/azulejo/troncos.w1080.webp" srcset="assets/camisetas/azulejo/troncos.w640.webp 640w, assets/camisetas/azulejo/troncos.w1080.webp 1080w, assets/camisetas/azulejo/troncos.w1600.webp 1600w" sizes="100vw" width="2496" height="1664" alt="Duas pessoas lado a lado com a camiseta Azulejo, diante de um painel de azulejos desfocado" draggable="false" loading="lazy" decoding="async"></figure>
+        <figure class="larga"><img src="assets/camisetas/azulejo/painel.w1080.webp" srcset="assets/camisetas/azulejo/painel.w640.webp 640w, assets/camisetas/azulejo/painel.w1080.webp 1080w, assets/camisetas/azulejo/painel.w1600.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="2496" height="1664" alt="Um homem e uma mulher andando com a camiseta Azulejo ao longo de um painel de azulejos azul e branco" draggable="false" loading="lazy" decoding="async"></figure>
+        <figure class="larga"><img src="assets/camisetas/azulejo/mureta.w1080.webp" srcset="assets/camisetas/azulejo/mureta.w640.webp 640w, assets/camisetas/azulejo/mureta.w1080.webp 1080w, assets/camisetas/azulejo/mureta.w1600.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="2496" height="1664" alt="Um homem e uma mulher sentados numa mureta com a camiseta Azulejo, diante de um painel de azulejos" draggable="false" loading="lazy" decoding="async"></figure>
+      </div>
+    </section>
+
+    <section class="block tee__origem">
+      <header class="block__head">
+        <h2 class="block__title">A estampa</h2>
+        <span class="idx">De onde vem</span>
+      </header>
+      <figure><img src="assets/camisetas/azulejo/estampa.svg" width="1000" height="1000" alt="A estampa Azulejo: quadrado de quatro por quatro azulejos com quartos de círculo e triângulos" draggable="false" loading="lazy"></figure>
+      <div>
+        <p class="tee__chamada">Um painel de prédio, do tamanho do peito.</p>
+        <p class="mute">Nos prédios modernistas brasileiros, o azulejo cobre a parede inteira com poucos módulos girados ao acaso. A gente ficou com dezesseis, escolheu a ordem e parou aí.</p>
+        <p class="mute">Como em toda peça da Siriguela, a estampa é o assunto: sem logo à mostra, sem nada nas mangas ou nas costas.</p>
+      </div>
+    </section>
+
+    <section class="block">
+      <header class="block__head">
+        <h2 class="block__title">A peça</h2>
+        <span class="idx">De frente</span>
+      </header>
+      <div class="tee__fotos">
+        <figure class="larga"><img src="assets/camisetas/azulejo/produto.w1080.webp" srcset="assets/camisetas/azulejo/produto.w640.webp 640w, assets/camisetas/azulejo/produto.w1080.webp 1080w, assets/camisetas/azulejo/produto.w1600.webp 1600w" sizes="(max-width: 900px) 100vw, 50vw" width="2048" height="2048" alt="A camiseta Azulejo estendida, de frente: branca, com o quadrado de azulejos no peito" draggable="false" loading="lazy" decoding="async"></figure>
+      </div>
+    </section>
+
+    <p class="tee__nota mono mute">Imagens de estudo geradas por computador. A camiseta ainda não foi produzida; o desenho final pode mudar.</p>
+  </main>
+
+  <script>siriguelaInit()</script>
+</body>
+</html>
