@@ -22,80 +22,7 @@
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/style.css">
-  <style>
-    /* Camiseta Azulejo: página editorial. Mesma grade de 12 colunas e os mesmos tokens da loja;
-       as fotos entram desencontradas, com legenda numerada, e o texto corre em colunas estreitas. */
-    .ed { display: grid; grid-template-columns: repeat(var(--cols), 1fr); column-gap: var(--gap); padding: 0 var(--pad); }
-    .ed figure { margin: 0; }
-    .ed img { width: 100%; height: auto; background: var(--soft); user-select: none; -webkit-user-drag: none; }
-    .ed figcaption { display: flex; justify-content: space-between; gap: 12px; padding-top: 8px; }
-    .ed p { margin: 0; }
-    .ed__frase { font-size: var(--t-lead); font-weight: var(--w-title); line-height: 1.06; letter-spacing: var(--track-title); text-wrap: balance; }
-    .ed__texto { color: var(--mute); max-width: 44ch; }
-
-    /* Capa: o nome ocupa a largura toda; embaixo, o texto encosta no pé da foto */
-    .capa { row-gap: 0; align-items: end; }
-    .capa__meta { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
-    .capa__nome { grid-column: 1 / -1; margin: 0; padding-top: clamp(12px, 2vw, 28px); font-size: clamp(76px, 21vw, 360px); font-weight: var(--w-title); line-height: .82; letter-spacing: -0.055em; }
-    .capa__lado { grid-column: 1 / span 4; display: grid; gap: 20px; padding-bottom: 6px; }
-    .capa__chamada { font-size: var(--t-title); font-weight: var(--w-title); line-height: 1.12; letter-spacing: var(--track-title); }
-    .capa__foto { grid-column: 7 / span 6; margin-top: clamp(28px, 5vw, 84px) !important; }
-    .capa__aviso { display: grid; gap: 10px; padding-top: 18px; border-top: 1px solid var(--ink); }
-
-    .manifesto { padding-top: var(--sect); row-gap: clamp(28px, 4vw, 56px); }
-    .manifesto .ed__frase { grid-column: 1 / span 9; }
-    .manifesto__a { grid-column: 5 / span 4; }
-    .manifesto__b { grid-column: 9 / span 4; }
-
-    .ensaio { padding-top: var(--sect); row-gap: clamp(40px, 7vw, 120px); align-items: start; }
-    .ensaio__a { grid-column: 1 / span 5; }
-    .ensaio__b { grid-column: 8 / span 4; margin-top: clamp(60px, 14vw, 240px) !important; }
-    .ensaio__cita { grid-column: 2 / span 9; font-size: clamp(34px, 6vw, 104px); font-weight: var(--w-title); line-height: .98; letter-spacing: var(--track-tight); text-wrap: balance; }
-    .sangra { margin: var(--sect) 0 0; }
-    .sangra img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
-    .sangra figcaption { display: flex; justify-content: space-between; gap: 12px; padding: 8px var(--pad) 0; }
-    .ensaio__c { grid-column: 2 / span 4; }
-    .ensaio__d { grid-column: 7 / span 6; margin-top: clamp(40px, 9vw, 150px) !important; }
-
-    .rua { padding-top: var(--sect); row-gap: clamp(28px, 5vw, 80px); align-items: end; }
-    .rua__a { grid-column: 1 / span 8; }
-    .rua__texto { grid-column: 10 / span 3; display: grid; gap: 16px; }
-    .rua__b { grid-column: 5 / span 8; }
-
-    .numeros { margin-top: var(--sect); padding-top: clamp(40px, 6vw, 96px); padding-bottom: clamp(40px, 6vw, 96px); background: var(--surface); align-items: center; row-gap: 32px; }
-    .numeros__arte { grid-column: 2 / span 4; }
-    .numeros__arte img { background: transparent; }
-    .numeros__lista { grid-column: 8 / span 5; margin: 0; padding: 0; list-style: none; }
-    .numeros__lista li { display: grid; grid-template-columns: minmax(1.4ch, auto) 1fr; column-gap: clamp(16px, 2.4vw, 36px); align-items: baseline; padding: 14px 0; border-top: 1px solid var(--line); }
-    .numeros__lista li:last-child { border-bottom: 1px solid var(--line); }
-    .numeros__lista b { font-size: clamp(56px, 8vw, 128px); font-weight: var(--w-title); line-height: .9; letter-spacing: var(--track-tight); font-variant-numeric: tabular-nums; }
-
-    .peca { padding-top: var(--sect); align-items: end; row-gap: 28px; }
-    .peca__foto { grid-column: 1 / span 6; }
-    .peca__ficha { grid-column: 8 / span 5; display: grid; gap: 22px; }
-    .peca__ficha dl { margin: 0; border-top: 1px solid var(--line); }
-    .peca__ficha dl div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
-    .peca__ficha dd { margin: 0; text-align: right; }
-
-    .prevenda { padding-top: var(--sect); padding-bottom: var(--sect); align-items: end; row-gap: 28px; }
-    .prevenda > .block__head { grid-column: 1 / -1; }
-    .prevenda .ed__frase { grid-column: 1 / span 6; }
-    .prevenda__form { grid-column: 8 / span 5; display: grid; gap: 14px; }
-
-    @media (max-width: 900px) {
-      .capa__lado, .capa__foto, .manifesto .ed__frase, .manifesto__a, .manifesto__b, .ensaio__cita,
-      .rua__a, .rua__texto, .rua__b, .numeros__lista, .peca__foto, .peca__ficha,
-      .prevenda .ed__frase, .prevenda__form { grid-column: 1 / -1; }
-      .capa__foto { order: 2; margin-top: 30px !important; }
-      .capa__lado { order: 3; padding-top: 24px; }
-      .ensaio__a { grid-column: 1 / span 9; }
-      .ensaio__b { grid-column: 5 / span 8; margin-top: 0 !important; }
-      .ensaio__c { grid-column: 1 / span 8; }
-      .ensaio__d { grid-column: 3 / span 10; margin-top: 0 !important; }
-      .numeros__arte { grid-column: 3 / span 8; }
-      .manifesto__a, .manifesto__b { grid-column: 2 / -1; }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/camiseta.css">
 </head>
 <body data-page="camiseta">
   <script src="assets/js/produtos.js"></script>
@@ -203,6 +130,15 @@
           <div><dt class="idx">Disponível</dt><dd>Pré-venda em breve</dd></div>
         </dl>
       </div>
+    </section>
+
+    <section class="ed outra">
+      <header class="block__head">
+        <h2 class="block__title">Outra camiseta</h2>
+        <span class="idx">Camiseta 02</span>
+      </header>
+      <a class="outra__link" href="camiseta/catavento/" aria-label="Ver a camiseta Catavento"><img src="assets/camisetas/catavento/cataventos.w1080.webp" srcset="assets/camisetas/catavento/cataventos.w640.webp 640w, assets/camisetas/catavento/cataventos.w1080.webp 1080w, assets/camisetas/catavento/cataventos.w1600.webp 1600w" sizes="(max-width: 900px) 100vw, 40vw" width="2496" height="1664" alt="Um homem e uma mulher rindo à beira-mar, cada um com um catavento de papel, vestindo a camiseta Catavento" draggable="false" loading="lazy" decoding="async"></a>
+      <p class="outra__nome"><a href="camiseta/catavento/">Catavento<span aria-hidden="true"> →</span></a></p>
     </section>
 
     <section class="ed prevenda" id="pre-venda">
