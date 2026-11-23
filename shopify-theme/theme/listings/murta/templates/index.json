@@ -58,7 +58,7 @@
         "link_label": "View all",
         "limit": 8,
         "columns": 4,
-        "columns_mobile": 2,
+        "columns_mobile": "2",
         "layout": "rail"
       }
     },
