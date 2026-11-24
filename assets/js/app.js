@@ -19,6 +19,23 @@
   /* endereço da página de cada sunga: /colecao1/sunga/<slug>/ (gerado por scripts/gerar-paginas.py) */
   const urlDe = (p) => `colecao1/sunga/${p.slug}/`;
   const parcela = (v) => brl(Math.floor((v / S.parcelas) * 100) / 100);
+  /* camisetas: venda contínua, endereço /camisetas/<slug>/ */
+  const C = S.camisetas;
+  const camBySlug = (slug) => C.itens.find((c) => c.slug === slug);
+  const urlCam = (c) => `camisetas/${c.slug}/`;
+  const camFoto = (c, f, sizes) => (c.solta && f === "solta")
+    ? `src="assets/camisetas/${c.slug}/solta.w1080.webp" srcset="assets/camisetas/${c.slug}/solta.w640.webp 640w, assets/camisetas/${c.slug}/solta.w1080.webp 1080w, assets/camisetas/${c.slug}/solta.w1188.webp 1188w" sizes="${sizes}"`
+    : pic(`assets/camisetas/${c.slug}/${f}.webp`, sizes);
+  const prazoCam = `${C.entrega.min} a ${C.entrega.max} dias corridos`;
+  /* item da sacola: { slug, size, qty, tipo? } — sem tipo é sunga (sacolas antigas) */
+  const peca = (i) => {
+    if (i.tipo === "camiseta") {
+      const c = camBySlug(i.slug);
+      return c && { tipo: "camiseta", nome: `Camiseta ${c.nome}`, preco: C.preco, url: urlCam(c), thumb: `src="assets/camisetas/${c.slug}/email-1x1.jpg"` };
+    }
+    const p = bySlug(i.slug);
+    return p && { tipo: "sunga", nome: p.nome, preco: S.preco, url: urlDe(p), thumb: pic(img(p, "frente"), "120px") };
+  };
   const store = {
     get(k, d) { try { const v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch { return d; } },
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} }
@@ -80,8 +97,8 @@
   /* ---------- Cupom e frete ---------- */
   const CUPOM_KEY = "siriguela.cupom";
   const cupomAtivo = () => store.get(CUPOM_KEY, null) === S.cupom.codigo;
-  const contas = (count) => {
-    const sub = S.preco * count;
+  const contas = (items) => {
+    const sub = items.reduce((v, i) => v + peca(i).preco * i.qty, 0);
     const desc = cupomAtivo() ? Math.round(sub * S.cupom.desconto * 100) / 100 : 0;
     const produtos = sub - desc;
     const gratis = produtos >= S.freteGratisAPartir;
@@ -104,7 +121,13 @@
       <header class="head">
         <a class="logo" href="index.html" aria-label="Siriguela, página inicial">${logo()}</a>
         <nav class="head__nav" aria-label="Principal">
-          <a href="index.html#colecao">Coleção</a>
+          <div class="head__sub">
+            <a href="camisetas/" class="head__sub-btn" aria-haspopup="true">Coleção</a>
+            <div class="head__sub-menu">
+              <a href="index.html#colecao">Sungas <span class="head__tag">em breve</span></a>
+              <a href="camisetas/">Camisetas</a>
+            </div>
+          </div>
           <a href="index.html#encomenda">Como funciona?</a>
           <a href="index.html#indice">Índice</a>
           <a href="index.html#sobre">Sobre</a>
@@ -123,11 +146,12 @@
         <div class="foot">
           <div>
             <h3 class="foot__logo"><img src="assets/img/logo-mono.svg" alt="Siriguela" width="104" height="28"></h3>
-            <p>Sungas estampadas, feitas sob encomenda a partir de pedaços do Brasil.</p>
+            <p>Camisetas e sungas estampadas, feitas sob encomenda a partir de pedaços do Brasil.</p>
           </div>
           <div>
             <h3 class="mono">Loja</h3>
-            <a href="index.html#colecao">Coleção</a>
+            <a href="camisetas/">Camisetas</a>
+            <a href="index.html#colecao">Sungas</a>
             <a href="index.html#medidas">Medidas</a>
             <a href="#" data-open-bag>Sacola</a>
           </div>
@@ -172,10 +196,10 @@
   const bag = {
     get() { return store.get(KEY, []) || []; },
     set(items) { store.set(KEY, items); render(); },
-    add(slug, size) {
+    add(slug, size, tipo) {
       const items = bag.get();
-      const hit = items.find((i) => i.slug === slug && i.size === size);
-      hit ? hit.qty++ : items.push({ slug, size, qty: 1 });
+      const hit = items.find((i) => i.slug === slug && i.size === size && (i.tipo || "sunga") === (tipo || "sunga"));
+      hit ? hit.qty++ : items.push(tipo === "camiseta" ? { slug, size, qty: 1, tipo } : { slug, size, qty: 1 });
       bag.set(items);
     },
     qty(idx, d) {
@@ -189,14 +213,11 @@
 
   const freteFrase = (c) => {
     if (c.gratis) return "Frete grátis para todo o Brasil.";
-    const umaMais = c.produtos + S.preco * (1 - (cupomAtivo() ? S.cupom.desconto : 0));
-    return umaMais >= S.freteGratisAPartir
-      ? "Com mais uma sunga, o frete fica grátis."
-      : `Faltam ${brl(c.falta)} para o frete grátis.`;
+    return `Faltam ${brl(c.falta)} para o frete grátis.`;
   };
 
   function render() {
-    const items = bag.get().filter((i) => bySlug(i.slug));
+    const items = bag.get().filter((i) => peca(i));
     const count = items.reduce((n, i) => n + i.qty, 0);
     $$("[data-count]").forEach((b) => { b.textContent = `(${count})`; b.classList.toggle("has", !!count); });
 
@@ -205,17 +226,19 @@
     if (!items.length) {
       list.innerHTML = `<div class="bag__empty">
         <p>Sua sacola está vazia.</p>
-        <p class="bag__hint">${J.safra}: ${J.aberta ? `encomendas abertas até ${J.longa(J.fim)}` : `encomendas de ${J.periodo}`}. Na primeira compra, ${S.cupom.codigo} dá 10% de desconto.</p>
-        <a class="btn btn--ghost btn--full" href="index.html#colecao" data-close-bag>Ver coleção <span>→</span></a></div>`;
+        <p class="bag__hint">Camisetas: compra aberta todos os dias, entrega em ${prazoCam}. Na primeira compra, ${S.cupom.codigo} dá 10% de desconto.</p>
+        <a class="btn btn--ghost btn--full" href="camisetas/" data-close-bag>Ver camisetas <span>→</span></a></div>`;
       foot.innerHTML = "";
       return;
     }
-    list.innerHTML = `<p class="bag__safra idx">Encomenda · ${J.safra}</p>` + items.map((i, idx) => {
-      const p = bySlug(i.slug);
+    const temSunga = items.some((i) => peca(i).tipo === "sunga");
+    const temCam = items.some((i) => peca(i).tipo === "camiseta");
+    list.innerHTML = `<p class="bag__safra idx">Sob encomenda${temSunga ? ` · ${J.safra}` : ""}</p>` + items.map((i) => {
+      const x = peca(i), idx = bag.get().indexOf(bag.get().find((b) => b.slug === i.slug && b.size === i.size && (b.tipo || "sunga") === (i.tipo || "sunga")));
       return `<div class="line">
-        <a href="${urlDe(p)}"><img ${pic(img(p, "frente"), "120px")} alt="Sunga ${p.nome}"></a>
+        <a href="${x.url}"><img ${x.thumb} alt="${x.tipo === "sunga" ? "Sunga " : ""}${x.nome}"></a>
         <div>
-          <div class="line__name">${p.nome}</div>
+          <div class="line__name">${x.nome}</div>
           <div class="mono mute">Tam. ${i.size} · feita sob encomenda</div>
           <div class="qty">
             <button aria-label="Diminuir" data-q="${idx}" data-d="-1">−</button>
@@ -224,13 +247,15 @@
           </div>
         </div>
         <div class="line__right">
-          <span>${brl(S.preco * i.qty)}</span>
+          <span>${brl(x.preco * i.qty)}</span>
           <button class="line__rm mono" data-rm="${idx}">Remover</button>
         </div>
       </div>`;
     }).join("");
 
-    const c = contas(count);
+    const c = contas(items);
+    const pode = J.aberta || !temSunga;
+    const prazo = [temCam ? `Camisetas chegam em ${prazoCam}.` : "", temSunga ? `Sungas: produção a partir de ${J.longa(J.producao)}, chegam até ${J.longa(J.entrega)}.` : ""].filter(Boolean).join("<br>");
     const cupom = cupomAtivo()
       ? `<div class="bag__row bag__row--cupom"><span>Cupom ${S.cupom.codigo} <button class="line__rm" data-cupom-rm>remover</button></span><span>− ${brl(c.desc)}</span></div>`
       : `<form class="coupon" data-coupon novalidate>
@@ -247,11 +272,11 @@
       <div class="bag__row"><span class="mute">Frete</span><span>${c.gratis ? "Grátis" : `<span class="mute">no pagamento</span>`}</span></div>
       <p class="bag__frete">${freteFrase(c)}</p>
       <div class="bag__row total"><span>${cupomAtivo() ? "Total com cupom" : "Total"}</span><span>${brl(c.produtos)}</span></div>
-      ${J.aberta
-        ? `<button class="btn btn--full" data-checkout>Finalizar encomenda <span>→</span></button>
-           <p class="bag__note">Produção a partir de ${J.longa(J.producao)}. Chega até ${J.longa(J.entrega)}.<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.produtos)} sem juros</span></p>`
-        : `<button class="btn btn--ghost btn--full" type="button" disabled>Encomendas abrem em ${J.longa(J.ini)}</button>
-           <p class="bag__note">Sua sacola fica guardada até lá.</p>`}`;
+      ${pode
+        ? `<button class="btn btn--full" data-checkout>Finalizar compra <span>→</span></button>
+           <p class="bag__note">${prazo}<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.produtos)} sem juros</span></p>`
+        : `<button class="btn btn--ghost btn--full" type="button" disabled>Sungas abrem em ${J.longa(J.ini)}</button>
+           <p class="bag__note">${temCam ? "As sungas só fecham pedido na safra. Remova as sungas para comprar as camisetas agora." : "Sua sacola fica guardada até lá."}</p>`}`;
   }
 
   const openBag = () => { document.body.classList.add("is-bag"); $(".bag").setAttribute("aria-hidden", "false"); $(".bag").inert = false; window.siriguelaLenis?.stop(); };
@@ -362,6 +387,100 @@
     </a>`;
   };
 
+  /* Card de camiseta: mesmo lookbook das sungas. Alterna entre dois takes do ensaio;
+     com o mouse em cima, aparece a camisa parada (de perto, ou recortada no Jardim). */
+  const LOOK_CAM = ["34", "45", "11", "34", "45", "11", "45"];
+  const cardCam = (c, k, comLook = true) => {
+    const r = comLook ? LOOK_CAM[k % LOOK_CAM.length] : "34";
+    const cls = comLook ? `l${(k % 7) + 1}` : "";
+    const tam = comLook ? (r === "11" ? "(max-width: 600px) 72vw, 30vw" : "(max-width: 600px) 100vw, 50vw") : "(max-width: 1000px) 50vw, 25vw";
+    return `<a class="card card--cam ${cls} r${r}" href="${urlCam(c)}" style="--piso:${c.piso}">
+      <div class="card__media">
+        <div class="flip" data-flip>
+          <img class="flip__f" ${camFoto(c, c.takes[0], tam)} alt="Camiseta ${c.nome} no corpo" loading="lazy">
+          <img class="flip__b" ${camFoto(c, c.takes[1], tam)} alt="Camiseta ${c.nome} no corpo, outro ângulo" loading="lazy">
+        </div>
+        <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, tam)} alt="" loading="lazy"></div>
+      </div>
+      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(C.preco)}</span></div>
+      <div class="card__sub"><span>${c.cor}</span><span class="idx">Chega em ${C.entrega.min} a ${C.entrega.max} dias</span></div>
+    </a>`;
+  };
+
+  /* bloco "Sob encomenda" das camisetas: um texto só, usado na coleção e em cada camiseta */
+  const encomendaCam = () => `
+    <header class="block__head">
+      <h2 class="block__title">Sob encomenda</h2>
+      <span class="idx">${prazoCam}</span>
+    </header>
+    <p class="ed__frase">Feita depois do seu pedido.</p>
+    <div class="encomenda-cam__texto">
+      <p class="ed__texto">A gente estampa e costura cada camiseta só depois que alguém compra. Assim não sobra estoque parado, não tem peça encalhada no fim da estação e o tecido vai só para o que vai ser usado.</p>
+      <p class="ed__texto">Por isso a sua leva de ${C.entrega.min} a ${C.entrega.max} dias corridos para chegar em casa. Frete grátis a partir de ${brl(S.freteGratisAPartir)} e troca em até 30 dias, com a peça sem uso.</p>
+    </div>`;
+
+  /* ---------- Camisetas: coleção (/camisetas/) ---------- */
+  function camisetas() {
+    const grid = $("[data-grid-cam]");
+    grid.classList.add("look");
+    grid.innerHTML = C.itens.map((c, k) => cardCam(c, k)).join("");
+    $$("[data-encomenda-cam]").forEach((el) => (el.innerHTML = encomendaCam()));
+  }
+
+  /* ---------- Camiseta: página de cada uma ----------
+     A compra entra na capa (data-compra) e numa barra fixa no pé da tela, que aparece
+     quando a compra da capa sai de vista: o botão de comprar fica sempre à mão. */
+  function camiseta() {
+    const c = camBySlug(document.body.dataset.slug);
+    if (!c) return;
+    $$("[data-encomenda-cam]").forEach((el) => (el.innerHTML = encomendaCam()));
+    const tamanhos = () => `<div class="picker__opts" role="radiogroup" aria-label="Tamanho">
+      ${C.tamanhos.map((t) => `<button class="size" role="radio" aria-checked="false" data-size="${t}" ${c.esgotados?.includes(t) ? "disabled" : ""}>${t}</button>`).join("")}
+    </div>`;
+    const box = $("[data-compra]");
+    box.innerHTML = `
+      <div class="info__price"><strong>${brl(C.preco)}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(C.preco)} sem juros</span></div>
+      <div class="picker" data-picker>
+        <div class="picker__head mono"><span>Tamanho</span><span class="mute">Modelagem ampla</span></div>
+        ${tamanhos()}
+        <p class="picker__msg mono mute" data-msg>Escolha o tamanho.</p>
+        <button class="btn btn--full" data-add>Comprar a minha <span>→</span></button>
+        <p class="info__perks">Sob encomenda: chega em ${prazoCam}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
+      </div>`;
+    document.body.insertAdjacentHTML("beforeend", `
+      <div class="compra-fixa" data-compra-fixa>
+        <div class="compra-fixa__nome"><span>${c.nome}</span><span class="mono mute">${brl(C.preco)}</span></div>
+        ${tamanhos()}
+        <button class="btn" data-add>Comprar <span>→</span></button>
+      </div>`);
+    document.body.classList.add("com-compra-fixa");
+
+    let size = null;
+    const avisa = (txt, erro) => {
+      $$("[data-picker], [data-compra-fixa]").forEach((el) => el.classList.toggle("is-err", !!erro));
+      const m = $("[data-msg]"); if (m) m.textContent = txt;
+    };
+    $$("[data-size]").forEach((b) => b.addEventListener("click", () => {
+      size = b.dataset.size;
+      $$("[data-size]").forEach((x) => x.setAttribute("aria-checked", x.dataset.size === size));
+      avisa(`Tamanho ${size}.`);
+    }));
+    $$("[data-add]").forEach((b) => b.addEventListener("click", () => {
+      if (!size) {
+        avisa("Escolha um tamanho.", true);
+        if (b.closest("[data-compra-fixa]")) toast("Escolha um tamanho.");
+        return;
+      }
+      bag.add(c.slug, size, "camiseta");
+      openBag();
+    }));
+    /* barra fixa só aparece quando a compra da capa não está na tela */
+    const fixa = $("[data-compra-fixa]");
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(([e]) => fixa.classList.toggle("is-on", !e.isIntersecting)).observe(box);
+    } else fixa.classList.add("is-on");
+  }
+
   /* Troca dos cards: corte seco entre frente e costas, 1,5 s cada, todos no mesmo compasso.
      Pausa com o mouse em cima (mostra a sunga no piso) e fora da tela; com movimento reduzido, fica de frente. */
   function flips() {
@@ -436,14 +555,14 @@
 
   /* ---------- Home ---------- */
   function home() {
-    $("[data-safra-nome]").textContent = J.aberta ? `${J.safra} · aberta` : J.safra;
+    $("[data-safra-nome]").textContent = `Sungas · ${J.safra}${J.aberta ? " · aberta" : ""}`;
     $("[data-safra-datas]").textContent = `${J.curta(J.ini)} – ${J.curta(J.fim)}`;
     letras();
 
     $("[data-janela-status]").textContent = `${J.safra} · ${J.quando}`;
     const passos = [
       { t: "Encomenda", d: J.periodo, p: `A safra fica aberta por ${EXTENSO[J.diasJanela] || J.diasJanela} dias. Você escolhe a estampa e o tamanho e garante a sua.` },
-      { t: "Produção", d: `a partir de ${J.longa(J.producao)}`, p: "Quando a janela fecha, a gente corta e costura só o que foi encomendado. Cada peça tem dono antes de existir." },
+      { t: "Produção", d: `a partir de ${J.longa(J.producao)}`, p: "Quando a janela fecha, a gente corta e costura só o que foi encomendado." },
       { t: "Entrega", d: `até ${J.longa(J.entrega)}`, p: `A sunga chega em casa em até ${J.entregaDias} dias úteis depois do fechamento. Frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
     ];
     $("[data-steps]").innerHTML = passos.map((s, k) => `
@@ -465,6 +584,12 @@
         <span class="index__go" aria-hidden="true">→</span>
         <span class="index__thumb" aria-hidden="true"><img ${pic(img(p, "estampa"), "400px")} alt="" loading="lazy"></span>
       </a></li>`).join("");
+
+    const gridCam = $("[data-grid-cam]");
+    if (gridCam) {
+      gridCam.classList.add("look");
+      gridCam.innerHTML = C.itens.slice(0, 7).map((c, k) => cardCam(c, k)).join("");
+    }
 
     const grid = $("[data-grid]");
     grid.classList.add("look");
@@ -729,6 +854,8 @@
     chrome();
     if (document.body.dataset.page === "home") home();
     if (document.body.dataset.page === "produto") product();
+    if (document.body.dataset.page === "camisetas") camisetas();
+    if (document.body.dataset.page === "camiseta") camiseta();
     render();
     flips();
     movimento();
