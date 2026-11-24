@@ -154,11 +154,11 @@ globalThis.SIRIGUELA = {
       { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Arquitetura para vestir.", piso: "#1F4571", takes: ["ladrilho", "recorte"], estatica: "gola" },
       { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "giro"], estatica: "gola" },
       { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["bolsos", "cubo"], estatica: "solta", solta: true },
-      { slug: "meias-luas", nome: "Meias-luas", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "recorte-taina"], estatica: "detalhe" },
+      { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "recorte-taina"], estatica: "detalhe" },
       { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Cada forma no lugar da outra.", piso: "#867B9F", takes: ["inteira", "inteiro"], estatica: "detalhe" },
       { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["inteira", "inteiro"], estatica: "detalhe" },
       { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["inteira", "recorte"], estatica: "detalhe" },
-      { slug: "rolo", nome: "Rolo", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "recorte"], estatica: "detalhe" },
+      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "recorte"], estatica: "detalhe" },
       { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["inteira", "andando"], estatica: "detalhe" }
     ]
   }

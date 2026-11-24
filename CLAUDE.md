@@ -45,7 +45,7 @@ A Siriguela fala como uma pessoa que desenha estampa e conhece o lugar de onde e
 
 ### Formatos
 
-- **Nome da estampa:** com maiúscula e artigo feminino ("a Meias-luas", "a Pipa").
+- **Nome da estampa:** com maiúscula e artigo feminino ("a Meia-lua", "a Pipa").
 - **Chamada (logo abaixo do nome):** até 8 palavras e ponto final, dizendo o que a estampa mostra.
 - **Texto da estampa:** 2 parágrafos. O primeiro conta de onde vem e o segundo diz como é a peça (formas, tintas, tecido).
 - **Botões:** verbo e objeto, sem ponto ("Comprar a minha", "Ver as camisetas").
