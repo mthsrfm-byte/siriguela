@@ -21,7 +21,17 @@ const PRE_VENDA = {
   "camiseta-bandeirinhas": { nome: "camiseta bandeirinhas", url: "/camisetas/bandeirinhas/", foto: "/assets/camisetas/bandeirinhas/email-1x1.jpg" }
 };
 const SEM_DATA = "9999-12-31";
-const preVenda = (slug) => (typeof slug === "string" && Object.hasOwn(PRE_VENDA, slug) ? PRE_VENDA[slug] : null);
+const EM_BREVE = "quando as sungas chegarem, você fica sabendo primeiro, por aqui.";
+const preVenda = (slug) => {
+  if (typeof slug !== "string") return null;
+  if (Object.hasOwn(PRE_VENDA, slug)) return PRE_VENDA[slug];
+  // sungas em breve: o e-mail só confirma o interesse; o aviso de safra fica para quando elas abrirem
+  if (!catalogo.sungasEmBreve) return null;
+  const p = catalogo.produtos.find(x => x.slug === slug);
+  if (p) return { nome: "sunga " + p.nome.toLowerCase(), url: "/colecao1/sunga/" + slug + "/", foto: "/assets/produtos/" + slug + "/email-1x1.jpg", texto: EM_BREVE };
+  if (slug === "sungas") return { nome: "coleção de sungas", url: "/sungas/", foto: "/assets/produtos/pipa/email-1x1.jpg", texto: EM_BREVE };
+  return null;
+};
 const json = (ok, status) => Response.json({ ok }, { status, headers: { "Cache-Control": "no-store" } });
 
 export default {

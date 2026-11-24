@@ -7,7 +7,7 @@ export function mensagem(nome, slug, abertura, aberta = false, pre = null) {
   const titulo = aberta ? "a safra abriu." : "seu e-mail tá anotado.";
   const descricao = aberta
     ? "as encomendas desta safra estão abertas. você já pode escolher o tamanho e pedir a sua."
-    : pre ? "quando a pré-venda abrir, você fica sabendo primeiro, por aqui."
+    : pre ? pre.texto || "quando a pré-venda abrir, você fica sabendo primeiro, por aqui."
     : "quando as encomendas abrirem, a gente te avisa por aqui.";
   const peca = pre ? pre.nome : nome ? "sunga " + nome.toLowerCase() : "coleção de sungas";
   const url = pre ? site + pre.url : nome ? site + "/colecao1/sunga/" + slug + "/" : site + "/";
