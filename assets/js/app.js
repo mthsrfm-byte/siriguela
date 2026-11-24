@@ -403,11 +403,18 @@
     const r = comLook ? LOOK_CAM[k % LOOK_CAM.length] : "34";
     const cls = comLook ? `l${(k % 7) + 1}` : "";
     const tam = comLook ? (r === "11" ? "(max-width: 600px) 72vw, 30vw" : "(max-width: 600px) 100vw, 50vw") : "(max-width: 1000px) 50vw, 25vw";
+    /* card pequeno (quadrado) usa as fotos mais fechadas na camiseta; "foto:zoom:altura" recorta ampliando */
+    const fotos = r === "11" && c.perto ? c.perto : c.takes;
+    const img = (spec, cls, alt) => {
+      const [f, z, y] = spec.split(":");
+      const corte = z ? ` style="transform: scale(${z}); transform-origin: 50% ${y || "40%"}"` : "";
+      return `<img class="${cls}" ${camFoto(c, f, tam)} alt="${alt}" loading="lazy"${corte}>`;
+    };
     return `<a class="card card--cam ${cls} r${r}" href="${urlCam(c)}" style="--piso:${c.piso}">
       <div class="card__media">
         <div class="flip" data-flip>
-          <img class="flip__f" ${camFoto(c, c.takes[0], tam)} alt="Camiseta ${c.nome} no corpo" loading="lazy">
-          <img class="flip__b" ${camFoto(c, c.takes[1], tam)} alt="Camiseta ${c.nome} no corpo, outro ângulo" loading="lazy">
+          ${img(fotos[0], "flip__f", `Camiseta ${c.nome} no corpo`)}
+          ${img(fotos[1], "flip__b", `Camiseta ${c.nome} no corpo, outro ângulo`)}
         </div>
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, tam)} alt="" loading="lazy"></div>
       </div>
