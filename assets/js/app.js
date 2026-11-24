@@ -130,15 +130,9 @@
       <header class="head">
         <a class="logo" href="index.html" aria-label="Siriguela, página inicial">${logo()}</a>
         <nav class="head__nav" aria-label="Principal">
-          <div class="head__sub">
-            <a href="camisetas/" class="head__sub-btn" aria-haspopup="true">Coleção</a>
-            <div class="head__sub-menu">
-              <a href="index.html#colecao">Sungas <span class="head__tag">em breve</span></a>
-              <a href="camisetas/">Camisetas</a>
-            </div>
-          </div>
+          <a href="camisetas/">Camisetas</a>
+          ${EMBREVE ? `<span class="head__off">Sungas <span class="head__tag">em breve</span></span>` : `<a href="index.html#colecao">Sungas</a>`}
           <a href="index.html#encomenda">Como funciona?</a>
-          <a href="index.html#indice">Índice</a>
           <a href="index.html#sobre">Sobre</a>
         </nav>
         <div class="head__right">
@@ -160,8 +154,7 @@
           <div>
             <h3 class="mono">Loja</h3>
             <a href="camisetas/">Camisetas</a>
-            <a href="index.html#colecao">Sungas</a>
-            <a href="index.html#medidas">Medidas</a>
+            ${EMBREVE ? "" : `<a href="index.html#colecao">Sungas</a>\n            <a href="index.html#medidas">Medidas</a>`}
             <a href="#" data-open-bag>Sacola</a>
           </div>
           <div>
@@ -620,7 +613,8 @@
         : `<p class="order__notice">As encomendas abrem em ${J.longa(J.ini)}. Deixe seu e-mail e a gente avisa no dia.</p>${avisoForm("aviso-home")}`;
     }
 
-    $("[data-index]").innerHTML = S.produtos.map((p, i) => `
+    /* seções das sungas (grade, índice e medidas) só existem na home quando elas estão à venda */
+    if ($("[data-index]")) $("[data-index]").innerHTML = S.produtos.map((p, i) => `
       <li><a href="${urlDe(p)}">
         <span class="idx">${num(i)}</span>
         <span class="index__name">${p.nome}</span>
@@ -637,9 +631,11 @@
     }
 
     const grid = $("[data-grid]");
-    grid.classList.add("look");
-    grid.innerHTML = S.produtos.map((p, i) => card(p, LOOK[i % LOOK.length])).join("");
-    $("[data-sizes]").innerHTML = sizeTable();
+    if (grid) {
+      grid.classList.add("look");
+      grid.innerHTML = S.produtos.map((p, i) => card(p, LOOK[i % LOOK.length])).join("");
+    }
+    if ($("[data-sizes]")) $("[data-sizes]").innerHTML = sizeTable();
 
     $("[data-join]").addEventListener("submit", (e) => {
       e.preventDefault();

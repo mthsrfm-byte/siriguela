@@ -685,19 +685,9 @@ html.lenis, html.lenis body { height: auto; }
   .com-recorte .crumbs { padding-bottom: 4px; }
 }
 
-/* ---------- Submenu da Coleção (Sungas · Camisetas) ----------
-   Sem fundo, como o resto do cabeçalho (o texto continua invertendo sobre as fotos). */
-.head__sub { position: relative; display: flex; }
-.head__sub-btn { display: block; }
-.head__sub-menu { position: absolute; top: 100%; left: 0; display: flex; flex-direction: column; gap: 2px; padding-top: 8px; min-width: max-content;
-  opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .18s, transform .18s, visibility 0s .18s; }
-.head__sub:hover .head__sub-menu, .head__sub:focus-within .head__sub-menu { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+/* ---------- Item do menu sem link (Sungas em breve) ---------- */
+.head__off { padding: 6px 0; opacity: .55; cursor: default; white-space: nowrap; }
 .head__tag { font-family: var(--f-mono); font-size: 11px; letter-spacing: .04em; text-transform: uppercase; opacity: .7; margin-left: 6px; }
-@media (max-width: 860px) {
-  .head__sub { flex-direction: column; }
-  .head__sub-btn { pointer-events: none; }
-  .head__sub-menu { position: static; opacity: 1; visibility: visible; transform: none; padding: 0 0 4px 18px; gap: 0; font-size: var(--t-body); font-weight: var(--w-text); }
-}
 
 /* ---------- Camisetas na grade (home e /camisetas/) ---------- */
 .card--cam .flip img { object-position: 50% 30%; }
