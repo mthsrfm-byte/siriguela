@@ -17,6 +17,7 @@
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="As sete sungas Siriguela lado a lado: Sete estampas. Nenhuma lisa.">
   <meta name="twitter:card" content="summary_large_image">
+  <link rel="preload" as="image" href="assets/video/camisetas.webp" fetchpriority="high">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/instrument-sans-normal-latin-5.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/ibm-plex-mono-normal-latin-1.woff2" as="font" type="font/woff2" crossorigin>
@@ -39,6 +40,13 @@
         </div>
         <h1 class="hero__title" data-letras>Só estampa<span class="ponto" aria-hidden="true"></span><span class="sr">.</span></h1>
       </div>
+      <!-- filme das camisetas: 21:9 no computador, 3:2 no tablet e no celular; mudo, em laço, leva às camisetas -->
+      <a class="filme" href="camisetas/" aria-label="Ver as camisetas">
+        <video class="filme__video" poster="assets/video/camisetas.webp" autoplay muted loop playsinline preload="metadata" disablepictureinpicture draggable="false" aria-label="Filme das camisetas: duplas andando com as camisetas Catavento, Degraus, Azulejo, Rolo, Jardim e Encaixe">
+          <source src="assets/video/camisetas-21x9.mp4" type="video/mp4" media="(min-width: 1025px)">
+          <source src="assets/video/camisetas-3x2.mp4" type="video/mp4">
+        </video>
+      </a>
     </section>
 
     <section class="block" id="camisetas">
