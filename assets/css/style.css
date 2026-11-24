@@ -708,3 +708,9 @@ html.lenis, html.lenis body { height: auto; }
   .grid--more .card__price { flex-basis: 100%; margin-left: 0; }
   .grid--more .card__sub .idx { display: none; }
 }
+/* camisetas: o card pequeno (quadrado) do lookbook fica 22% maior */
+.look .card--cam.l3 { width: 122%; }
+.look .card--cam.l6 { width: 122%; margin-left: -22%; }
+@media (max-width: 600px) {
+  .look .card--cam.l3, .look .card--cam.l6 { width: 88%; margin-left: 0; }
+}

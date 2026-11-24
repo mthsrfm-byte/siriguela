@@ -31,6 +31,10 @@ Abra http://localhost:5190
 - Página de produto ("Capa", celular e computador): a primeira foto é a sunga no chão em 3:2, com o nome gigante encostado nela e a compra logo abaixo; as outras fotos seguem num mosaico. Sunga com `recorte: true` no `produtos.js` usa a sunga recortada (PNG transparente) no lugar da foto: o original fica em `_originais-fotos/<slug>/solta.png` e o site usa `assets/produtos/<slug>/solta.w640/w1080/w1448.webp` (WebP com transparência, gerado com Pillow). Depois de marcar uma sunga nova, rode `python3 scripts/gerar-paginas.py`.
 - `assets/produtos/grades/`: as grades originais de onde as fotos foram recortadas
 
+## Deploy dos workers
+
+O site sai sozinho pelo GitHub Pages. Os workers da Cloudflare (`checkout/` e `avisos/`) saem pela Action `.github/workflows/workers.yml`, que roda a cada push na `main` que mexa neles ou em `assets/js/produtos.js` (e à mão em Actions → Workers → Run workflow). Ela precisa do secret `CLOUDFLARE_API_TOKEN` no repositório, com permissão "Edit Cloudflare Workers"; se o token enxergar mais de uma conta, também de `CLOUDFLARE_ACCOUNT_ID`.
+
 ## Encomenda
 
 A loja funciona sob encomenda: a safra abre todo mês do dia 1 ao 7, a produção começa quando a janela fecha e a entrega chega em até 10 dias úteis. Preço, frete grátis, cupom e janela ficam no topo de `assets/js/produtos.js`. O site calcula sozinho se a janela está aberta ou fechada e escreve as datas.

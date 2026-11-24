@@ -1,0 +1,36 @@
+# Publica os workers da Cloudflare (checkout e avisos) sempre que algo entra na main
+# mexendo neles ou no catálogo. Também roda à mão em Actions → Workers → Run workflow.
+# Precisa do secret CLOUDFLARE_API_TOKEN (permissão "Edit Cloudflare Workers") e,
+# se o token enxergar mais de uma conta, de CLOUDFLARE_ACCOUNT_ID.
+name: Workers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "checkout/**"
+      - "avisos/**"
+      - "assets/js/produtos.js"
+      - ".github/workflows/workers.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: workers
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        worker: [checkout, avisos]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Publica ${{ matrix.worker }}
+        run: npx --yes wrangler@4 deploy --config ${{ matrix.worker }}/wrangler.jsonc
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

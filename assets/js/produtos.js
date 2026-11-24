@@ -145,21 +145,23 @@ globalThis.SIRIGUELA = {
   },
   /* Camisetas: venda contínua (sem janela de safra), feitas depois do pedido e entregues em 7 a 15 dias corridos.
      As páginas ficam em /camisetas/<slug>/ (escritas à mão) e as fotos em assets/camisetas/<slug>/.
-     takes: as duas fotos que se alternam no card; estatica: a foto da camisa que aparece no hover. */
+     takes: as duas fotos que se alternam no card (poses diferentes); estatica: a foto da camisa que aparece no hover;
+     perto: as duas fotos do card pequeno (quadrado), mais fechadas na camiseta. "foto:zoom:altura" amplia a foto
+     a partir daquela altura, para recortar o rosto e ficar só com a peça. */
   camisetas: {
     preco: 159.90,
     tamanhos: ["P", "M", "G", "GG"],
     entrega: { min: 7, max: 15 },
     itens: [
-      { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Arquitetura para vestir.", piso: "#1F4571", takes: ["ladrilho", "recorte"], estatica: "gola" },
-      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "giro"], estatica: "gola" },
-      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["bolsos", "cubo"], estatica: "solta", solta: true },
-      { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "recorte-taina"], estatica: "detalhe" },
-      { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Cada forma no lugar da outra.", piso: "#867B9F", takes: ["inteira", "inteiro"], estatica: "detalhe" },
-      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["inteira", "inteiro"], estatica: "detalhe" },
-      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["inteira", "recorte"], estatica: "detalhe" },
-      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "recorte"], estatica: "detalhe" },
-      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["inteira", "andando"], estatica: "detalhe" }
+      { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Arquitetura para vestir.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola" },
+      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "cubo"], perto: ["nuca", "giro:1.6:35%"], estatica: "gola" },
+      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["cubo", "de-cima"], perto: ["bolsos", "folha"], estatica: "solta", solta: true },
+      { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe" },
+      { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Cada forma no lugar da outra.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe" },
+      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["inteira", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe" },
+      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["inteira", "topo"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe" },
+      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "disco:1.6:40%"], estatica: "detalhe" },
+      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["inteira", "banco"], perto: ["recorte", "andando:1.5:35%"], estatica: "detalhe" }
     ]
   }
 };
