@@ -10,15 +10,15 @@ function proximaAbertura() {
 // Peças fora do catálogo que só recolhem interesse: o e-mail recebe a confirmação e mais nada.
 // A data distante impede o aviso automático de "safra aberta", que é das sungas.
 const PRE_VENDA = {
-  "camiseta-azulejo": { nome: "camiseta azulejo", url: "/camiseta/azulejo/", foto: "/assets/camisetas/azulejo/email-1x1.jpg" },
-  "camiseta-catavento": { nome: "camiseta catavento", url: "/camiseta/catavento/", foto: "/assets/camisetas/catavento/email-1x1.jpg" },
-  "camiseta-jardim": { nome: "camiseta jardim", url: "/camiseta/jardim/", foto: "/assets/camisetas/jardim/email-1x1.jpg" },
-  "camiseta-meias-luas": { nome: "camiseta meias-luas", url: "/camiseta/meias-luas/", foto: "/assets/camisetas/meias-luas/email-1x1.jpg" },
-  "camiseta-encaixe": { nome: "camiseta encaixe", url: "/camiseta/encaixe/", foto: "/assets/camisetas/encaixe/email-1x1.jpg" },
-  "camiseta-blocos": { nome: "camiseta blocos", url: "/camiseta/blocos/", foto: "/assets/camisetas/blocos/email-1x1.jpg" },
-  "camiseta-degraus": { nome: "camiseta degraus", url: "/camiseta/degraus/", foto: "/assets/camisetas/degraus/email-1x1.jpg" },
-  "camiseta-rolo": { nome: "camiseta rolo", url: "/camiseta/rolo/", foto: "/assets/camisetas/rolo/email-1x1.jpg" },
-  "camiseta-bandeirinhas": { nome: "camiseta bandeirinhas", url: "/camiseta/bandeirinhas/", foto: "/assets/camisetas/bandeirinhas/email-1x1.jpg" }
+  "camiseta-azulejo": { nome: "camiseta azulejo", url: "/camisetas/azulejo/", foto: "/assets/camisetas/azulejo/email-1x1.jpg" },
+  "camiseta-catavento": { nome: "camiseta catavento", url: "/camisetas/catavento/", foto: "/assets/camisetas/catavento/email-1x1.jpg" },
+  "camiseta-jardim": { nome: "camiseta jardim", url: "/camisetas/jardim/", foto: "/assets/camisetas/jardim/email-1x1.jpg" },
+  "camiseta-meias-luas": { nome: "camiseta meias-luas", url: "/camisetas/meias-luas/", foto: "/assets/camisetas/meias-luas/email-1x1.jpg" },
+  "camiseta-encaixe": { nome: "camiseta encaixe", url: "/camisetas/encaixe/", foto: "/assets/camisetas/encaixe/email-1x1.jpg" },
+  "camiseta-blocos": { nome: "camiseta blocos", url: "/camisetas/blocos/", foto: "/assets/camisetas/blocos/email-1x1.jpg" },
+  "camiseta-degraus": { nome: "camiseta degraus", url: "/camisetas/degraus/", foto: "/assets/camisetas/degraus/email-1x1.jpg" },
+  "camiseta-rolo": { nome: "camiseta rolo", url: "/camisetas/rolo/", foto: "/assets/camisetas/rolo/email-1x1.jpg" },
+  "camiseta-bandeirinhas": { nome: "camiseta bandeirinhas", url: "/camisetas/bandeirinhas/", foto: "/assets/camisetas/bandeirinhas/email-1x1.jpg" }
 };
 const SEM_DATA = "9999-12-31";
 const preVenda = (slug) => (typeof slug === "string" && Object.hasOwn(PRE_VENDA, slug) ? PRE_VENDA[slug] : null);

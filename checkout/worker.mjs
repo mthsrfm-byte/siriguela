@@ -13,10 +13,6 @@ export default {
     if (new URL(req.url).pathname !== "/api/checkout") return responder(404, {});
     if (req.method !== "POST") return responder(405, { erro: "Use a sacola para iniciar uma encomenda." });
     if (req.headers.get("Origin") !== origem) return responder(403, {});
-    const dia = Number(diaBrasilia.format(new Date()));
-    if (dia < catalogo.janela.diaInicio || dia > catalogo.janela.diaFim) {
-      return responder(409, { erro: "Encomendas fechadas. Sua sacola fica guardada para a próxima safra." });
-    }
     if (!env.NEXTOUT_KEY) return responder(503, { erro: "Pagamento indisponível por enquanto. Sua sacola está salva." });
     if (!req.headers.get("Content-Type")?.startsWith("application/json")) return responder(415, {});
     if (Number(req.headers.get("Content-Length")) > 16384) return responder(413, {});
@@ -26,22 +22,36 @@ export default {
     if (!Array.isArray(body?.items) || !body.items.length || body.items.length > 50) {
       return responder(400, { erro: "Confira os itens da sua sacola." });
     }
+    const camisetas = catalogo.camisetas;
     const items = [];
+    let temSunga = false;
     for (const item of body.items) {
-      const produto = catalogo.produtos.find(p => p.slug === item?.slug);
-      if (!produto || !catalogo.tamanhos.includes(item.size) || !Number.isSafeInteger(item.qty) || item.qty < 1 ||
-          !Number.isSafeInteger(item.qty * Math.round(catalogo.preco * 100))) {
+      /* camiseta: venda contínua; sunga: só na janela da safra */
+      const camiseta = item?.tipo === "camiseta";
+      const produto = camiseta ? camisetas.itens.find(c => c.slug === item?.slug) : catalogo.produtos.find(p => p.slug === item?.slug);
+      const preco = camiseta ? camisetas.preco : catalogo.preco;
+      const tamanhos = camiseta ? camisetas.tamanhos : catalogo.tamanhos;
+      if (!produto || !tamanhos.includes(item.size) || !Number.isSafeInteger(item.qty) || item.qty < 1 ||
+          !Number.isSafeInteger(item.qty * Math.round(preco * 100))) {
         return responder(400, { erro: "Confira o tamanho e a quantidade de cada peça." });
       }
+      const tipo = camiseta ? "Camiseta" : "Sunga";
       if (produto.esgotados?.includes(item.size)) {
-        return responder(409, { erro: `Sunga ${produto.nome}, tamanho ${item.size}, esgotada. Remova essa peça para continuar.` });
+        return responder(409, { erro: `${tipo} ${produto.nome}, tamanho ${item.size}, esgotada. Remova essa peça para continuar.` });
       }
+      if (!camiseta) temSunga = true;
       items.push({
-        name: `Sunga ${produto.nome} · tamanho ${item.size}`,
-        amount: Math.round(catalogo.preco * 100),
+        name: `${tipo} ${produto.nome} · tamanho ${item.size}`,
+        amount: Math.round(preco * 100),
         quantity: item.qty,
-        image: `${origem}/assets/produtos/${produto.slug}/${produto.recorte ? "solta" : "frente"}.w640.webp`
+        image: camiseta
+          ? `${origem}/assets/camisetas/${produto.slug}/email-1x1.jpg`
+          : `${origem}/assets/produtos/${produto.slug}/${produto.recorte ? "solta" : "frente"}.w640.webp`
       });
+    }
+    const dia = Number(diaBrasilia.format(new Date()));
+    if (temSunga && (dia < catalogo.janela.diaInicio || dia > catalogo.janela.diaFim)) {
+      return responder(409, { erro: "As sungas só fecham pedido na safra, do dia 1 ao 7. Remova as sungas para comprar as camisetas agora." });
     }
     const utm = {};
     for (const key of ["source", "medium", "campaign", "content", "term"]) {
