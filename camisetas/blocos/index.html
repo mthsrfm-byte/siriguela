@@ -29,27 +29,23 @@
   <script src="assets/js/app.js"></script>
 
   <main>
-    <nav class="crumbs" aria-label="Você está em">
-      <a href="index.html">Siriguela</a><span class="mute">/</span><a href="camisetas/">Camisetas</a><span class="mute">/</span><span>Blocos</span>
-    </nav>
 
     <section class="ed capa">
-      <div class="capa__meta"><span class="idx">Camiseta 06 · Edição de estreia</span><span class="idx">R$ 159,90 · sob encomenda</span></div>
       <h1 class="capa__nome">Blocos<span class="ponto" aria-hidden="true"></span></h1>
       <div class="capa__lado">
         <p class="capa__chamada">Um prédio que cabe no peito.</p>
         <p class="ed__texto">Retângulos em creme e mostarda, uma escada de sombra e meio sol terracota, sobre algodão preto. Arquitetura em poucas linhas.</p>
         <div class="capa__aviso" data-compra></div>
       </div>
-      <figure class="capa__foto">
+      <figure class="capa__foto" data-scroll data-scroll-speed="0.14" data-scroll-enable-touch-speed>
         <img src="assets/camisetas/blocos/detalhe.w1080.webp" srcset="assets/camisetas/blocos/detalhe.w640.webp 640w, assets/camisetas/blocos/detalhe.w1080.webp 1080w, assets/camisetas/blocos/detalhe.w1600.webp 1600w, assets/camisetas/blocos/detalhe.w1776.webp 1776w" sizes="(max-width: 900px) 100vw, 48vw" width="1776" height="2368" alt="A estampa Blocos de perto, no peito de uma camiseta preta: retângulos em creme e mostarda e uma meia-lua terracota" draggable="false" fetchpriority="high">
       </figure>
     </section>
 
     <section class="ed manifesto">
-      <p class="ed__frase">Concreto também é desenho.</p>
-      <p class="ed__texto manifesto__a">A arquitetura brutalista é feita de volume, sombra e degrau. Tirando o cinza, sobra a composição.</p>
-      <p class="ed__texto manifesto__b">A Blocos guarda esse resto: três tintas, um recorte em escada e uma meia-lua que pode ser porta, sol ou fim de tarde.</p>
+      <p class="ed__frase">Brutalismo sem o cinza.</p>
+      <p class="ed__texto manifesto__a">A arquitetura brutalista é feita de volume, sombra e degrau.</p>
+      <p class="ed__texto manifesto__b">A Blocos tira o cinza e fica com a composição: três tintas, um recorte em escada e uma meia-lua que pode ser porta ou sol.</p>
     </section>
 
     <section class="ed ensaio">
@@ -59,7 +55,7 @@
       <figure class="ensaio__b">
         <img src="assets/camisetas/blocos/bloco.w1080.webp" srcset="assets/camisetas/blocos/bloco.w640.webp 640w, assets/camisetas/blocos/bloco.w1080.webp 1080w, assets/camisetas/blocos/bloco.w1600.webp 1600w, assets/camisetas/blocos/bloco.w1776.webp 1776w" sizes="(max-width: 900px) 66vw, 32vw" width="1776" height="2368" alt="Homem com a camiseta Blocos e calça crua, o braço apoiado num bloco creme, em fundo mostarda" draggable="false" loading="lazy" decoding="async">
       </figure>
-      <p class="ensaio__cita">Concreto no peito.</p>
+      <p class="ensaio__cita">Feita para o centro da cidade.</p>
     </section>
 
     <figure class="sangra">
@@ -81,8 +77,8 @@
       </figure>
       <div class="rua__texto">
         <span class="idx">No prédio</span>
-        <p class="capa__chamada">Degrau, porta mostarda, sol cortado.</p>
-        <p class="ed__texto">Fotografada entre escadarias e empenas de concreto.</p>
+        <p class="capa__chamada">Entre escadarias e empenas.</p>
+        <p class="ed__texto">Fotografada num prédio brutalista, com uma porta mostarda no meio do concreto.</p>
       </div>
       <figure class="rua__b">
         <img src="assets/camisetas/blocos/torsos.w1080.webp" srcset="assets/camisetas/blocos/torsos.w640.webp 640w, assets/camisetas/blocos/torsos.w1080.webp 1080w, assets/camisetas/blocos/torsos.w1600.webp 1600w, assets/camisetas/blocos/torsos.w2496.webp 2496w" sizes="(max-width: 900px) 100vw, 64vw" width="2496" height="1664" alt="Duas pessoas lado a lado com a camiseta Blocos, rostos fora do quadro, diante de um prédio de concreto" draggable="false" loading="lazy" decoding="async">
@@ -104,14 +100,7 @@
       </figure>
     </section>
 
-    <section class="ed outra">
-      <header class="block__head">
-        <h2 class="block__title">Outra camiseta</h2>
-        <span class="idx">Camiseta 07</span>
-      </header>
-      <a class="outra__link" href="camisetas/degraus/" aria-label="Ver a camiseta Degraus"><img src="assets/camisetas/degraus/descendo.w1080.webp" srcset="assets/camisetas/degraus/descendo.w640.webp 640w, assets/camisetas/degraus/descendo.w1080.webp 1080w, assets/camisetas/degraus/descendo.w1600.webp 1600w, assets/camisetas/degraus/descendo.w2496.webp 2496w" sizes="(max-width: 900px) 100vw, 40vw" width="2496" height="1664" alt="Um homem e uma mulher com a camiseta Degraus descendo uma escadaria pintada de coral e creme" draggable="false" loading="lazy" decoding="async"></a>
-      <p class="outra__nome"><a href="camisetas/degraus/">Degraus<span aria-hidden="true"> →</span></a></p>
-    </section>
+    <section class="block outras-cam" data-outras-cam></section>
 
     <section class="ed encomenda-cam" id="encomenda" data-encomenda-cam></section>
   </main>

@@ -50,6 +50,9 @@ export default {
       });
     }
     const dia = Number(diaBrasilia.format(new Date()));
+    if (temSunga && catalogo.sungasEmBreve) {
+      return responder(409, { erro: "As sungas ainda não estão à venda. Remova as sungas para comprar as camisetas." });
+    }
     if (temSunga && (dia < catalogo.janela.diaInicio || dia > catalogo.janela.diaFim)) {
       return responder(409, { erro: "As sungas só fecham pedido na safra, do dia 1 ao 7. Remova as sungas para comprar as camisetas agora." });
     }

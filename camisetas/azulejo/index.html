@@ -29,27 +29,23 @@
   <script src="assets/js/app.js"></script>
 
   <main>
-    <nav class="crumbs" aria-label="Você está em">
-      <a href="index.html">Siriguela</a><span class="mute">/</span><a href="camisetas/">Camisetas</a><span class="mute">/</span><span>Azulejo</span>
-    </nav>
 
     <section class="ed capa">
-      <div class="capa__meta"><span class="idx">Camiseta 01 · Edição de estreia</span><span class="idx">R$ 159,90 · sob encomenda</span></div>
       <h1 class="capa__nome">Azulejo<span class="ponto" aria-hidden="true"></span></h1>
       <div class="capa__lado">
         <p class="capa__chamada">Arquitetura para vestir.</p>
         <p class="ed__texto">O Brasil moderno cobriu suas paredes de azul. A gente tirou dezesseis azulejos do muro e levou para o peito.</p>
         <div class="capa__aviso" data-compra></div>
       </div>
-      <figure class="capa__foto">
+      <figure class="capa__foto" data-scroll data-scroll-speed="0.14" data-scroll-enable-touch-speed>
         <img src="assets/camisetas/azulejo/ladrilho.w1080.webp" srcset="assets/camisetas/azulejo/ladrilho.w640.webp 640w, assets/camisetas/azulejo/ladrilho.w1080.webp 1080w, assets/camisetas/azulejo/ladrilho.w1600.webp 1600w, assets/camisetas/azulejo/ladrilho.w1776.webp 1776w" sizes="(max-width: 900px) 100vw, 48vw" width="1776" height="2368" alt="Homem com a camiseta Azulejo, segurando um ladrilho branco, em fundo azul-cobalto: o quadrado de dezesseis azulejos no peito" draggable="false" fetchpriority="high">
       </figure>
     </section>
 
     <section class="ed manifesto">
-      <p class="ed__frase">Um prédio inteiro, do tamanho do peito.</p>
-      <p class="ed__texto manifesto__a">Há paredes que param quem passa. Painéis em que o mesmo azulejo gira, se repete e nunca se repete igual, num ritmo que o olho segue sem cansar.</p>
-      <p class="ed__texto manifesto__b">A Azulejo nasce desse ritmo. Dezesseis peças e dois azuis num quadrado preciso, sobre algodão branco.</p>
+      <p class="ed__frase">Dezesseis azulejos no peito.</p>
+      <p class="ed__texto manifesto__a">Nos painéis do modernismo brasileiro, o mesmo azulejo é girado e repetido até cobrir a parede inteira.</p>
+      <p class="ed__texto manifesto__b">A Azulejo usa a mesma regra: dezesseis peças e dois azuis num quadrado, sobre algodão branco.</p>
     </section>
 
     <section class="ed ensaio">
@@ -59,7 +55,7 @@
       <figure class="ensaio__b">
         <img src="assets/camisetas/azulejo/gola.w1080.webp" srcset="assets/camisetas/azulejo/gola.w640.webp 640w, assets/camisetas/azulejo/gola.w1080.webp 1080w, assets/camisetas/azulejo/gola.w1600.webp 1600w, assets/camisetas/azulejo/gola.w1776.webp 1776w" sizes="(max-width: 900px) 66vw, 32vw" width="1776" height="2368" alt="Detalhe da gola e da estampa Azulejo no peito, com dois dedos na gola" draggable="false" loading="lazy" decoding="async">
       </figure>
-      <p class="ensaio__cita">A estampa é o assunto.</p>
+      <p class="ensaio__cita">Cobalto e azul-claro sobre branco.</p>
     </section>
 
     <figure class="sangra">
@@ -81,8 +77,8 @@
       </figure>
       <div class="rua__texto">
         <span class="idx">Na rua</span>
-        <p class="capa__chamada">Feita para a cidade de onde veio.</p>
-        <p class="ed__texto">Do estúdio para a calçada: concreto, sol e a sombra do cobogó.</p>
+        <p class="capa__chamada">Na calçada, ao meio-dia.</p>
+        <p class="ed__texto">Fotografada no estúdio e na rua, entre paredes de concreto e a sombra de um cobogó.</p>
       </div>
       <figure class="rua__b">
         <img src="assets/camisetas/azulejo/escada.w1080.webp" srcset="assets/camisetas/azulejo/escada.w640.webp 640w, assets/camisetas/azulejo/escada.w1080.webp 1080w, assets/camisetas/azulejo/escada.w1600.webp 1600w, assets/camisetas/azulejo/escada.w2496.webp 2496w" sizes="(max-width: 900px) 100vw, 64vw" width="2496" height="1664" alt="Uma mulher e um homem sentados numa escada de concreto com a camiseta Azulejo, com sombra de cobogó nos degraus" draggable="false" loading="lazy" decoding="async">
@@ -104,14 +100,7 @@
       </figure>
     </section>
 
-    <section class="ed outra">
-      <header class="block__head">
-        <h2 class="block__title">Outra camiseta</h2>
-        <span class="idx">Camiseta 02</span>
-      </header>
-      <a class="outra__link" href="camisetas/catavento/" aria-label="Ver a camiseta Catavento"><img src="assets/camisetas/catavento/torres.w1080.webp" srcset="assets/camisetas/catavento/torres.w640.webp 640w, assets/camisetas/catavento/torres.w1080.webp 1080w, assets/camisetas/catavento/torres.w1600.webp 1600w, assets/camisetas/catavento/torres.w2496.webp 2496w" sizes="(max-width: 900px) 100vw, 40vw" width="2496" height="1664" alt="Uma mulher e um homem com a camiseta Catavento numa duna, com torres eólicas ao fundo" draggable="false" loading="lazy" decoding="async"></a>
-      <p class="outra__nome"><a href="camisetas/catavento/">Catavento<span aria-hidden="true"> →</span></a></p>
-    </section>
+    <section class="block outras-cam" data-outras-cam></section>
 
     <section class="ed encomenda-cam" id="encomenda" data-encomenda-cam></section>
   </main>

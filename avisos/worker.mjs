@@ -13,11 +13,11 @@ const PRE_VENDA = {
   "camiseta-azulejo": { nome: "camiseta azulejo", url: "/camisetas/azulejo/", foto: "/assets/camisetas/azulejo/email-1x1.jpg" },
   "camiseta-catavento": { nome: "camiseta catavento", url: "/camisetas/catavento/", foto: "/assets/camisetas/catavento/email-1x1.jpg" },
   "camiseta-jardim": { nome: "camiseta jardim", url: "/camisetas/jardim/", foto: "/assets/camisetas/jardim/email-1x1.jpg" },
-  "camiseta-meias-luas": { nome: "camiseta meias-luas", url: "/camisetas/meias-luas/", foto: "/assets/camisetas/meias-luas/email-1x1.jpg" },
+  "camiseta-meia-lua": { nome: "camiseta meia-lua", url: "/camisetas/meia-lua/", foto: "/assets/camisetas/meia-lua/email-1x1.jpg" },
   "camiseta-encaixe": { nome: "camiseta encaixe", url: "/camisetas/encaixe/", foto: "/assets/camisetas/encaixe/email-1x1.jpg" },
   "camiseta-blocos": { nome: "camiseta blocos", url: "/camisetas/blocos/", foto: "/assets/camisetas/blocos/email-1x1.jpg" },
   "camiseta-degraus": { nome: "camiseta degraus", url: "/camisetas/degraus/", foto: "/assets/camisetas/degraus/email-1x1.jpg" },
-  "camiseta-rolo": { nome: "camiseta rolo", url: "/camisetas/rolo/", foto: "/assets/camisetas/rolo/email-1x1.jpg" },
+  "camiseta-ciranda": { nome: "camiseta ciranda", url: "/camisetas/ciranda/", foto: "/assets/camisetas/ciranda/email-1x1.jpg" },
   "camiseta-bandeirinhas": { nome: "camiseta bandeirinhas", url: "/camisetas/bandeirinhas/", foto: "/assets/camisetas/bandeirinhas/email-1x1.jpg" }
 };
 const SEM_DATA = "9999-12-31";

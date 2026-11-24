@@ -29,27 +29,23 @@
   <script src="assets/js/app.js"></script>
 
   <main>
-    <nav class="crumbs" aria-label="Você está em">
-      <a href="index.html">Siriguela</a><span class="mute">/</span><a href="camisetas/">Camisetas</a><span class="mute">/</span><span>Catavento</span>
-    </nav>
 
     <section class="ed capa">
-      <div class="capa__meta"><span class="idx">Camiseta 02 · Edição de estreia</span><span class="idx">R$ 159,90 · sob encomenda</span></div>
       <h1 class="capa__nome" style="--nome: 18vw">Catavento<span class="ponto" aria-hidden="true"></span></h1>
       <div class="capa__lado">
         <p class="capa__chamada">O vento tem desenho.</p>
-        <p class="ed__texto">Vinte e três triângulos em cobalto e mostarda, girando no peito. O brinquedo de papel da infância, desenhado em triângulos.</p>
+        <p class="ed__texto">Vinte e três triângulos em cobalto e mostarda, girando no peito. O brinquedo de papel da infância.</p>
         <div class="capa__aviso" data-compra></div>
       </div>
-      <figure class="capa__foto">
+      <figure class="capa__foto" data-scroll data-scroll-speed="0.14" data-scroll-enable-touch-speed>
         <img src="assets/camisetas/catavento/capa.w1080.webp" srcset="assets/camisetas/catavento/capa.w640.webp 640w, assets/camisetas/catavento/capa.w1080.webp 1080w, assets/camisetas/catavento/capa.w1600.webp 1600w, assets/camisetas/catavento/capa.w1776.webp 1776w" sizes="(max-width: 900px) 100vw, 48vw" width="1776" height="2368" alt="Camiseta off-white com a estampa Catavento no peito, caindo solta no corpo: triângulos em azul-cobalto e mostarda" draggable="false" fetchpriority="high">
       </figure>
     </section>
 
     <section class="ed manifesto">
       <p class="ed__frase">Geometria que não fica parada.</p>
-      <p class="ed__texto manifesto__a">Todo mundo já correu com um catavento na mão. Bastava um sopro para o papel virar cor, e a cor virar movimento.</p>
-      <p class="ed__texto manifesto__b">A Catavento guarda esse instante. Triângulos que parecem girar mesmo com você parado, em duas cores: o azul do céu limpo e o amarelo do sol do meio-dia.</p>
+      <p class="ed__texto manifesto__a">Quase todo mundo já correu com um catavento de papel na mão só para ver as cores girarem.</p>
+      <p class="ed__texto manifesto__b">A Catavento desenha esse giro com triângulos em duas cores: o azul do céu limpo e o amarelo do sol do meio-dia.</p>
     </section>
 
     <section class="ed ensaio">
@@ -81,8 +77,8 @@
       </figure>
       <div class="rua__texto">
         <span class="idx">No litoral</span>
-        <p class="capa__chamada">Duna, mar e torres de vento.</p>
-        <p class="ed__texto">Fotografada na duna, na beira do mar e debaixo das torres eólicas.</p>
+        <p class="capa__chamada">Na duna, com vento forte.</p>
+        <p class="ed__texto">Fotografada na areia, perto do mar, debaixo das torres eólicas.</p>
       </div>
       <figure class="rua__b">
         <img src="assets/camisetas/catavento/duna.w1080.webp" srcset="assets/camisetas/catavento/duna.w640.webp 640w, assets/camisetas/catavento/duna.w1080.webp 1080w, assets/camisetas/catavento/duna.w1600.webp 1600w, assets/camisetas/catavento/duna.w2496.webp 2496w" sizes="(max-width: 900px) 100vw, 64vw" width="2496" height="1664" alt="Um homem e uma mulher deitados na areia, vistos de cima, com a camiseta Catavento" draggable="false" loading="lazy" decoding="async">
@@ -117,14 +113,7 @@
       </figure>
     </section>
 
-    <section class="ed outra">
-      <header class="block__head">
-        <h2 class="block__title">Outra camiseta</h2>
-        <span class="idx">Camiseta 01</span>
-      </header>
-      <a class="outra__link" href="camisetas/azulejo/" aria-label="Ver a camiseta Azulejo"><img src="assets/camisetas/azulejo/painel.w1080.webp" srcset="assets/camisetas/azulejo/painel.w640.webp 640w, assets/camisetas/azulejo/painel.w1080.webp 1080w, assets/camisetas/azulejo/painel.w1600.webp 1600w, assets/camisetas/azulejo/painel.w2496.webp 2496w" sizes="(max-width: 900px) 100vw, 40vw" width="2496" height="1664" alt="Duas pessoas com a camiseta Azulejo encostadas num painel de azulejos" draggable="false" loading="lazy" decoding="async"></a>
-      <p class="outra__nome"><a href="camisetas/azulejo/">Azulejo<span aria-hidden="true"> →</span></a></p>
-    </section>
+    <section class="block outras-cam" data-outras-cam></section>
 
     <section class="ed encomenda-cam" id="encomenda" data-encomenda-cam></section>
   </main>
