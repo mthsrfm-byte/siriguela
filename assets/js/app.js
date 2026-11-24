@@ -627,7 +627,7 @@
     const gridCam = $("[data-grid-cam]");
     if (gridCam) {
       gridCam.classList.add("look");
-      gridCam.innerHTML = C.itens.slice(0, 7).map((c, k) => cardCam(c, k)).join("");
+      gridCam.innerHTML = C.itens.map((c, k) => cardCam(c, k)).join("");
     }
 
     const grid = $("[data-grid]");
