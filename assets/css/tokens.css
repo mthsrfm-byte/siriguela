@@ -41,7 +41,7 @@
   --f-sans: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
 
-  --t-hero:  clamp(64px, 12.5vw, 220px);  /* "Só estampa." */
+  --t-hero:  clamp(64px, 12.5vw, 220px);  /* título grande */
   --t-h1:    clamp(44px, 5vw, 80px);      /* nome da sunga */
   --t-lead:  clamp(28px, 3.4vw, 52px);    /* frases grandes */
   --t-title: clamp(22px, 2vw, 30px);      /* títulos de seção */

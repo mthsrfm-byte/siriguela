@@ -19,7 +19,7 @@ globalThis.SIRIGUELA = {
   tamanhos: ["P", "M", "G", "GG"],
   produtos: [
     {
-      slug: "cobogo", recorte: true, modelo: { altura: "1,84", veste: "M" },
+      slug: "cobogo", recorte: true, outra: { f: "modelo-v", pose: "em-pe" }, modelo: { altura: "1,84", veste: "M" },
       nome: "Cobogó",
       origem: "Brasília, DF",
       coord: "15°47′S 47°52′W",
@@ -35,7 +35,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "caju", recorte: true, modelo: { altura: "1,80", veste: "M" },
+      slug: "caju", recorte: true, outra: { f: "sentado-v", pose: "sentado-cubo" }, modelo: { altura: "1,80", veste: "M" },
       nome: "Caju",
       origem: "Fortaleza, CE",
       coord: "3°43′S 38°31′W",
@@ -51,7 +51,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "costas-modelo", "modelo", "frente", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "pitanga", recorte: true, modelo: { altura: "1,80", veste: "M" },
+      slug: "pitanga", recorte: true, outra: { f: "costas-modelo-v", pose: "costas" }, modelo: { altura: "1,80", veste: "M" },
       nome: "Pitanga",
       origem: "Salvador, BA",
       coord: "12°58′S 38°30′W",
@@ -67,7 +67,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "mandacaru", recorte: true, modelo: { altura: "1,78", veste: "M" },
+      slug: "mandacaru", recorte: true, outra: { f: "recorte-v", pose: "perto" }, modelo: { altura: "1,78", veste: "M" },
       nome: "Mandacaru",
       origem: "Cabaceiras, PB",
       coord: "7°29′S 36°17′W",
@@ -83,7 +83,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "bacuri", recorte: true, modelo: { altura: "1,82", veste: "M" },
+      slug: "bacuri", recorte: true, outra: { f: "sentado-v", pose: "sentado-chao" }, modelo: { altura: "1,82", veste: "M" },
       nome: "Bacuri",
       origem: "Belém, PA",
       coord: "1°27′S 48°30′W",
@@ -99,7 +99,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "cupuacu", recorte: true, modelo: { altura: "1,83", veste: "M" },
+      slug: "cupuacu", recorte: true, outra: { f: "modelo-v", pose: "em-pe" }, modelo: { altura: "1,83", veste: "M" },
       nome: "Cupuaçu",
       origem: "Manaus, AM",
       coord: "3°07′S 60°01′W",
@@ -115,7 +115,7 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "pipa", recorte: true, modelo: { altura: "1,85", veste: "M" },
+      slug: "pipa", recorte: true, outra: { f: "costas-modelo-v", pose: "costas" }, modelo: { altura: "1,85", veste: "M" },
       nome: "Pipa",
       origem: "Rio de Janeiro, RJ",
       coord: "22°57′S 43°10′W",
@@ -147,21 +147,23 @@ globalThis.SIRIGUELA = {
      As páginas ficam em /camisetas/<slug>/ (escritas à mão) e as fotos em assets/camisetas/<slug>/.
      takes: as duas fotos que se alternam no card, sempre uma do homem e uma da mulher do ensaio, em poses diferentes; estatica: a foto da camisa que aparece no hover;
      perto: as duas fotos do card pequeno (quadrado), mais fechadas na camiseta, também uma de cada modelo. "foto:zoom:altura" amplia a foto
-     a partir daquela altura, para recortar o rosto e ficar só com a peça. */
+     a partir daquela altura, para recortar o rosto e ficar só com a peça.
+     outra: a foto única do slider "Outras camisetas" no fim de cada página; pose e quem (h/m) servem para o sorteio
+     não deixar duas poses iguais nem o mesmo modelo lado a lado. As sungas têm o mesmo campo, só com a pose. */
   camisetas: {
     preco: 159.90,
     tamanhos: ["P", "M", "G", "GG"],
     entrega: { min: 7, max: 15 },
     itens: [
-      { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Arquitetura para vestir.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola" },
-      { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Cada forma no lugar da outra.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe" },
-      { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe" },
-      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe" },
-      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe" },
-      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe" },
-      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe" },
-      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true },
-      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola" }
+      { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Arquitetura para vestir.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola", outra: { f: "de-cima", pose: "deitado", quem: "h" } },
+      { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Cada forma no lugar da outra.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe", outra: { f: "nuca", pose: "meio-corpo", quem: "m" } },
+      { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe", outra: { f: "cubo", pose: "sentado-cubo", quem: "h" } },
+      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe", outra: { f: "vao", pose: "apoiado", quem: "m" } },
+      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe", outra: { f: "chao", pose: "sentado-chao", quem: "h" } },
+      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe", outra: { f: "banco", pose: "sentado-cubo", quem: "m" } },
+      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe", outra: { f: "bloco", pose: "pe-no-degrau", quem: "h" } },
+      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true, outra: { f: "sombra-samir", pose: "perfil", quem: "h" } },
+      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola", outra: { f: "giro", pose: "em-pe", quem: "m" } }
     ]
   }
 };
