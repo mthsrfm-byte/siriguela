@@ -145,8 +145,8 @@ globalThis.SIRIGUELA = {
   },
   /* Camisetas: venda contínua (sem janela de safra), feitas depois do pedido e entregues em 7 a 15 dias corridos.
      As páginas ficam em /camisetas/<slug>/ (escritas à mão) e as fotos em assets/camisetas/<slug>/.
-     takes: as duas fotos que se alternam no card (poses diferentes); estatica: a foto da camisa que aparece no hover;
-     perto: as duas fotos do card pequeno (quadrado), mais fechadas na camiseta. "foto:zoom:altura" amplia a foto
+     takes: as duas fotos que se alternam no card, sempre uma do homem e uma da mulher do ensaio, em poses diferentes; estatica: a foto da camisa que aparece no hover;
+     perto: as duas fotos do card pequeno (quadrado), mais fechadas na camiseta, também uma de cada modelo. "foto:zoom:altura" amplia a foto
      a partir daquela altura, para recortar o rosto e ficar só com a peça. */
   camisetas: {
     preco: 159.90,
@@ -154,14 +154,14 @@ globalThis.SIRIGUELA = {
     entrega: { min: 7, max: 15 },
     itens: [
       { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Arquitetura para vestir.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola" },
-      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "cubo"], perto: ["nuca", "giro:1.6:35%"], estatica: "gola" },
-      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["cubo", "de-cima"], perto: ["bolsos", "folha"], estatica: "solta", solta: true },
+      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola" },
+      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true },
       { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe" },
       { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Cada forma no lugar da outra.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe" },
-      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["inteira", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe" },
-      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["inteira", "topo"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe" },
-      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "disco:1.6:40%"], estatica: "detalhe" },
-      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["inteira", "banco"], perto: ["recorte", "andando:1.5:35%"], estatica: "detalhe" }
+      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe" },
+      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe" },
+      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe" },
+      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe" }
     ]
   }
 };
