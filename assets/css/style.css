@@ -516,6 +516,12 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
   .janela-bar__aside { display: none; }
 }
 
+/* ---------- Hero: filme das camisetas ---------- */
+/* sangra até as bordas da página; a proporção troca junto com o arquivo (21:9 no computador, 3:2 até 1024 px) */
+.filme { display: block; margin: 0 calc(var(--pad) * -1); background: var(--soft); }
+.filme__video { display: block; width: 100%; aspect-ratio: 21 / 9; object-fit: cover; object-position: 50% 0; user-select: none; -webkit-user-drag: none; }
+@media (max-width: 1024px) { .filme__video { aspect-ratio: 3 / 2; } }
+
 /* ---------- Hero: faixa de vídeos da campanha (marquee) ---------- */
 .reel { --reel-h: clamp(340px, 62vh, 680px); --reel-gap: var(--gap); --reel-dur: 70s;
   position: relative; overflow: hidden; margin: 0 calc(var(--pad) * -1); padding: 0; }
