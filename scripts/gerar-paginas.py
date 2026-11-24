@@ -2,7 +2,7 @@
 
 O site é estático, então cada endereço bonito (/colecao1/sunga/pipa/) é uma pasta
 com uma cópia do produto.html. A tag <base> aponta para a raiz do site, assim os
-caminhos relativos (assets/..., index.html#colecao) continuam funcionando.
+caminhos relativos (assets/..., sungas/) continuam funcionando.
 
 Rode de novo sempre que mudar o produto.html ou incluir/tirar uma sunga do catálogo:
 
@@ -17,6 +17,8 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PASTA = os.path.join(RAIZ, "colecao1", "sunga")
 
 catalogo = open(os.path.join(RAIZ, "assets", "js", "produtos.js"), encoding="utf-8").read()
+# só a lista das sungas: as camisetas (bloco "camisetas:" no fim do arquivo) têm páginas próprias
+catalogo = catalogo.split("\n  camisetas:")[0]
 slugs = re.findall(r'slug:\s*"([^"]+)"', catalogo)
 nomes = re.findall(r'nome:\s*"([^"]+)"', catalogo)
 chamadas = re.findall(r'chamada:\s*"([^"]+)"', catalogo)
@@ -37,7 +39,7 @@ for slug, nome, chamada in zip(slugs, nomes, chamadas):
     html = re.sub(r'<meta property="og:title" content="[^"]*">',
                   f'<meta property="og:title" content="Sunga {nome} · Siriguela">', html, count=1)
     html = re.sub(r'<meta property="og:description" content="[^"]*">',
-                  f'<meta property="og:description" content="{chamada} R$ 249,90, sob encomenda.">', html, count=1)
+                  f'<meta property="og:description" content="{chamada} Em breve na Siriguela.">', html, count=1)
     html = re.sub(r'<meta property="og:url" content="([^"]*)">',
                   lambda m: f'<meta property="og:url" content="{m.group(1)}colecao1/sunga/{slug}/">', html, count=1)
     # primeiras fotos da galeria já pedidas no <head> (o app.js só monta a galeria depois)

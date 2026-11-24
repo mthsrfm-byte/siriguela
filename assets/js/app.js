@@ -131,7 +131,7 @@
         <a class="logo" href="index.html" aria-label="Siriguela, página inicial">${logo()}</a>
         <nav class="head__nav" aria-label="Principal">
           <a href="camisetas/">Camisetas</a>
-          ${EMBREVE ? `<span class="head__off">Sungas <span class="head__tag">em breve</span></span>` : `<a href="index.html#colecao">Sungas</a>`}
+          <a href="sungas/">Sungas${EMBREVE ? ` <span class="head__tag">em breve</span>` : ""}</a>
           <a href="index.html#encomenda">Como funciona?</a>
           <a href="index.html#sobre">Sobre</a>
         </nav>
@@ -154,7 +154,7 @@
           <div>
             <h3 class="mono">Loja</h3>
             <a href="camisetas/">Camisetas</a>
-            ${EMBREVE ? "" : `<a href="index.html#colecao">Sungas</a>\n            <a href="index.html#medidas">Medidas</a>`}
+            <a href="sungas/">Sungas</a>
             <a href="#" data-open-bag>Sacola</a>
           </div>
           <div>
@@ -384,7 +384,7 @@
         </div>
         <div class="card__piso" aria-hidden="true"><img ${pic(look.r === "32" ? img(p, "frente") : `assets/produtos/${p.slug}/piso-v.jpg`, tam)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(i)}</span><span class="card__name">${p.nome}</span><span class="card__price">${EMBREVE ? "Em breve" : brl(S.preco)}</span></div>
+      <div class="card__meta"><span class="idx">${num(i)}</span><span class="card__name">${p.nome}</span><span class="card__price">${brl(S.preco)}</span></div>
       <div class="card__sub"><span>${p.origem}</span><span class="idx">${EMBREVE ? "Em breve" : J.aberta ? `Encomenda até ${J.curta(J.fim)}` : `Abre ${J.curta(J.ini)}`}</span></div>
     </a>`;
   };
@@ -427,6 +427,17 @@
       <p class="ed__texto">A gente estampa e costura cada camiseta só depois que alguém compra. Assim não sobra estoque parado nem peça encalhada no fim da estação.</p>
       <p class="ed__texto">Por isso a sua leva de ${C.entrega.min} a ${C.entrega.max} dias corridos para chegar em casa. Frete grátis a partir de ${brl(S.freteGratisAPartir)}. ${TROCA_TXT}.</p>
     </div>`;
+
+  /* ---------- Sungas: coleção (/sungas/) ----------
+     O mesmo lookbook que ficava na home. Enquanto estão em breve, cada sunga abre a página
+     com o aviso por e-mail, e o fim da página recolhe o e-mail de quem quer saber da coleção toda. */
+  function sungas() {
+    const grid = $("[data-grid]");
+    grid.classList.add("look");
+    grid.innerHTML = S.produtos.map((p, i) => card(p, LOOK[i % LOOK.length])).join("");
+    const aviso = $("[data-aviso-sungas]");
+    if (aviso) aviso.innerHTML = avisoForm("aviso-sungas", "sungas");
+  }
 
   /* ---------- Camisetas: coleção (/camisetas/) ---------- */
   function camisetas() {
@@ -649,7 +660,7 @@
   function product() {
     const antigo = new URLSearchParams(location.search).get("s");
     const p = bySlug(document.body.dataset.slug || antigo);
-    if (!p) { location.replace("index.html#colecao"); return; }
+    if (!p) { location.replace("sungas/"); return; }
     /* endereço antigo (produto.html?s=pipa) vai para o novo (/colecao1/sunga/pipa/) */
     if (!document.body.dataset.slug) { location.replace(urlDe(p)); return; }
     const i = S.produtos.indexOf(p);
@@ -702,7 +713,9 @@
         <p class="picker__msg mono mute" data-msg>Corte justo. Na dúvida, vá no maior.</p>
         ${J.aberta
           ? `<button class="btn btn--full" data-add>Encomendar a minha <span>→</span></button>`
-          : `<button class="btn btn--full" data-notify-open>${EMBREVE ? "Avise-me quando chegar" : "Avise-me quando abrir"} <span>→</span></button><div class="info__notify" data-notify-box hidden>${avisoForm("aviso-pdp", p.slug)}</div>`}
+          : EMBREVE
+            ? `<div class="info__notify">${avisoForm("aviso-pdp", p.slug)}</div>`
+            : `<button class="btn btn--full" data-notify-open>Avise-me quando abrir <span>→</span></button><div class="info__notify" data-notify-box hidden>${avisoForm("aviso-pdp", p.slug)}</div>`}
         <p class="info__perks">Frete grátis a partir de ${brl(S.freteGratisAPartir)}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
       </div>
       <div class="acc">
@@ -898,6 +911,7 @@
     if (document.body.dataset.page === "home") home();
     if (document.body.dataset.page === "produto") product();
     if (document.body.dataset.page === "camisetas") camisetas();
+    if (document.body.dataset.page === "sungas") sungas();
     if (document.body.dataset.page === "camiseta") camiseta();
     render();
     flips();

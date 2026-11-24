@@ -6,7 +6,7 @@ globalThis.SIRIGUELA = {
   /* true: as sungas aparecem no site, mas não estão à venda (cards "Em breve", página com aviso por e-mail
      e o checkout recusa sunga). Volte para false quando a Coleção 01 abrir. */
   sungasEmBreve: true,
-  preco: 249.90,
+  preco: 279.90,
   parcelas: 3,
   freteGratisAPartir: 399.90,
   cupom: { codigo: "SIRIGUELA10", desconto: 0.10, regra: "Válido na primeira compra. Conferido no pagamento." },
