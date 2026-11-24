@@ -11,7 +11,7 @@
 /* --nome: corpo do nome em vw. Nome mais comprido pede um valor menor para caber numa linha com o ponto. */
 .capa { row-gap: 0; align-items: end; }
 .capa__meta { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
-.capa__nome { grid-column: 1 / -1; margin: 0; padding-top: clamp(12px, 2vw, 28px); font-size: clamp(56px, var(--nome, 21vw), 360px); white-space: nowrap; font-weight: var(--w-title); line-height: .82; letter-spacing: -0.055em; }
+.capa__nome { grid-column: 1 / -1; margin: 0; padding-top: clamp(20px, 4vw, 64px); font-size: clamp(56px, var(--nome, 21vw), 360px); white-space: nowrap; font-weight: var(--w-title); line-height: .82; letter-spacing: -0.055em; }
 .capa__lado { grid-column: 1 / span 4; display: grid; gap: 20px; padding-bottom: 6px; }
 .capa__chamada { font-size: var(--t-title); font-weight: var(--w-title); line-height: 1.12; letter-spacing: var(--track-title); }
 .capa__foto { grid-column: 7 / span 6; margin-top: clamp(28px, 5vw, 84px) !important; }
@@ -52,13 +52,8 @@
   .manifesto__a, .manifesto__b { grid-column: 2 / -1; }
 }
 
-/* Par de fotos extra e o caminho para a outra camiseta */
-.outra { padding-top: var(--sect); align-items: end; row-gap: 20px; }
-.outra > .block__head { grid-column: 1 / -1; }
-.outra__link { grid-column: 1 / span 5; display: block; }
-.outra__nome { grid-column: 7 / span 6; margin: 0; font-size: clamp(40px, 7.4vw, 120px); white-space: nowrap; font-weight: var(--w-title); line-height: .86; letter-spacing: var(--track-tight); }
-.outra__nome a:hover { opacity: .6; }
-@media (max-width: 900px) { .outra__link, .outra__nome { grid-column: 1 / -1; } }
+/* Fim da página: todas as outras camisetas, em grade regular */
+.outras-cam { padding-top: var(--sect); }
 
 /* Capa com a camiseta recortada (PNG transparente em WebP), como a capa das sungas: a peça fica solta no
    linho, centrada, e o nome passa um pouco por baixo da barra dela. */

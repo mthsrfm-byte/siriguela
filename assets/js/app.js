@@ -19,6 +19,8 @@
   /* endereço da página de cada sunga: /colecao1/sunga/<slug>/ (gerado por scripts/gerar-paginas.py) */
   const urlDe = (p) => `colecao1/sunga/${p.slug}/`;
   const parcela = (v) => brl(Math.floor((v / S.parcelas) * 100) / 100);
+  /* sungas em breve (S.sungasEmBreve): sem venda, só lista de aviso; a janela da safra fica guardada para quando voltarem */
+  const EMBREVE = !!S.sungasEmBreve;
   /* camisetas: venda contínua, endereço /camisetas/<slug>/ */
   const C = S.camisetas;
   const camBySlug = (slug) => C.itens.find((c) => c.slug === slug);
@@ -27,6 +29,7 @@
     ? `src="assets/camisetas/${c.slug}/solta.w1080.webp" srcset="assets/camisetas/${c.slug}/solta.w640.webp 640w, assets/camisetas/${c.slug}/solta.w1080.webp 1080w, assets/camisetas/${c.slug}/solta.w1188.webp 1188w" sizes="${sizes}"`
     : pic(`assets/camisetas/${c.slug}/${f}.webp`, sizes);
   const prazoCam = `${C.entrega.min} a ${C.entrega.max} dias corridos`;
+  const TROCA_TXT = "Troca e devolução em até 7 dias corridos, com a peça sem uso";
   /* item da sacola: { slug, size, qty, tipo? } — sem tipo é sunga (sacolas antigas) */
   const peca = (i) => {
     if (i.tipo === "camiseta") {
@@ -91,6 +94,7 @@
     const quando = w.aberta
       ? (nFecha <= 1 ? "Fecha hoje, às 23h59" : `Fecha em ${nFecha} dias`)
       : (nAbre <= 1 ? "Abre amanhã" : `Abre em ${nAbre} dias`);
+    if (EMBREVE) w.aberta = false;
     return { ...w, producao, entrega, longa, curta, safra, periodo, quando, entregaDias: cfg.entregaDiasUteis, diasJanela: cfg.diaFim - cfg.diaInicio + 1 };
   })();
 
@@ -109,15 +113,20 @@
   /* faixa da safra + cabeçalho: entram antes do conteúdo (app.js roda no início do <body>),
      assim nada empurra a página para baixo depois que ela aparece */
   function chromeTop() {
-    document.body.insertAdjacentHTML("afterbegin", `
-      <div class="janela-bar">
-        <a href="index.html#encomenda" class="janela-bar__main">
+    /* nas páginas das camisetas o topo fica limpo: só o cabeçalho e o nome */
+    const limpo = ["camiseta", "camisetas"].includes(document.body.dataset.page);
+    const faixa = EMBREVE
+      ? `<a href="camisetas/" class="janela-bar__main"><span>Camisetas sob encomenda</span><span class="janela-bar__sep" aria-hidden="true">·</span><span>Chegam em ${prazoCam}</span></a>`
+      : `<a href="index.html#encomenda" class="janela-bar__main">
           <span>Safra ${MESES[J.ini.getMonth()].slice(0, 3).replace(/^./, (c) => c.toUpperCase())}/${J.ini.getFullYear()}</span>
           <span class="janela-bar__sep" aria-hidden="true">·</span>
           <span>Encomendas até ${J.curta(J.fim)}</span>
-        </a>
+        </a>`;
+    document.body.insertAdjacentHTML("afterbegin", `
+      ${limpo ? "" : `<div class="janela-bar">
+        ${faixa}
         <span class="janela-bar__aside">10% na primeira compra com ${S.cupom.codigo}</span>
-      </div>
+      </div>`}
       <header class="head">
         <a class="logo" href="index.html" aria-label="Siriguela, página inicial">${logo()}</a>
         <nav class="head__nav" aria-label="Principal">
@@ -164,7 +173,7 @@
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
         </div>
         <div class="foot__base mono mute">
-          <span>© ${new Date().getFullYear()} Siriguela · ${J.safra}</span>
+          <span>© ${new Date().getFullYear()} Siriguela</span>
           <span>Feito sob encomenda no Brasil</span>
         </div>
       </footer>
@@ -233,7 +242,7 @@
     }
     const temSunga = items.some((i) => peca(i).tipo === "sunga");
     const temCam = items.some((i) => peca(i).tipo === "camiseta");
-    list.innerHTML = `<p class="bag__safra idx">Sob encomenda${temSunga ? ` · ${J.safra}` : ""}</p>` + items.map((i) => {
+    list.innerHTML = `<p class="bag__safra idx">Sob encomenda${temSunga && !EMBREVE ? ` · ${J.safra}` : ""}</p>` + items.map((i) => {
       const x = peca(i), idx = bag.get().indexOf(bag.get().find((b) => b.slug === i.slug && b.size === i.size && (b.tipo || "sunga") === (i.tipo || "sunga")));
       return `<div class="line">
         <a href="${x.url}"><img ${x.thumb} alt="${x.tipo === "sunga" ? "Sunga " : ""}${x.nome}"></a>
@@ -275,8 +284,8 @@
       ${pode
         ? `<button class="btn btn--full" data-checkout>Finalizar compra <span>→</span></button>
            <p class="bag__note">${prazo}<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.produtos)} sem juros</span></p>`
-        : `<button class="btn btn--ghost btn--full" type="button" disabled>Sungas abrem em ${J.longa(J.ini)}</button>
-           <p class="bag__note">${temCam ? "As sungas só fecham pedido na safra. Remova as sungas para comprar as camisetas agora." : "Sua sacola fica guardada até lá."}</p>`}`;
+        : `<button class="btn btn--ghost btn--full" type="button" disabled>${EMBREVE ? "Sungas em breve" : `Sungas abrem em ${J.longa(J.ini)}`}</button>
+           <p class="bag__note">${temCam ? `As sungas ainda não estão à venda. Remova as sungas para comprar as camisetas agora.` : "Sua sacola fica guardada até lá."}</p>`}`;
   }
 
   const openBag = () => { document.body.classList.add("is-bag"); $(".bag").setAttribute("aria-hidden", "false"); $(".bag").inert = false; window.siriguelaLenis?.stop(); };
@@ -382,8 +391,8 @@
         </div>
         <div class="card__piso" aria-hidden="true"><img ${pic(look.r === "32" ? img(p, "frente") : `assets/produtos/${p.slug}/piso-v.jpg`, tam)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(i)}</span><span class="card__name">${p.nome}</span><span class="card__price">${brl(S.preco)}</span></div>
-      <div class="card__sub"><span>${p.origem}</span><span class="idx">${J.aberta ? `Encomenda até ${J.curta(J.fim)}` : `Abre ${J.curta(J.ini)}`}</span></div>
+      <div class="card__meta"><span class="idx">${num(i)}</span><span class="card__name">${p.nome}</span><span class="card__price">${EMBREVE ? "Em breve" : brl(S.preco)}</span></div>
+      <div class="card__sub"><span>${p.origem}</span><span class="idx">${EMBREVE ? "Em breve" : J.aberta ? `Encomenda até ${J.curta(J.fim)}` : `Abre ${J.curta(J.ini)}`}</span></div>
     </a>`;
   };
 
@@ -415,8 +424,8 @@
     </header>
     <p class="ed__frase">Feita depois do seu pedido.</p>
     <div class="encomenda-cam__texto">
-      <p class="ed__texto">A gente estampa e costura cada camiseta só depois que alguém compra. Assim não sobra estoque parado, não tem peça encalhada no fim da estação e o tecido vai só para o que vai ser usado.</p>
-      <p class="ed__texto">Por isso a sua leva de ${C.entrega.min} a ${C.entrega.max} dias corridos para chegar em casa. Frete grátis a partir de ${brl(S.freteGratisAPartir)} e troca em até 30 dias, com a peça sem uso.</p>
+      <p class="ed__texto">A gente estampa e costura cada camiseta só depois que alguém compra. Assim não sobra estoque parado nem peça encalhada no fim da estação.</p>
+      <p class="ed__texto">Por isso a sua leva de ${C.entrega.min} a ${C.entrega.max} dias corridos para chegar em casa. Frete grátis a partir de ${brl(S.freteGratisAPartir)}. ${TROCA_TXT}.</p>
     </div>`;
 
   /* ---------- Camisetas: coleção (/camisetas/) ---------- */
@@ -434,6 +443,18 @@
     const c = camBySlug(document.body.dataset.slug);
     if (!c) return;
     $$("[data-encomenda-cam]").forEach((el) => (el.innerHTML = encomendaCam()));
+    /* fim da página: todas as outras camisetas, a partir da próxima da ordem */
+    const outras = $("[data-outras-cam]");
+    if (outras) {
+      const k = C.itens.indexOf(c);
+      const lista = C.itens.slice(k + 1).concat(C.itens.slice(0, k));
+      outras.innerHTML = `
+        <header class="block__head">
+          <h2 class="block__title">Outras camisetas</h2>
+          <span class="idx">${lista.length} estampas · ${brl(C.preco)}</span>
+        </header>
+        <div class="grid grid--more">${lista.map((x) => cardCam(x, 0, false)).join("")}</div>`;
+    }
     const tamanhos = () => `<div class="picker__opts" role="radiogroup" aria-label="Tamanho">
       ${C.tamanhos.map((t) => `<button class="size" role="radio" aria-checked="false" data-size="${t}" ${c.esgotados?.includes(t) ? "disabled" : ""}>${t}</button>`).join("")}
     </div>`;
@@ -530,7 +551,7 @@
         body: JSON.stringify({ email: f.querySelector("input").value, produto: f.dataset.notify })
       });
       if (!response.ok || (await response.json()).ok !== true) throw new Error();
-      status.textContent = "E-mail anotado. A gente avisa quando as encomendas abrirem.";
+      status.textContent = EMBREVE ? "E-mail anotado. A gente avisa quando as sungas chegarem." : "E-mail anotado. A gente avisa quando as encomendas abrirem.";
       f.reset();
     } catch {
       status.textContent = "Não conseguimos anotar seu e-mail. Tente novamente em instantes.";
@@ -555,25 +576,42 @@
 
   /* ---------- Home ---------- */
   function home() {
-    $("[data-safra-nome]").textContent = `Sungas · ${J.safra}${J.aberta ? " · aberta" : ""}`;
-    $("[data-safra-datas]").textContent = `${J.curta(J.ini)} – ${J.curta(J.fim)}`;
     letras();
-
-    $("[data-janela-status]").textContent = `${J.safra} · ${J.quando}`;
-    const passos = [
-      { t: "Encomenda", d: J.periodo, p: `A safra fica aberta por ${EXTENSO[J.diasJanela] || J.diasJanela} dias. Você escolhe a estampa e o tamanho e garante a sua.` },
-      { t: "Produção", d: `a partir de ${J.longa(J.producao)}`, p: "Quando a janela fecha, a gente corta e costura só o que foi encomendado." },
-      { t: "Entrega", d: `até ${J.longa(J.entrega)}`, p: `A sunga chega em casa em até ${J.entregaDias} dias úteis depois do fechamento. Frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
-    ];
-    $("[data-steps]").innerHTML = passos.map((s, k) => `
-      <li class="step${J.aberta && k === 0 ? " is-now" : ""}">
-        <span class="idx">${num(k)} · ${s.t}${J.aberta && k === 0 ? " · agora" : ""}</span>
-        <b>${s.d}</b>
-        <p>${s.p}</p>
-      </li>`).join("");
-    $("[data-order-cta]").innerHTML = J.aberta
-      ? `<a class="btn" href="#colecao">Escolher a minha <span>→</span></a>`
-      : `<p class="order__notice">As encomendas abrem em ${J.longa(J.ini)}. Deixe seu e-mail e a gente avisa no dia.</p>${avisoForm("aviso-home")}`;
+    if (EMBREVE) {
+      /* sungas em breve: o topo e o "Como funciona?" falam das camisetas */
+      $("[data-safra-nome]").textContent = "Camisetas sob encomenda";
+      $("[data-safra-datas]").textContent = brl(C.preco);
+      $("[data-janela-status]").textContent = `Camisetas · ${prazoCam}`;
+      $("[data-steps]").innerHTML = [
+        { t: "Pedido", d: "Qualquer dia", p: "Você escolhe a estampa e o tamanho. A compra das camisetas fica aberta o mês todo." },
+        { t: "Produção", d: "Depois do pedido", p: "A gente estampa e costura a sua camiseta. Nenhuma fica pronta esperando dono." },
+        { t: "Entrega", d: `Em ${prazoCam}`, p: `Enviamos para todo o Brasil, com frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
+      ].map((s, k) => `
+        <li class="step">
+          <span class="idx">${num(k)} · ${s.t}</span>
+          <b>${s.d}</b>
+          <p>${s.p}</p>
+        </li>`).join("");
+      $("[data-order-cta]").innerHTML = `<a class="btn" href="camisetas/">Ver as camisetas <span>→</span></a>`;
+    } else {
+      $("[data-safra-nome]").textContent = `Sungas · ${J.safra}${J.aberta ? " · aberta" : ""}`;
+      $("[data-safra-datas]").textContent = `${J.curta(J.ini)} – ${J.curta(J.fim)}`;
+      $("[data-janela-status]").textContent = `${J.safra} · ${J.quando}`;
+      const passos = [
+        { t: "Encomenda", d: J.periodo, p: `A safra fica aberta por ${EXTENSO[J.diasJanela] || J.diasJanela} dias. Você escolhe a estampa e o tamanho e garante a sua.` },
+        { t: "Produção", d: `a partir de ${J.longa(J.producao)}`, p: "Quando a janela fecha, a gente corta e costura só o que foi encomendado." },
+        { t: "Entrega", d: `até ${J.longa(J.entrega)}`, p: `A sunga chega em casa em até ${J.entregaDias} dias úteis depois do fechamento. Frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
+      ];
+      $("[data-steps]").innerHTML = passos.map((s, k) => `
+        <li class="step${J.aberta && k === 0 ? " is-now" : ""}">
+          <span class="idx">${num(k)} · ${s.t}${J.aberta && k === 0 ? " · agora" : ""}</span>
+          <b>${s.d}</b>
+          <p>${s.p}</p>
+        </li>`).join("");
+      $("[data-order-cta]").innerHTML = J.aberta
+        ? `<a class="btn" href="#colecao">Escolher a minha <span>→</span></a>`
+        : `<p class="order__notice">As encomendas abrem em ${J.longa(J.ini)}. Deixe seu e-mail e a gente avisa no dia.</p>${avisoForm("aviso-home")}`;
+    }
 
     $("[data-index]").innerHTML = S.produtos.map((p, i) => `
       <li><a href="${urlDe(p)}">
@@ -613,7 +651,7 @@
     if (!document.body.dataset.slug) { location.replace(urlDe(p)); return; }
     const i = S.produtos.indexOf(p);
     document.title = `${p.nome} · Siriguela`;
-    $('meta[name="description"]').setAttribute("content", `Sunga ${p.nome}. ${p.chamada} ${brl(S.preco)}, feita sob encomenda, do P ao GG.`);
+    $('meta[name="description"]').setAttribute("content", EMBREVE ? `Sunga ${p.nome}. ${p.chamada} Em breve na Siriguela.` : `Sunga ${p.nome}. ${p.chamada} ${brl(S.preco)}, feita sob encomenda, do P ao GG.`);
     $("[data-crumb]").textContent = p.nome;
     /* sunga recortada (só quem tem `recorte: true`): WebP transparente de 640/1080/1448 px */
     const soltaAttrs = (q) => {
@@ -647,8 +685,10 @@
       <p class="info__lede">${p.chamada}</p>
       <div class="info__price"><strong>${brl(S.preco)}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(S.preco)}</span></div>
       <div class="info__janela${J.aberta ? " is-open" : ""}">
-        <span class="idx">${J.safra} · ${J.aberta ? "Encomendas abertas" : "Encomendas fechadas"}</span>
-        <span>${J.aberta ? `${J.quando}. Feita para você e entregue até ${J.longa(J.entrega)}.` : `Abre em ${J.longa(J.ini)}. Encomendas até ${J.longa(J.fim)}, entrega até ${J.longa(J.entrega)}.`}</span>
+        ${EMBREVE
+          ? `<span class="idx">Em breve</span><span>As sungas da Coleção 01 ainda não estão à venda. Deixe seu e-mail e a gente avisa quando chegarem.</span>`
+          : `<span class="idx">${J.safra} · ${J.aberta ? "Encomendas abertas" : "Encomendas fechadas"}</span>
+        <span>${J.aberta ? `${J.quando}. Feita para você e entregue até ${J.longa(J.entrega)}.` : `Abre em ${J.longa(J.ini)}. Encomendas até ${J.longa(J.fim)}, entrega até ${J.longa(J.entrega)}.`}</span>`}
       </div>
       <div class="picker" data-picker>
         <div class="picker__head mono"><span>Tamanho</span><a href="#medidas-pdp" data-open-sizes>Medidas</a></div>
@@ -659,7 +699,7 @@
         <p class="picker__msg mono mute" data-msg>Corte justo. Na dúvida, vá no maior.</p>
         ${J.aberta
           ? `<button class="btn btn--full" data-add>Encomendar a minha <span>→</span></button>`
-          : `<button class="btn btn--full" data-notify-open>Avise-me quando abrir <span>→</span></button><div class="info__notify" data-notify-box hidden>${avisoForm("aviso-pdp", p.slug)}</div>`}
+          : `<button class="btn btn--full" data-notify-open>${EMBREVE ? "Avise-me quando chegar" : "Avise-me quando abrir"} <span>→</span></button><div class="info__notify" data-notify-box hidden>${avisoForm("aviso-pdp", p.slug)}</div>`}
         <p class="info__perks">Frete grátis a partir de ${brl(S.freteGratisAPartir)}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
       </div>
       <div class="acc">
@@ -670,9 +710,9 @@
         <details>
           <summary class="mono">Encomenda e entrega</summary>
           <div class="acc__body">
-            <p>Esta sunga é feita depois do seu pedido. As encomendas ficam abertas do dia ${S.janela.diaInicio} ao dia ${S.janela.diaFim} de cada mês; quando a janela fecha, a produção começa e a entrega chega em até ${J.entregaDias} dias úteis.</p>
-            <p>Nada de estoque parado nem de sobra de coleção: só existe a peça que alguém encomendou.</p>
-            <p>Enviamos para todo o Brasil, com frete grátis a partir de ${brl(S.freteGratisAPartir)}. Troca em até 30 dias, com a peça sem uso e com etiqueta.</p>
+            <p>${EMBREVE ? "Quando as sungas chegarem, cada uma será feita depois do pedido." : `Esta sunga é feita depois do seu pedido. As encomendas ficam abertas do dia ${S.janela.diaInicio} ao dia ${S.janela.diaFim} de cada mês; quando a janela fecha, a produção começa e a entrega chega em até ${J.entregaDias} dias úteis.`}</p>
+            <p>A gente só produz o que foi pedido, então não sobra estoque.</p>
+            <p>Enviamos para todo o Brasil, com frete grátis a partir de ${brl(S.freteGratisAPartir)}. ${TROCA_TXT} e com etiqueta.</p>
           </div>
         </details>
         <details>

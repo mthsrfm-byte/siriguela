@@ -1,6 +1,6 @@
 # Siriguela
 
-Loja de sungas estampadas. Só estampa, nenhuma lisa.
+Loja de camisetas e sungas estampadas. Só estampa, nenhuma lisa. As sungas estão em breve (`sungasEmBreve: true` em `assets/js/produtos.js`): aparecem no site, mas não vendem. O tom de voz dos textos está no `CLAUDE.md`.
 
 Site estático (HTML, CSS e JS puros, sem build), pronto para GitHub Pages.
 
