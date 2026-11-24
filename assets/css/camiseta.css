@@ -91,7 +91,7 @@
 .compra-fixa .picker__opts { grid-template-columns: repeat(4, 48px); }
 .compra-fixa .size { height: 44px; }
 .compra-fixa.is-err .size { border-color: var(--hot); }
-.compra-fixa .btn { white-space: nowrap; }
+.compra-fixa .btn { height: 44px; white-space: nowrap; }
 .com-compra-fixa footer { padding-bottom: 84px; }
 @media (max-width: 600px) {
   .compra-fixa { grid-template-columns: 1fr auto; gap: 10px 12px; }

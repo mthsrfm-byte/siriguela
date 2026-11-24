@@ -122,7 +122,7 @@
     p.dataset.scrollCssProgress = "";
   });
 
-  /* 3. "Só estampa.": cada letra escapa pela máscara numa velocidade, o ponto vem por último, com atraso */
+  /* 3. Título do hero: cada letra escapa pela máscara da sua palavra numa velocidade, o ponto vem por último, com atraso */
   document.querySelectorAll(".hero__title .ch").forEach((ch, i, todos) => {
     const ultimo = i === todos.length - 1;
     ch.dataset.scroll = "";

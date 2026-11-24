@@ -416,6 +416,65 @@
     </a>`;
   };
 
+  /* ---------- Fim da página de produto: slider "Outras", uma foto fixa por peça ----------
+     A ordem é sorteada a cada visita. O sorteio tenta algumas vezes e fica com a ordem
+     que deixa menos vizinhos com a mesma pose ou o mesmo modelo (campo `outra` no produtos.js). */
+  const sorteia = (lista) => {
+    const choca = (a, b) => a.outra.pose === b.outra.pose || (!!a.outra.quem && a.outra.quem === b.outra.quem);
+    const nota = (l) => l.reduce((n, x, k) => n + (k && choca(l[k - 1], x) ? 1 : 0), 0);
+    let melhor = lista, menor = Infinity;
+    for (let t = 0; t < 80 && menor > 0; t++) {
+      const l = lista.slice();
+      for (let k = l.length - 1; k > 0; k--) { const j = Math.floor(Math.random() * (k + 1)); [l[k], l[j]] = [l[j], l[k]]; }
+      const n = nota(l);
+      if (n < menor) { melhor = l; menor = n; }
+    }
+    return melhor;
+  };
+  const TAM_SLIDE = "(max-width: 600px) 74vw, (max-width: 1000px) 40vw, 24vw";
+  const slideCam = (c) => `<a class="card slide" href="${urlCam(c)}" style="--piso:${c.piso}">
+      <div class="card__media">
+        <img class="slide__foto" ${camFoto(c, c.outra.f, TAM_SLIDE)} alt="Camiseta ${c.nome} no corpo" loading="lazy">
+        <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, TAM_SLIDE)} alt="" loading="lazy"></div>
+      </div>
+      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(C.preco)}</span></div>
+      <div class="card__sub"><span>${c.cor}</span></div>
+    </a>`;
+  const slideSunga = (p) => `<a class="card slide" href="${urlDe(p)}" style="--piso:${p.piso || "var(--soft)"}">
+      <div class="card__media">
+        <img class="slide__foto" ${pic(`assets/produtos/${p.slug}/${p.outra.f}.jpg`, TAM_SLIDE)} alt="Sunga ${p.nome} no corpo" loading="lazy">
+        <div class="card__piso" aria-hidden="true"><img ${pic(`assets/produtos/${p.slug}/piso-v.jpg`, TAM_SLIDE)} alt="" loading="lazy"></div>
+      </div>
+      <div class="card__meta"><span class="idx">${num(S.produtos.indexOf(p))}</span><span class="card__name">${p.nome}</span><span class="card__price">${brl(S.preco)}</span></div>
+      <div class="card__sub"><span>${p.origem}</span>${EMBREVE ? `<span class="idx">Em breve</span>` : ""}</div>
+    </a>`;
+  const slider = (cards) => `
+    <div class="slider" data-slider>
+      <div class="slider__track" data-slider-track>${cards}</div>
+      <div class="slider__nav" aria-hidden="true">
+        <button class="slider__seta" type="button" tabindex="-1" data-slider-seta="-1">←</button>
+        <button class="slider__seta" type="button" tabindex="-1" data-slider-seta="1">→</button>
+      </div>
+    </div>`;
+  /* setas: andam uma tela de cards por vez e se apagam nas pontas */
+  const sliders = () => $$("[data-slider]").forEach((sl) => {
+    const track = sl.querySelector("[data-slider-track]");
+    const [ant, prox] = sl.querySelectorAll("[data-slider-seta]");
+    const pontas = () => {
+      ant.disabled = track.scrollLeft < 4;
+      prox.disabled = track.scrollLeft + track.clientWidth > track.scrollWidth - 4;
+    };
+    [ant, prox].forEach((b) => b.addEventListener("click", () => {
+      const card = track.firstElementChild;
+      const passo = card ? card.getBoundingClientRect().width + (parseFloat(getComputedStyle(track).columnGap) || 0) : track.clientWidth;
+      const n = Math.max(1, Math.floor((track.clientWidth + 1) / passo));
+      track.scrollBy({ left: Number(b.dataset.sliderSeta) * n * passo, behavior: "smooth" });
+    }));
+    track.addEventListener("scroll", pontas, { passive: true });
+    addEventListener("resize", pontas);
+    pontas();
+  });
+
   /* bloco "Sob encomenda" das camisetas: um texto só, usado na coleção e em cada camiseta */
   const encomendaCam = () => `
     <header class="block__head">
@@ -454,17 +513,17 @@
     const c = camBySlug(document.body.dataset.slug);
     if (!c) return;
     $$("[data-encomenda-cam]").forEach((el) => (el.innerHTML = encomendaCam()));
-    /* fim da página: todas as outras camisetas, a partir da próxima da ordem */
+    /* fim da página: todas as outras camisetas num slider, em ordem sorteada */
     const outras = $("[data-outras-cam]");
     if (outras) {
-      const k = C.itens.indexOf(c);
-      const lista = C.itens.slice(k + 1).concat(C.itens.slice(0, k));
+      const lista = sorteia(C.itens.filter((x) => x !== c));
       outras.innerHTML = `
         <header class="block__head">
           <h2 class="block__title">Outras camisetas</h2>
           <span class="idx">${lista.length} estampas · ${brl(C.preco)}</span>
         </header>
-        <div class="grid grid--more">${lista.map((x) => cardCam(x, 0, false)).join("")}</div>`;
+        ${slider(lista.map(slideCam).join(""))}`;
+      sliders();
     }
     const tamanhos = () => `<div class="picker__opts" role="radiogroup" aria-label="Tamanho">
       ${C.tamanhos.map((t) => `<button class="size" role="radio" aria-checked="false" data-size="${t}" ${c.esgotados?.includes(t) ? "disabled" : ""}>${t}</button>`).join("")}
@@ -521,9 +580,11 @@
     const vis = new Set();
     const io = new IntersectionObserver((es) => es.forEach((e) => (e.isIntersecting ? vis.add(e.target) : vis.delete(e.target))), { threshold: 0.25 });
     els.forEach((el) => io.observe(el));
+    /* só pausa no hover com mouse de verdade: no toque, o iPhone deixa o :hover preso no último card tocado */
+    const mouse = matchMedia("(hover: hover) and (pointer: fine)");
     setInterval(() => {
       if (document.hidden) return;
-      els.forEach((el) => { if (vis.has(el) && !el.closest(".card").matches(":hover")) el.classList.toggle("is-back"); });
+      els.forEach((el) => { if (vis.has(el) && !(mouse.matches && el.closest(".card").matches(":hover"))) el.classList.toggle("is-back"); });
     }, 1500);
   }
 
@@ -576,18 +637,38 @@
   function letras() {
     const h = $("[data-letras]");
     if (!h || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const texto = h.childNodes[0].textContent;
+    const texto = h.childNodes[0].textContent.trim();
+    const palavras = texto.split(/\s+/);
     let i = 0;
-    const spans = [...texto].map((c) => c === " "
-      ? `<span class="ch" aria-hidden="true">&nbsp;</span>`
-      : `<span class="ch" style="--i:${i++}" aria-hidden="true">${c}</span>`).join("");
-    h.innerHTML = `<span class="sr">${texto}.</span><span class="mask" aria-hidden="true">${spans}<span class="ch" style="--i:${i + 2}"><span class="ponto"></span></span></span>`;
+    /* uma máscara por palavra: a linha só quebra entre palavras; o ponto fica preso à última */
+    const masks = palavras.map((w, k) => {
+      const letras = [...w].map((c) => `<span class="ch" style="--i:${i++}">${c}</span>`).join("");
+      const ponto = k === palavras.length - 1 ? `<span class="ch" style="--i:${i + 2}"><span class="ponto"></span></span>` : "";
+      return `<span class="mask">${letras}${ponto}</span>`;
+    }).join(" ");
+    h.innerHTML = `<span class="sr">${texto}.</span><span aria-hidden="true">${masks}</span>`;
     requestAnimationFrame(() => h.classList.add("is-in"));
+  }
+
+  /* Filme do hero: tem autoplay, mas o iPhone em Modo de Pouca Energia bloqueia e mostra um botão de play.
+     Tenta de novo quando o filme entra na tela e no primeiro toque ou rolagem (um gesto libera o vídeo).
+     Se ainda assim não tocar, fica o pôster parado, sem botão (style.css). */
+  function filme() {
+    const v = $(".filme__video");
+    if (!v || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const toca = () => { if (v.paused) v.play().catch(() => {}); };
+    const gestos = ["touchstart", "pointerdown", "scroll", "keydown"];
+    const libera = () => { toca(); if (!v.paused) gestos.forEach((g) => removeEventListener(g, libera)); };
+    gestos.forEach((g) => addEventListener(g, libera, { passive: true }));
+    v.addEventListener("playing", () => gestos.forEach((g) => removeEventListener(g, libera)), { once: true });
+    if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => e.isIntersecting && toca()).observe(v);
+    toca();
   }
 
   /* ---------- Home ---------- */
   function home() {
     letras();
+    filme();
     if (EMBREVE) {
       /* sungas em breve: o topo e o "Como funciona?" falam das camisetas */
       $("[data-safra-nome]").textContent = "Camisetas sob encomenda";
@@ -777,7 +858,9 @@
       d.scrollIntoView({ behavior: "smooth", block: "center" });
     });
 
-    $("[data-more]").innerHTML = [1, 2, 3, 4].map((k) => S.produtos[(i + k) % total]).map((q) => card(q)).join("");
+    /* fim da página: as outras sungas num slider, em ordem sorteada */
+    $("[data-more]").outerHTML = slider(sorteia(S.produtos.filter((q) => q !== p)).map(slideSunga).join(""));
+    sliders();
 
     /* "Capa" (celular e computador): a ficha entra logo depois da primeira foto, com o nome
        gigante encostado nela; as outras fotos seguem num mosaico (style.css). */
