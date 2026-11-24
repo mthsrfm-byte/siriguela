@@ -19,16 +19,16 @@ globalThis.SIRIGUELA = {
   tamanhos: ["P", "M", "G", "GG"],
   produtos: [
     {
-      slug: "pipa", recorte: true, modelo: { altura: "1,85", veste: "M" },
-      nome: "Pipa",
-      origem: "Rio de Janeiro, RJ",
-      coord: "22°57′S 43°10′W",
-      cor: "#F15A40",
-      piso: "#A8876F",  /* cor do chão da foto de frente: completa o quadro no card vertical */
-      chamada: "Papel de seda contra o sol do morro.",
+      slug: "cobogo", recorte: true, modelo: { altura: "1,84", veste: "M" },
+      nome: "Cobogó",
+      origem: "Brasília, DF",
+      coord: "15°47′S 47°52′W",
+      cor: "#1F5A6B",
+      piso: "#C7AB93",  /* cor do chão da foto de frente: completa o quadro no card vertical */
+      chamada: "Modernismo que vai à praia.",
       texto: [
-        "Todo moleque carioca já perdeu uma tarde inteira olhando para cima. A Pipa nasceu dessas tardes: a laje quente, a linha esticada, o Pão de Açúcar lá no fundo e uma pipa de papel de seda brigando com o vento de agosto. A gente recortou a cena até sobrar quatro planos de cor (coral, céu, piscina e vinho), que se encontram no centro como as varetas.",
-        "A estampa cobre frente e costas sem quebrar o desenho na costura. Tecido 90% poliéster e 10% elastano, com forro interno e secagem rápida."
+        "O cobogó foi inventado no Recife, nos anos 1920, para deixar o vento entrar e o sol do lado de fora. Brasília levou o bloco vazado para fachadas inteiras, e a luz recortada atravessando o concreto virou parte da paisagem da capital. Aqui ele vira quartos de círculo em petróleo, laranja-tijolo e cru: a mesma geometria do prédio, levada para a praia.",
+        "A repetição dos módulos foi pensada para encaixar nas costuras da peça. Tecido 90% poliéster e 10% elastano, firme o bastante para o desenho não deformar no corpo."
       ],
       fotos: ["frente", "modelo", "costas-modelo", "sentado", "recorte", "costas", "detalhe", "estampa", "inspiracao"],
       vertical: ["modelo", "costas-modelo", "sentado", "recorte"],
@@ -51,16 +51,16 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "costas-modelo", "modelo", "frente", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "cobogo", recorte: true, modelo: { altura: "1,84", veste: "M" },
-      nome: "Cobogó",
-      origem: "Brasília, DF",
-      coord: "15°47′S 47°52′W",
-      cor: "#1F5A6B",
-      piso: "#C7AB93",  /* cor do chão da foto de frente: completa o quadro no card vertical */
-      chamada: "Modernismo que vai à praia.",
+      slug: "pitanga", recorte: true, modelo: { altura: "1,80", veste: "M" },
+      nome: "Pitanga",
+      origem: "Salvador, BA",
+      coord: "12°58′S 38°30′W",
+      cor: "#E3141B",
+      piso: "#EC9B98",  /* cor do chão da foto de frente: completa o quadro no card vertical */
+      chamada: "Fruta de quintal em escala gigante.",
       texto: [
-        "O cobogó foi inventado no Recife, nos anos 1920, para deixar o vento entrar e o sol do lado de fora. Brasília levou o bloco vazado para fachadas inteiras, e a luz recortada atravessando o concreto virou parte da paisagem da capital. Aqui ele vira quartos de círculo em petróleo, laranja-tijolo e cru: a mesma geometria do prédio, levada para a praia.",
-        "A repetição dos módulos foi pensada para encaixar nas costuras da peça. Tecido 90% poliéster e 10% elastano, firme o bastante para o desenho não deformar no corpo."
+        "Em Salvador, pitangueira é árvore de quintal, e quase todo mundo lembra de comer pitanga direto do pé, escolhendo as mais escuras, que são as mais doces. A estampa amplia os gomos da fruta até eles virarem forma pura: vermelho, vinho e um raio de sol amarelo cortando o meio.",
+        "Tecido 90% poliéster e 10% elastano, com forro interno e secagem rápida."
       ],
       fotos: ["frente", "modelo", "costas-modelo", "sentado", "recorte", "costas", "detalhe", "estampa", "inspiracao"],
       vertical: ["modelo", "costas-modelo", "sentado", "recorte"],
@@ -115,16 +115,16 @@ globalThis.SIRIGUELA = {
       jpg: ["recorte", "sentado", "frente", "modelo", "costas-modelo", "costas", "detalhe", "estampa"]
     },
     {
-      slug: "pitanga", recorte: true, modelo: { altura: "1,80", veste: "M" },
-      nome: "Pitanga",
-      origem: "Salvador, BA",
-      coord: "12°58′S 38°30′W",
-      cor: "#E3141B",
-      piso: "#EC9B98",  /* cor do chão da foto de frente: completa o quadro no card vertical */
-      chamada: "Fruta de quintal em escala gigante.",
+      slug: "pipa", recorte: true, modelo: { altura: "1,85", veste: "M" },
+      nome: "Pipa",
+      origem: "Rio de Janeiro, RJ",
+      coord: "22°57′S 43°10′W",
+      cor: "#F15A40",
+      piso: "#A8876F",  /* cor do chão da foto de frente: completa o quadro no card vertical */
+      chamada: "Papel de seda contra o sol do morro.",
       texto: [
-        "Em Salvador, pitangueira é árvore de quintal, e quase todo mundo lembra de comer pitanga direto do pé, escolhendo as mais escuras, que são as mais doces. A estampa amplia os gomos da fruta até eles virarem forma pura: vermelho, vinho e um raio de sol amarelo cortando o meio.",
-        "Tecido 90% poliéster e 10% elastano, com forro interno e secagem rápida."
+        "Todo moleque carioca já perdeu uma tarde inteira olhando para cima. A Pipa nasceu dessas tardes: a laje quente, a linha esticada, o Pão de Açúcar lá no fundo e uma pipa de papel de seda brigando com o vento de agosto. A gente recortou a cena até sobrar quatro planos de cor (coral, céu, piscina e vinho), que se encontram no centro como as varetas.",
+        "A estampa cobre frente e costas sem quebrar o desenho na costura. Tecido 90% poliéster e 10% elastano, com forro interno e secagem rápida."
       ],
       fotos: ["frente", "modelo", "costas-modelo", "sentado", "recorte", "costas", "detalhe", "estampa", "inspiracao"],
       vertical: ["modelo", "costas-modelo", "sentado", "recorte"],
@@ -154,14 +154,14 @@ globalThis.SIRIGUELA = {
     entrega: { min: 7, max: 15 },
     itens: [
       { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Arquitetura para vestir.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola" },
-      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola" },
-      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true },
-      { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe" },
       { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Cada forma no lugar da outra.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe" },
+      { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curva com curva, até fechar o quadrado.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe" },
       { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Um prédio que cabe no peito.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe" },
-      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe" },
       { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Meio círculo, e o desenho roda.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe" },
-      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe" }
+      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Triângulo por triângulo, a festa.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe" },
+      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Sobe, vira, desce, recomeça.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe" },
+      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Um jardim para vestir.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true },
+      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "O vento tem desenho.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola" }
     ]
   }
 };
