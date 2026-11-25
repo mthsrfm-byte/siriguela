@@ -2,6 +2,16 @@
 
 Site estático (HTML, CSS e JS puros). Estrutura, fotos e deploy estão no `README.md`.
 
+## Arquivos das camisetas (produção)
+
+Ficam em `producao/`, com as diretrizes em `producao/README.md` e a ficha em `producao/camisetas.json`. Em cada `producao/camisetas/<slug>/` há o SVG de impressão, o PNG transparente em 300 DPI, a prévia sobre a cor da malha e a foto de referência.
+
+Quando o Matheus pedir os arquivos das camisetas ("me manda os arquivos das camisetas", "manda as artes", "arquivos para impressão"):
+
+1. Se ele citar uma camiseta, mande os arquivos dela com `SendUserFile` (`<slug>-estampa.svg`, `<slug>-estampa-300dpi.png` e `<slug>-referencia.webp`). Junte na mensagem a linha dela da tabela do `producao/README.md`: malha, cor, tamanho e o que fica vazado.
+2. Se ele não citar, gere o zip de tudo (`cd producao && zip -r <scratchpad>/siriguela-arquivos-impressao.zip README.md camisetas.json camisetas`) e mande o zip. O zip não entra no repositório.
+3. Se a arte do site mudou depois da última geração (compare as datas de `assets/camisetas/<slug>/estampa.svg` e da pasta), rode `node producao/gerar-arquivos.js` antes de mandar.
+
 ## Tom de voz: cartão-postal
 
 Vale para todo texto do site: páginas, cards, botões, mensagens da sacola, e-mails e metas de compartilhamento.

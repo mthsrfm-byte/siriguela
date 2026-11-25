@@ -32,6 +32,10 @@ Abra http://localhost:5190
 - Página de produto ("Capa", celular e computador): a primeira foto é a sunga no chão em 3:2, com o nome gigante encostado nela e a compra logo abaixo; as outras fotos seguem num mosaico. Sunga com `recorte: true` no `produtos.js` usa a sunga recortada (PNG transparente) no lugar da foto: o original fica em `_originais-fotos/<slug>/solta.png` e o site usa `assets/produtos/<slug>/solta.w640/w1080/w1448.webp` (WebP com transparência, gerado com Pillow). Depois de marcar uma sunga nova, rode `python3 scripts/gerar-paginas.py`.
 - `assets/produtos/grades/`: as grades originais de onde as fotos foram recortadas
 
+## Produção
+
+`producao/`: arquivos de impressão das 9 camisetas (SVG e PNG 300 DPI transparentes, prévia na cor da malha, foto de referência) e as diretrizes de impressão em `producao/README.md`. Gere de novo com `node producao/gerar-arquivos.js` sempre que mudar uma `estampa.svg`.
+
 ## Lançamento: o que fica no catálogo
 
 - `empresa` em `assets/js/produtos.js`: razão social, CNPJ, endereço, e-mail e WhatsApp. Aparecem no rodapé e nas páginas `/trocas/`, `/privacidade/` e `/contato/` (campo vazio não aparece).
