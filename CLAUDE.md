@@ -2,21 +2,27 @@
 
 Site estático (HTML, CSS e JS puros). Estrutura, fotos e deploy estão no `README.md`.
 
-## Tom de voz
+## Tom de voz: cartão-postal
 
 Vale para todo texto do site: páginas, cards, botões, mensagens da sacola, e-mails e metas de compartilhamento.
 
+### A ideia
+
+Cada texto é um cartão-postal. Põe quem lê num lugar do Brasil, numa hora do dia, com a luz e a temperatura daquela hora, e mostra o que se vê dali. A estampa sai dessa cena. A Siriguela não explica a estampa, ela leva você até o lugar de onde o desenho veio.
+
 ### Quem fala
 
-A Siriguela fala como uma pessoa que desenha estampa e conhece o lugar de onde ela veio. Usa "a gente", trata quem lê por "você", escreve em português do Brasil e sem gíria de internet. É segura sem levantar a voz: "Só estampa.", "Nenhuma lisa, nunca."
+Alguém que esteve lá e conta o que viu, sem pressa. Usa "a gente", trata quem lê por "você", escreve em português do Brasil e sem gíria de internet. É leve e tem um pouco de poesia, mas cada frase continua dizendo uma coisa concreta.
 
-### O que faz o texto ser da Siriguela
+### Como se escreve
 
-- **Lugar real.** Cada estampa sai de um lugar ou objeto do Brasil, com nome: Ver-o-Peso, Cabaceiras, o cobogó de Brasília, os painéis de azulejo do modernismo. Prefira o nome próprio ao genérico ("o Ver-o-Peso de manhã", e não "uma feira").
-- **Cor com nome.** Cobalto, terracota, petróleo, mostarda, cru. Nunca "cores vibrantes".
-- **Números de verdade.** Quantas formas, quantas tintas, preço, prazo, tecido. Se não dá para conferir, não escreva.
-- **Frase curta e na ordem direta.** Uma ideia por frase. Pontuação simples.
-- **Fato antes de adjetivo.** "Tecido 90% poliéster e 10% elastano, com forro interno" vale mais que "leve, macio e incrível".
+- **Lugar com nome.** Ver-o-Peso, Cabaceiras, Itamaracá, o cobogó de Brasília, as abóbadas de concreto. O nome próprio vale mais que o genérico ("o Ver-o-Peso de manhã", e não "uma feira").
+- **Hora e luz.** De manhã cedo, ao meio-dia, no fim da tarde, depois que escurece. Sol a pino, sombra comprida, luz de claraboia. Uma imagem de luz por texto já basta.
+- **Sentido.** O cheiro do bacuri, a laje quente, o degrau frio de manhã, o vento que não para. Uma sensação por parágrafo, no máximo.
+- **Cor com nome.** Cobalto, terracota, petróleo, mostarda, cru, coral, lilás. Nunca "cores vibrantes".
+- **Números de verdade.** Quantas formas, quantas tintas, preço, prazo, tecido. Se não dá para conferir, não escreva. Fato histórico também precisa ser verdadeiro (Volpi e as bandeirinhas, o cobogó no Recife dos anos 1920).
+- **Frase curta, ordem direta.** Uma ideia por frase. Pode ter ritmo e pode fechar com uma imagem, desde que a imagem seja concreta ("O branco da camiseta faz o papel do rejunte").
+- **A cena primeiro, a peça depois.** O primeiro parágrafo leva ao lugar. O segundo diz como é a peça: formas, tintas, tecido.
 
 ### O que não entra (texto com cara de IA)
 
@@ -26,11 +32,11 @@ A Siriguela fala como uma pessoa que desenha estampa e conhece o lugar de onde e
   - "Todo X é Y" ("Toda curva procura a outra")
   - "Não é X. É Y." ("Estampa não é enfeite. É assunto.")
 - **Gancho de mistério ou revelação:** "O cupuaçu engana.", "E tem um segredo:", "Spoiler:", dois-pontos para fazer suspense.
-- **Frase de efeito no fim do parágrafo:** "para você esquecer que está de sunga", "do mar à roda de samba sem trocar de roupa".
+- **Slogan no fim do parágrafo:** "para você esquecer que está de sunga", "do mar à roda de samba sem trocar de roupa". Imagem concreta pode; promessa de anúncio, não.
 - **Promessa que não dá para provar:** "a que mais faz perguntarem", "impossível de passar despercebida", "todo mundo ama".
 - **Lista de três com repetição:** "nada de estoque, nada de sobra, nada de liquidação". Escreva a frase uma vez.
-- **Personificar a estampa:** "a estampa encontra", "a camiseta conversa com a arquitetura", "reconhece o lugar de onde veio".
 - **Clichê de moda e marketing:** "peça-chave", "atemporal", "para todas as ocasiões", "eleve seu look", "exclusivo" sem dizer por quê, "Seja dos primeiros".
+- **Lugar inventado ou vago demais:** se não sabe onde a foto foi feita, descreva o que aparece nela e não dê nome.
 - **Travessão para aparte** e aspas em rótulo inventado.
 - **Emoji.**
 
@@ -46,14 +52,15 @@ A Siriguela fala como uma pessoa que desenha estampa e conhece o lugar de onde e
 ### Formatos
 
 - **Nome da estampa:** com maiúscula e artigo feminino ("a Meia-lua", "a Pipa").
-- **Chamada (logo abaixo do nome):** até 8 palavras e ponto final, dizendo o que a estampa mostra.
-- **Texto da estampa:** 2 parágrafos. O primeiro conta de onde vem e o segundo diz como é a peça (formas, tintas, tecido).
+- **Chamada (logo abaixo do nome):** até 8 palavras e ponto final. É a legenda do cartão-postal: lugar, hora ou luz ("Roda de ciranda na beira do mar.").
+- **Texto da estampa:** 2 parágrafos. O primeiro leva ao lugar e à hora; o segundo diz como é a peça (formas, tintas, tecido).
+- **Ensaio:** a chamada diz onde a foto foi feita; o texto descreve o que aparece nela e a luz daquela hora.
 - **Botões:** verbo e objeto, sem ponto ("Comprar a minha", "Ver as camisetas").
 - **Mensagens de erro:** dizem o que houve e o que fazer ("Escolha um tamanho.", "Remova as sungas para comprar as camisetas agora.").
 - **Números:** "R$ 159,90", "7 a 15 dias corridos", "90% poliéster". Por extenso só no meio do texto corrido ("dezesseis módulos").
 
 ### Antes de publicar texto novo
 
-1. Leia em voz alta. Se soa como anúncio, corte.
+1. Leia em voz alta. Se soa como anúncio, corte. Se soa como relatório, falta lugar ou luz.
 2. Procure as fórmulas da lista acima no site inteiro (`grep`). Se a frase nova repete uma que já existe, troque.
 3. Confira se preço, prazo e troca batem com as regras da loja.
