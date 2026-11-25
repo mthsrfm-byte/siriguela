@@ -10,6 +10,22 @@ globalThis.SIRIGUELA = {
   parcelas: 3,
   freteGratisAPartir: 399.90,
   cupom: { codigo: "SIRIGUELA10", desconto: 0.10, regra: "Válido na primeira compra. Conferido no pagamento." },
+  /* Quem vende: aparece no rodapé, em /contato/ e nas políticas (Decreto 7.962/2013 pede razão social, CNPJ,
+     endereço e contato no site). Campo vazio não aparece. Preencha antes de rodar anúncio. */
+  empresa: {
+    nome: "Siriguela",
+    razao: "",          // razão social, como está no CNPJ
+    cnpj: "",           // 00.000.000/0000-00
+    endereco: "",       // rua, número, bairro, cidade/UF, CEP
+    email: "ola@siriguela.site",
+    whatsapp: ""        // só números com DDD, ex.: 11999998888
+  },
+  /* Anúncios: com o ID preenchido, o site mostra o aviso de cookies e, depois do "Aceitar",
+     carrega o Pixel da Meta e o Google Analytics 4. Vazio, nada é carregado. */
+  marketing: {
+    metaPixel: "",      // só números, em Gerenciador de Eventos → Fontes de dados
+    ga4: ""             // G-XXXXXXXXXX
+  },
   /* Encomenda: a safra abre todo mês do dia 1 ao dia 7 (até 23h59, horário local).
      A produção começa quando a janela fecha e a entrega chega em até 10 dias úteis depois
      (sem sábado, domingo e feriados nacionais de data fixa).
@@ -154,6 +170,16 @@ globalThis.SIRIGUELA = {
     preco: 159.90,
     tamanhos: ["P", "M", "G", "GG"],
     entrega: { min: 7, max: 15 },
+    /* Ficha técnica que aparece em "Detalhes" na página de cada camiseta. Vem do fornecedor que produz:
+       preencha com os dados dele (não invente). Enquanto estiver vazio, a seção não aparece.
+       tecido: frase curta, ex.: "100% algodão, fio 30.1 penteado, 180 g/m²"
+       medidas: { cabecalho: ["Tamanho", "Largura", "Comprimento"], linhas: [["P", "52 cm", "70 cm"], ...] } */
+    ficha: {
+      tecido: "",
+      estampa: "",
+      cuidados: "",
+      medidas: null
+    },
     itens: [
       { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Um painel azul no fim da tarde.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola", outra: { f: "de-cima", pose: "deitado", quem: "h" } },
       { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Um quebra-cabeça de madeira no chão da sala.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe", outra: { f: "nuca", pose: "meio-corpo", quem: "m" } },

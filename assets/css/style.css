@@ -742,3 +742,30 @@ html.lenis, html.lenis body { height: auto; }
 @media (max-width: 600px) {
   .look .card--cam.l3, .look .card--cam.l6 { width: 88%; margin-left: 0; }
 }
+
+/* ---------- Aviso de cookies (só aparece com Pixel ou GA4 configurado em S.marketing) ---------- */
+.cookies { position: fixed; left: var(--pad); right: var(--pad); bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 70;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap;
+  max-width: 760px; margin: 0 auto; padding: 16px 18px; background: var(--bg); border: 1px solid var(--line);
+  box-shadow: 0 12px 32px rgba(18, 18, 18, .10); font-size: var(--t-small); }
+.cookies p { margin: 0; flex: 1 1 320px; color: var(--mute); }
+.cookies a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.cookies__acoes { display: flex; gap: 8px; }
+.cookies__acoes .btn { height: 44px; }
+.cookies__nao { height: 44px; padding: 0 18px; border: 1px solid var(--line); }
+body:has(.compra-fixa.is-on) .cookies { bottom: calc(150px + env(safe-area-inset-bottom)); }
+
+/* ---------- Ficha da camiseta ("Detalhes", logo abaixo da compra) ---------- */
+.ficha-cam { margin-top: 28px; }
+.ficha-cam .acc__body a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Páginas de ajuda (trocas, privacidade, contato) ---------- */
+.ajuda { max-width: 720px; padding-bottom: var(--sect); }
+.ajuda h1 { margin: 0 0 28px; font-size: var(--t-title); font-weight: var(--w-title); letter-spacing: var(--track-title); }
+.ajuda h2 { margin: 40px 0 12px; font-size: var(--t-body); font-weight: var(--w-title); }
+.ajuda p, .ajuda li { color: var(--mute); max-width: 62ch; }
+.ajuda ul, .ajuda ol { padding-left: 1.2em; }
+.ajuda a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
+.ajuda dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 24px; margin: 0; }
+.ajuda dt { font-family: var(--f-mono); font-size: var(--t-idx); text-transform: uppercase; letter-spacing: .06em; color: var(--faint); padding-top: 3px; }
+.ajuda dd { margin: 0; }

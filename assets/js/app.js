@@ -160,13 +160,14 @@
           <div>
             <h3 class="mono">Ajuda</h3>
             <a href="index.html#encomenda">Como funciona a encomenda</a>
-            <a href="#">Trocas</a>
-            <a href="#">Contato</a>
+            <a href="trocas/">Trocas e devoluções</a>
+            <a href="privacidade/">Privacidade</a>
+            <a href="contato/">Contato</a>
           </div>
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
         </div>
         <div class="foot__base mono mute">
-          <span>© ${new Date().getFullYear()} Siriguela</span>
+          <span>© ${new Date().getFullYear()} ${empresaLinha()}</span>
           <span>Feito sob encomenda no Brasil</span>
         </div>
       </footer>
@@ -193,6 +194,66 @@
     }));
   }
 
+  /* ---------- Empresa (S.empresa): rodapé e páginas de ajuda ---------- */
+  const E = S.empresa || {};
+  const empresaLinha = () => [E.razao || E.nome || "Siriguela", E.cnpj && `CNPJ ${E.cnpj}`].filter(Boolean).join(" · ");
+
+  /* ---------- Anúncios (S.marketing): Pixel da Meta e GA4, só depois do "Aceitar" ----------
+     Sem ID preenchido, nada aparece e nada é carregado. A escolha fica guardada no navegador. */
+  const MK = S.marketing || {};
+  const CONSENT_KEY = "siriguela.cookies";
+  const temRastreio = !!(MK.metaPixel || MK.ga4);
+  const eventos = [];
+  const evento = (nome, dados = {}) => {
+    if (!temRastreio) return;
+    if (window.fbq) window.fbq("track", nome, dados);
+    else eventos.push([nome, dados]);
+    if (window.gtag) {
+      const ga = { AddToCart: "add_to_cart", InitiateCheckout: "begin_checkout", ViewContent: "view_item", Lead: "generate_lead" }[nome];
+      if (ga) window.gtag("event", ga, { currency: "BRL", value: dados.value, items: (dados.content_ids || []).map((id) => ({ item_id: id })) });
+    }
+  };
+  function ligaRastreio() {
+    if (MK.metaPixel && !window.fbq) {
+      /* snippet oficial do Pixel da Meta */
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");
+      window.fbq("init", MK.metaPixel);
+      window.fbq("track", "PageView");
+    }
+    if (MK.ga4 && !window.gtag) {
+      const g = document.createElement("script");
+      g.async = true; g.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(MK.ga4)}`;
+      document.head.appendChild(g);
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", MK.ga4);
+    }
+    eventos.splice(0).forEach(([n, d]) => evento(n, d));
+  }
+  function cookies() {
+    if (!temRastreio) return;
+    const escolha = store.get(CONSENT_KEY, null);
+    if (escolha === "sim") { ligaRastreio(); return; }
+    if (escolha === "nao") return;
+    document.body.insertAdjacentHTML("beforeend", `
+      <div class="cookies" role="dialog" aria-label="Cookies" data-cookies>
+        <p>A gente usa cookies para medir os anúncios e saber de onde vem cada visita. Detalhes em <a href="privacidade/">Privacidade</a>.</p>
+        <div class="cookies__acoes">
+          <button class="cookies__nao" data-cookies-nao>Recusar</button>
+          <button class="btn" data-cookies-sim>Aceitar</button>
+        </div>
+      </div>`);
+    const caixa = $("[data-cookies]");
+    caixa.addEventListener("click", (e) => {
+      const sim = e.target.closest("[data-cookies-sim]"), nao = e.target.closest("[data-cookies-nao]");
+      if (!sim && !nao) return;
+      store.set(CONSENT_KEY, sim ? "sim" : "nao");
+      caixa.remove();
+      if (sim) ligaRastreio();
+    });
+  }
+
   /* ---------- Sacola ---------- */
   const KEY = "siriguela.sacola";
   const bag = {
@@ -203,6 +264,7 @@
       const hit = items.find((i) => i.slug === slug && i.size === size && (i.tipo || "sunga") === (tipo || "sunga"));
       hit ? hit.qty++ : items.push(tipo === "camiseta" ? { slug, size, qty: 1, tipo } : { slug, size, qty: 1 });
       bag.set(items);
+      evento("AddToCart", { content_ids: [`${tipo || "sunga"}-${slug}-${size}`], content_type: "product", value: tipo === "camiseta" ? C.preco : S.preco, currency: "BRL" });
     },
     qty(idx, d) {
       const items = bag.get();
@@ -305,6 +367,19 @@
   try {
     if (Object.keys(campanha).length) sessionStorage.setItem("siriguela.campanha", JSON.stringify(campanha));
   } catch {}
+  /* fbclid e gclid (clique do anúncio): seguem até a URL do pagamento, para o checkout creditar a venda */
+  const cliques = Object.fromEntries(["fbclid", "gclid"].filter((k) => parametros.has(k)).map((k) => [k, parametros.get(k)]));
+  try {
+    if (Object.keys(cliques).length) sessionStorage.setItem("siriguela.cliques", JSON.stringify(cliques));
+  } catch {}
+  const comCampanha = (url, utm) => {
+    const u = new URL(url);
+    Object.entries(utm || {}).forEach(([k, v]) => { if (v && !u.searchParams.has("utm_" + k)) u.searchParams.set("utm_" + k, v); });
+    let ck = cliques;
+    try { ck = JSON.parse(sessionStorage.getItem("siriguela.cliques")) || cliques; } catch {}
+    Object.entries(ck).forEach(([k, v]) => { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });
+    return u.href;
+  };
 
   let iniciandoPagamento = false;
   async function finalizar(botao) {
@@ -321,7 +396,11 @@
         body: JSON.stringify({ items: bag.get(), utm }), signal: AbortSignal.timeout(16000)
       });
       const dados = await resposta.json();
-      if (resposta.ok && dados.url) location.assign(dados.url);
+      if (resposta.ok && dados.url) {
+        const itens = bag.get();
+        evento("InitiateCheckout", { content_ids: itens.map((i) => `${i.tipo || "sunga"}-${i.slug}-${i.size}`), num_items: itens.reduce((n, i) => n + i.qty, 0), value: contas(itens.filter((i) => peca(i))).produtos, currency: "BRL" });
+        location.assign(comCampanha(dados.url, utm));
+      }
       else toast(dados.erro || "Não foi possível abrir o pagamento. Tente novamente.");
     } catch {
       toast("Não foi possível abrir o pagamento. Sua sacola está salva.");
@@ -475,6 +554,38 @@
     pontas();
   });
 
+  /* Ficha da camiseta ("Detalhes"): medidas e tecido vêm de C.ficha (dados do fornecedor; vazio não aparece);
+     entrega, troca e pagamento valem sempre. */
+  const fichaCam = () => {
+    const F = C.ficha || {};
+    const medidas = F.medidas && F.medidas.linhas?.length ? `
+        <details id="medidas-cam">
+          <summary>Medidas</summary>
+          <div class="acc__body">
+            <table class="table">
+              <thead><tr>${F.medidas.cabecalho.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
+              <tbody>${F.medidas.linhas.map((l) => `<tr>${l.map((v) => `<td>${v}</td>`).join("")}</tr>`).join("")}</tbody>
+            </table>
+            <p class="mono">Modelagem ampla. Na dúvida entre dois tamanhos, fique com o menor.</p>
+          </div>
+        </details>` : "";
+    const tecido = [F.tecido, F.estampa, F.cuidados].filter(Boolean);
+    return `
+      <div class="acc ficha-cam">
+        ${medidas}
+        ${tecido.length ? `<details><summary>Tecido e cuidados</summary><div class="acc__body">${tecido.map((t) => `<p>${t}</p>`).join("")}</div></details>` : ""}
+        <details>
+          <summary>Entrega, troca e pagamento</summary>
+          <div class="acc__body">
+            <p>A gente estampa e costura a sua depois do pedido. Ela chega em ${prazoCam}, com rastreio por e-mail.</p>
+            <p>Frete grátis a partir de ${brl(S.freteGratisAPartir)}. Abaixo disso, o valor aparece no pagamento, pelo seu CEP.</p>
+            <p>${TROCA_TXT}. <a href="trocas/">Como trocar</a>.</p>
+            <p>Pix ou cartão em até ${S.parcelas}x sem juros.</p>
+          </div>
+        </details>
+      </div>`;
+  };
+
   /* bloco "Sob encomenda" das camisetas: um texto só, usado na coleção e em cada camiseta */
   const encomendaCam = () => `
     <header class="block__head">
@@ -537,7 +648,9 @@
         <p class="picker__msg mono mute" data-msg>Escolha o tamanho.</p>
         <button class="btn btn--full" data-add>Comprar a minha <span>→</span></button>
         <p class="info__perks">Sob encomenda: chega em ${prazoCam}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
-      </div>`;
+      </div>
+      ${fichaCam()}`;
+    evento("ViewContent", { content_ids: [`camiseta-${c.slug}`], content_name: `Camiseta ${c.nome}`, content_type: "product", value: C.preco, currency: "BRL" });
     document.body.insertAdjacentHTML("beforeend", `
       <div class="compra-fixa" data-compra-fixa>
         <div class="compra-fixa__nome"><span>${c.nome}</span><span class="mono mute">${brl(C.preco)}</span></div>
@@ -623,6 +736,7 @@
         body: JSON.stringify({ email: f.querySelector("input").value, produto: f.dataset.notify })
       });
       if (!response.ok || (await response.json()).ok !== true) throw new Error();
+      evento("Lead", { content_name: f.dataset.notify || "lista" });
       status.textContent = EMBREVE ? "E-mail anotado. A gente avisa quando as sungas chegarem." : "E-mail anotado. A gente avisa quando as encomendas abrirem.";
       f.reset();
     } catch {
@@ -663,6 +777,24 @@
     v.addEventListener("playing", () => gestos.forEach((g) => removeEventListener(g, libera)), { once: true });
     if ("IntersectionObserver" in window) new IntersectionObserver(([e]) => e.isIntersecting && toca()).observe(v);
     toca();
+  }
+
+  /* ---------- Páginas de ajuda (trocas, privacidade, contato): dados da empresa vêm de S.empresa ---------- */
+  function ajuda() {
+    $$("[data-empresa]").forEach((el) => {
+      const k = el.dataset.empresa, v = E[k];
+      if (k === "razao") { el.textContent = E.razao || E.nome || "Siriguela"; return; }
+      if (!v) {
+        const dd = el.closest("dd");
+        if (dd) { dd.previousElementSibling?.remove(); dd.remove(); }
+        return;
+      }
+      if (k === "email") { el.textContent = v; el.href = `mailto:${v}`; }
+      else if (k === "whatsapp") { el.textContent = v.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3"); el.href = `https://wa.me/55${v}`; }
+      else el.textContent = v;
+    });
+    const reset = $("[data-cookies-reset]");
+    if (reset) reset.addEventListener("click", () => { store.set(CONSENT_KEY, null); location.reload(); });
   }
 
   /* ---------- Home ---------- */
@@ -729,12 +861,9 @@
     }
     if ($("[data-sizes]")) $("[data-sizes]").innerHTML = sizeTable();
 
-    $("[data-join]").addEventListener("submit", (e) => {
-      e.preventDefault();
-      // TODO: ligar a um serviço de e-mail (Mailchimp, Brevo, Klaviyo…)
-      $("[data-join-ok]").textContent = "Pronto, você está na lista.";
-      e.target.reset();
-    });
+    /* lista da home: mesmo formulário (e mesmo /api/avisos) do aviso das sungas */
+    const lista = $("[data-join-form]");
+    if (lista) lista.innerHTML = avisoForm("lista-home", "sungas");
   }
 
   /* ---------- Produto ---------- */
@@ -996,8 +1125,10 @@
     if (document.body.dataset.page === "camisetas") camisetas();
     if (document.body.dataset.page === "sungas") sungas();
     if (document.body.dataset.page === "camiseta") camiseta();
+    if (document.body.dataset.page === "ajuda") ajuda();
     render();
     flips();
+    cookies();
     movimento();
   };
 

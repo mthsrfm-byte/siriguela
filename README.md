@@ -32,6 +32,14 @@ Abra http://localhost:5190
 - Página de produto ("Capa", celular e computador): a primeira foto é a sunga no chão em 3:2, com o nome gigante encostado nela e a compra logo abaixo; as outras fotos seguem num mosaico. Sunga com `recorte: true` no `produtos.js` usa a sunga recortada (PNG transparente) no lugar da foto: o original fica em `_originais-fotos/<slug>/solta.png` e o site usa `assets/produtos/<slug>/solta.w640/w1080/w1448.webp` (WebP com transparência, gerado com Pillow). Depois de marcar uma sunga nova, rode `python3 scripts/gerar-paginas.py`.
 - `assets/produtos/grades/`: as grades originais de onde as fotos foram recortadas
 
+## Lançamento: o que fica no catálogo
+
+- `empresa` em `assets/js/produtos.js`: razão social, CNPJ, endereço, e-mail e WhatsApp. Aparecem no rodapé e nas páginas `/trocas/`, `/privacidade/` e `/contato/` (campo vazio não aparece).
+- `marketing`: ID do Pixel da Meta e do GA4. Com algum preenchido, o site mostra o aviso de cookies e só carrega o rastreio depois do "Aceitar". Eventos: PageView, ViewContent (página da camiseta), AddToCart, InitiateCheckout e Lead (e-mail na lista). O Purchase sai do checkout da Nextout.
+- `camisetas.ficha`: tecido, estampa, cuidados e tabela de medidas do fornecedor. Vazio, a seção não aparece em "Detalhes".
+- UTMs e `fbclid`/`gclid` seguem do anúncio até a URL do pagamento.
+- `sitemap.xml`, `robots.txt` e `404.html` na raiz.
+
 ## Deploy dos workers
 
 O site sai sozinho pelo GitHub Pages. Os workers da Cloudflare (`checkout/` e `avisos/`) saem pela Action `.github/workflows/workers.yml`, que roda a cada push na `main` que mexa neles ou em `assets/js/produtos.js` (e à mão em Actions → Workers → Run workflow). Ela precisa do secret `CLOUDFLARE_API_TOKEN` no repositório, com permissão "Edit Cloudflare Workers"; se o token enxergar mais de uma conta, também de `CLOUDFLARE_ACCOUNT_ID`.
