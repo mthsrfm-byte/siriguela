@@ -57,7 +57,8 @@
 
 /* Capa com a camiseta recortada (PNG transparente em WebP), como a capa das sungas: a peça fica solta no
    linho, centrada, e o nome passa um pouco por baixo da barra dela. */
-.capa--solta { align-items: start; --nome-solto: clamp(56px, min(21vw, 30svh), 360px); }
+/* --nome (no h1 de cada página) encolhe o nome comprido também aqui; sem ele, vale 21vw como na Jardim */
+.capa--solta { align-items: start; --nome-solto: clamp(56px, min(var(--nome, 21vw), 30svh), 360px); }
 /* tudo na primeira dobra: o nome encolhe com a altura da tela e a camiseta ocupa o que sobra dela */
 .capa__solta { grid-column: 1 / -1; justify-self: center; position: relative; z-index: 2; pointer-events: none;
   width: min(44vw, 640px, calc((100svh - 235px - var(--nome-solto) * .78) * 1188 / 1149)); margin-top: clamp(12px, 2vw, 28px) !important; }
@@ -66,7 +67,7 @@
 .capa--solta .capa__lado { grid-column: 1 / span 5; padding-top: clamp(28px, 4vw, 64px); padding-bottom: 0; }
 .capa--solta .capa__aviso { grid-column: 8 / span 5; margin-top: clamp(28px, 4vw, 64px); align-self: end; }
 @media (max-width: 900px) {
-  .capa--solta { --nome-solto: clamp(56px, 21vw, 360px); }
+  .capa--solta { --nome-solto: clamp(56px, var(--nome, 21vw), 360px); }
   .capa__solta { width: 86vw; }
   .capa--solta .capa__lado, .capa--solta .capa__aviso { grid-column: 1 / -1; order: 0; }
   .capa--solta .capa__aviso { margin-top: 24px; }
