@@ -12,11 +12,10 @@
 
   /* ---------- Rolagem com inércia ---------- */
   const lenis = new window.Lenis({
-    lerp: document.body.dataset.page === 'home' ? 0.075 : 0.085,           // quanto menor, mais longa a inércia
+    lerp: 0.085,           // quanto menor, mais longa a inércia
     wheelMultiplier: 0.9,
     smoothWheel: true,
-    syncTouch: document.body.dataset.page === 'home',
-    syncTouchLerp: 0.09
+    syncTouch: false       // no celular a rolagem continua nativa
   });
   window.siriguelaLenis = lenis;
   lenis.on("scroll", ScrollTrigger.update);
