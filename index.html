@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="assets/css/fonts.css">
   <link rel="stylesheet" href="assets/css/tokens.css">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/ambar.css">
 </head>
 <body data-page="home">
   <script src="assets/js/produtos.js"></script>
@@ -54,7 +55,12 @@
         <h2 class="block__title">Camisetas</h2>
         <span class="idx">9 estampas · R$ 159,90 · chegam em 7 a 15 dias</span>
       </header>
-      <div class="grid" data-grid-cam></div>
+      <div class="ambar-catalogo">
+        <div class="ambar-palco" aria-hidden="true" inert>
+          <model-viewer class="ambar-fruta" camera-orbit="15deg 74deg auto" shadow-intensity="0" exposure="1.05" interaction-prompt="none"></model-viewer>
+        </div>
+        <div class="grid" data-grid-cam></div>
+      </div>
     </section>
 
 
@@ -114,5 +120,6 @@
   </main>
 
   <script>siriguelaInit()</script>
+  <script type="module" src="assets/js/ambar.js"></script>
 </body>
 </html>

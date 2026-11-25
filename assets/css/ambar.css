@@ -1,0 +1,15 @@
+.ambar-catalogo { position: relative; isolation: isolate; }
+.ambar-palco { position: absolute; inset: 0 calc(-1 * var(--pad)); overflow: clip; pointer-events: none; }
+.ambar-fruta {
+  display: block;
+  position: absolute;
+  width: clamp(170px, 45vw, 580px);
+  height: clamp(210px, 52vw, 600px);
+  top: 0;
+  left: 0;
+  opacity: 0;
+  --progress-bar-height: 0;
+  pointer-events: none;
+}
+.ambar-catalogo .grid { position: relative; }
+.ambar-catalogo .card { background: var(--bg); }
