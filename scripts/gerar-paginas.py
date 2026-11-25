@@ -42,6 +42,8 @@ for slug, nome, chamada in zip(slugs, nomes, chamadas):
                   f'<meta property="og:description" content="{chamada} Em breve na Siriguela.">', html, count=1)
     html = re.sub(r'<meta property="og:url" content="([^"]*)">',
                   lambda m: f'<meta property="og:url" content="{m.group(1)}colecao1/sunga/{slug}/">', html, count=1)
+    html = re.sub(r'(<meta property="og:url" content="([^"]*)">)',
+                  lambda m: f'{m.group(1)}\n  <link rel="canonical" href="{m.group(2)}">', html, count=1)
     # primeiras fotos da galeria já pedidas no <head> (o app.js só monta a galeria depois)
     def pre(f, sizes, larguras=(640, 1080, 1600)):
         b = f"assets/produtos/{slug}/{f}"
