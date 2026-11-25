@@ -1,0 +1,39 @@
+{
+  "_leia": "Ficha de produção das 9 camisetas. Lida por producao/gerar-arquivos.js e, depois, pelo Worker de pedidos (mapa estampa → malha → arte). Medidas em cm; cores em hex sRGB. 'malha.alvo' é a cor que o site mostra; peça ao fornecedor a cor mais próxima da cartela dele.",
+  "impressao": {
+    "largura_cm": 30,
+    "dpi": 300,
+    "posicao": "Frente, centralizada na largura, topo da estampa a 8 cm da costura da gola (tamanho M; manter a mesma distância nos outros tamanhos).",
+    "tecnica": "DTG (impressão direta) para malha clara; DTG com base branca ou DTF para malha escura. Cores chapadas, sem degradê nem textura.",
+    "confirmar": "Largura de 30 cm e distância da gola são o padrão da Siriguela até a primeira amostra. Se o fornecedor tiver área menor, reduza a largura e mantenha a proporção."
+  },
+  "camisetas": [
+    { "slug": "azulejo", "nome": "Azulejo", "malha": { "cor": "Branca", "alvo": "#F3F1EA" }, "remover_fundo": false,
+      "tintas": ["#1B2F9E", "#3D63BF", "#8FB0E0", "#C3D5EF", "#F3F1EA"],
+      "nota": "Os 16 quadrados #F3F1EA são o branco do azulejo. Imprima: eles separam as peças do branco da malha." },
+    { "slug": "encaixe", "nome": "Encaixe", "malha": { "cor": "Branca", "alvo": "#F3F1EA" }, "remover_fundo": false,
+      "tintas": ["#EF8F7B", "#B594D4", "#CDB5E2", "#D99C26", "#2553B0", "#F1ECE2"],
+      "nota": "O quadrado de fundo #F1ECE2 faz parte do desenho (fecha o bloco). Imprima." },
+    { "slug": "meia-lua", "nome": "Meia-lua", "malha": { "cor": "Off-white", "alvo": "#EBE3D6" }, "remover_fundo": false,
+      "tintas": ["#3560B0", "#A5452C", "#EBE3D6"],
+      "nota": "Os quadrados #EBE3D6 são o cru do tecido. Na malha off-white podem sair vazados (sem tinta); confira na amostra qual fica melhor." },
+    { "slug": "blocos", "nome": "Blocos", "malha": { "cor": "Preta", "alvo": "#141414" }, "remover_fundo": true,
+      "tintas": ["#EFE7D6", "#DBA32B", "#A94F33"],
+      "nota": "O preto do desenho é a malha: fica vazado. Precisa de base branca embaixo do creme e do mostarda." },
+    { "slug": "ciranda", "nome": "Ciranda", "malha": { "cor": "Azul-marinho", "alvo": "#131B33" }, "remover_fundo": true,
+      "tintas": ["#EFDFA8", "#C9992E"],
+      "nota": "O azul-marinho entre as metades é a malha: fica vazado. Base branca embaixo das duas tintas." },
+    { "slug": "bandeirinhas", "nome": "Bandeirinhas", "malha": { "cor": "Preta", "alvo": "#141414" }, "remover_fundo": true,
+      "tintas": ["#EFE7D6", "#DBA32B", "#EE8B78"],
+      "nota": "O preto entre os triângulos é a malha: fica vazado. Base branca embaixo das três tintas." },
+    { "slug": "degraus", "nome": "Degraus", "malha": { "cor": "Azul-petróleo", "alvo": "#17505F" }, "remover_fundo": true,
+      "tintas": ["#F0E2B0", "#E98672"],
+      "nota": "O petróleo entre os degraus é a malha: fica vazado. Base branca embaixo do creme e do coral." },
+    { "slug": "jardim", "nome": "Jardim", "malha": { "cor": "Terracota", "alvo": "#B04B2F" }, "remover_fundo": false,
+      "tintas": ["#DD9F2B", "#234F31", "#1F4A93", "#467440", "#93A961", "#EAD59C", "#C2612B", "#F2EBDC"],
+      "nota": "Estampa cheia, sem vazado. O fio claro #F2EBDC entre as formas faz parte do desenho. Base branca embaixo de tudo (malha colorida)." },
+    { "slug": "catavento", "nome": "Catavento", "malha": { "cor": "Off-white", "alvo": "#EBE3D6" }, "remover_fundo": false,
+      "tintas": ["#2254B4", "#E0A320"],
+      "nota": "Os triângulos brancos do desenho são a malha off-white: ficam vazados (o arquivo já é transparente ali)." }
+  ]
+}

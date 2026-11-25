@@ -53,12 +53,8 @@ Com a resposta, preencha a tabela de mapeamento da Fase 3. Se faltar cor, avise 
 
 ## Fase 3. Artes e mapeamento
 
-1. Gere as artes de impressão a partir de `assets/camisetas/<slug>/estampa.svg`:
-   - Tire o `<rect>` de fundo das estampas escuras: Blocos, Ciranda, Bandeirinhas, Degraus e Jardim. Confira uma por uma, porque na Jardim o primeiro `rect` é parte do desenho.
-   - Exporte em PNG transparente com 300 DPI, na largura que a Dimona indicar (30 cm são cerca de 3.543 px). Use `rsvg-convert` ou o Chromium do Playwright.
-   - Salve em `assets/print/<slug>-frente.png` e faça commit. A Dimona baixa a arte por URL pública.
-   - Mostre as 9 artes ao Matheus antes de seguir.
-2. Crie `pedidos/mapa.json` com uma entrada por camiseta: slug, cor da malha, prefixo de SKU da Dimona, técnica e URL da arte. O SKU final é prefixo + tamanho.
+1. As artes de impressão já estão prontas em `producao/camisetas/<slug>/`: SVG e PNG transparentes em 300 DPI, com 30 cm de largura. As regras de tamanho, posição, técnica, cor da malha e partes vazadas estão em `producao/README.md`. A Dimona baixa a arte por URL pública: `https://siriguela.site/producao/camisetas/<slug>/<slug>-estampa-300dpi.png`. Se a área de impressão dela for menor que 30 cm, mude `largura_cm` em `producao/camisetas.json` e rode `node producao/gerar-arquivos.js`.
+2. Acrescente a `producao/camisetas.json` o prefixo de SKU da Dimona de cada camiseta (malha + cor). O SKU final é prefixo + tamanho. O Worker lê esse arquivo.
 
 ## Fase 4. Amostras
 
@@ -85,7 +81,7 @@ Crie `pedidos/worker.mjs` e `pedidos/wrangler.jsonc`, no padrão de `checkout/` 
 3. Use o `id` do evento para não processar o mesmo evento duas vezes. Guarde em um D1 ou KV `pedidos` o evento recebido, o pedido enviado à Dimona e a resposta.
 4. Trate só o evento `pedido.pago`. Para cada produto:
    - separe o nome `Camiseta <Nome> · tamanho <T>`;
-   - ache a camiseta em `mapa.json`;
+   - ache a camiseta em `producao/camisetas.json`;
    - monte o SKU e a URL da arte.
 5. O webhook não traz a UF: pegue pelo CEP no `https://viacep.com.br/ws/<cep>/json/`. O complemento também não vem: deixe em branco.
 6. Chame `POST <domínio Dimona>/api/<versão>/orders` com o token `DIMONA_TOKEN` (secret). Use o id da Nextout como `order_id`/`id`, que impede pedido em dobro. Mande também o `webhook_url` de status, se a Dimona aceitar.
@@ -108,7 +104,7 @@ Para o deploy, o secret `CLOUDFLARE_API_TOKEN` precisa estar no GitHub (veja o `
 
 ## Pronto quando
 
-- 9 artes aprovadas e publicadas em `assets/print/`.
+- 9 artes conferidas pelo Matheus em `producao/camisetas/`.
 - Amostras aprovadas pelo Matheus.
 - Ficha técnica e prazo do site com os números reais.
 - Uma compra real que virou pedido na Dimona sem ninguém digitar nada.
