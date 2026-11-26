@@ -56,7 +56,7 @@ O site sai sozinho pelo GitHub Pages. Os workers da Cloudflare (`checkout/` e `a
 
 ## Encomenda
 
-A loja funciona sob encomenda: a safra abre todo mês do dia 1 ao 7, a produção começa quando a janela fecha e a entrega chega em até 10 dias úteis. Preço, frete grátis, cupom e janela ficam no topo de `assets/js/produtos.js`. O site calcula sozinho se a janela está aberta ou fechada e escreve as datas.
+A loja funciona sob encomenda: a safra abre todo mês do dia 1 ao 7, a produção começa quando a janela fecha e a entrega chega em até 10 dias úteis. Preço, frete fixo, cupom e janela ficam no topo de `assets/js/produtos.js`. O site calcula sozinho se a janela está aberta ou fechada e escreve as datas.
 
 Para ver a loja com a janela aberta fora do período, abra `?janela=aberta` (ou `?janela=fechada`). A escolha vale até fechar a aba.
 
@@ -67,7 +67,7 @@ A sacola envia os itens para `POST /api/checkout`. O worker `siriguela-checkout`
 Para ativar a loja:
 
 1. No painel Nextout, conecte o gateway que recebe as vendas e cadastre `checkout.siriguela.site` em Domínio. Depois de o painel associar o domínio à loja, publique o registro DNS indicado por ele no Cloudflare.
-2. Configure a origem dos envios, o peso e as dimensões reais da embalagem. Confira frete grátis a partir de R$ 399,90 após o desconto, cartão em até 3× sem juros e o cupom `SIRIGUELA10` de 10% exclusivo para primeira compra. A API pública só recebe itens e campanha. O cliente informa o cupom no checkout e o painel precisa verificar a elegibilidade.
+2. Configure a origem dos envios, o peso e as dimensões reais da embalagem. Confira o frete fixo de R$ 19,90 em todo pedido, cartão em até 3× sem juros e o cupom `SIRIGUELA10` de 10% exclusivo para primeira compra. A API pública só recebe itens e campanha. O cliente informa o cupom no checkout e o painel precisa verificar a elegibilidade.
 3. Em Produtos → Integração via API, gere a chave e salve-a como secret `NEXTOUT_KEY` nas configurações do worker `siriguela-checkout`. O valor fica só no Cloudflare. A rota passa a usá-lo sem alterar o código.
 
 Na homologação, confira uma sacola com duas estampas, o desconto de primeira compra, o CEP, o parcelamento e o pedido no painel. O modo de prévia da vitrine não libera pagamentos fora da safra. A Nextout documenta que links da API não expiram. O bloqueio local se aplica à criação de novos links, e o encerramento de um link já emitido depende da Nextout. As confirmações dos pedidos dessa integração são acompanhadas no painel.

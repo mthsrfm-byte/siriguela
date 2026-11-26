@@ -105,8 +105,8 @@
     const sub = items.reduce((v, i) => v + peca(i).preco * i.qty, 0);
     const desc = cupomAtivo() ? Math.round(sub * S.cupom.desconto * 100) / 100 : 0;
     const produtos = sub - desc;
-    const gratis = produtos >= S.freteGratisAPartir;
-    return { sub, desc, produtos, gratis, falta: Math.max(0, S.freteGratisAPartir - produtos) };
+    const frete = S.frete;
+    return { sub, desc, produtos, frete, total: produtos + frete };
   };
 
   /* ---------- Cabeçalho, rodapé e sacola (comuns às páginas) ---------- */
@@ -283,11 +283,6 @@
     rm(idx) { const items = bag.get(); items.splice(idx, 1); bag.set(items); }
   };
 
-  const freteFrase = (c) => {
-    if (c.gratis) return "Frete grátis para todo o Brasil.";
-    return `Faltam ${brl(c.falta)} para o frete grátis.`;
-  };
-
   function render() {
     const items = bag.get();
     const count = items.reduce((n, i) => n + i.qty, 0);
@@ -341,12 +336,11 @@
       <div class="bag__row"><span class="mute">Subtotal</span><span>${brl(c.sub)}</span></div>
       ${cupom}
       ${cupomAtivo() ? `<p class="bag__note">Use ${S.cupom.codigo} no pagamento para confirmar o desconto da primeira compra.</p>` : ""}
-      <div class="bag__row"><span class="mute">Frete</span><span>${c.gratis ? "Grátis" : `<span class="mute">no pagamento</span>`}</span></div>
-      <p class="bag__frete">${freteFrase(c)}</p>
-      <div class="bag__row total"><span>${cupomAtivo() ? "Total com cupom" : "Total"}</span><span>${brl(c.produtos)}</span></div>
+      <div class="bag__row"><span class="mute">Frete</span><span>${brl(c.frete)}</span></div>
+      <div class="bag__row total"><span>${cupomAtivo() ? "Total com cupom" : "Total"}</span><span>${brl(c.total)}</span></div>
       ${pode
         ? `<button class="btn btn--full" data-checkout>Finalizar compra <span>→</span></button>
-           <p class="bag__note">${prazo}<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.produtos)} sem juros</span></p>`
+           <p class="bag__note">${prazo}<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.total)} sem juros</span></p>`
         : `<button class="btn btn--ghost btn--full" type="button" disabled>${EMBREVE ? "Sungas em breve" : `Sungas abrem em ${J.longa(J.ini)}`}</button>
            <p class="bag__note">${temCam ? `As sungas ainda não estão à venda. Remova as sungas para comprar as camisetas agora.` : "Sua sacola fica guardada até lá."}</p>`}`;
   }
@@ -586,7 +580,7 @@
           <summary>Entrega, troca e pagamento</summary>
           <div class="acc__body">
             <p>A gente estampa e costura a sua depois do pedido. Ela chega em ${prazoCam}, com rastreio por e-mail.</p>
-            <p>Frete grátis a partir de ${brl(S.freteGratisAPartir)}. Abaixo disso, o valor aparece no pagamento, pelo seu CEP.</p>
+            <p>Frete fixo de ${brl(S.frete)} para todo o Brasil.</p>
             <p>${TROCA_TXT}. <a href="trocas/">Como trocar</a>.</p>
             <p>Pix ou cartão em até ${S.parcelas}x sem juros.</p>
           </div>
@@ -603,7 +597,7 @@
     <p class="ed__frase">Feita depois do seu pedido.</p>
     <div class="encomenda-cam__texto">
       <p class="ed__texto">A gente estampa e costura cada camiseta só depois que alguém compra. Assim não sobra estoque parado nem peça encalhada no fim da estação.</p>
-      <p class="ed__texto">Por isso a sua leva de ${C.entrega.min} a ${C.entrega.max} dias corridos para chegar em casa. Frete grátis a partir de ${brl(S.freteGratisAPartir)}. ${TROCA_TXT}.</p>
+      <p class="ed__texto">Por isso a sua leva de ${C.entrega.min} a ${C.entrega.max} dias corridos para chegar em casa. Frete fixo de ${brl(S.frete)} para todo o Brasil. ${TROCA_TXT}.</p>
     </div>`;
 
   /* ---------- Sungas: coleção (/sungas/) ----------
@@ -821,7 +815,7 @@
       $("[data-steps]").innerHTML = [
         { t: "Pedido", d: "Qualquer dia", p: "Você escolhe a estampa e o tamanho. A compra das camisetas fica aberta o mês todo." },
         { t: "Produção", d: "Depois do pedido", p: "A gente estampa e costura a sua camiseta. Nenhuma fica pronta esperando dono." },
-        { t: "Entrega", d: `Em ${prazoCam}`, p: `Enviamos para todo o Brasil, com frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
+        { t: "Entrega", d: `Em ${prazoCam}`, p: `Enviamos para todo o Brasil, com frete fixo de ${brl(S.frete)}.` }
       ].map((s, k) => `
         <li class="step">
           <span class="idx">${num(k)} · ${s.t}</span>
@@ -836,7 +830,7 @@
       const passos = [
         { t: "Encomenda", d: J.periodo, p: `A safra fica aberta por ${EXTENSO[J.diasJanela] || J.diasJanela} dias. Você escolhe a estampa e o tamanho e garante a sua.` },
         { t: "Produção", d: `a partir de ${J.longa(J.producao)}`, p: "Quando a janela fecha, a gente corta e costura só o que foi encomendado." },
-        { t: "Entrega", d: `até ${J.longa(J.entrega)}`, p: `A sunga chega em casa em até ${J.entregaDias} dias úteis depois do fechamento. Frete grátis a partir de ${brl(S.freteGratisAPartir)}.` }
+        { t: "Entrega", d: `até ${J.longa(J.entrega)}`, p: `A sunga chega em casa em até ${J.entregaDias} dias úteis depois do fechamento. Frete fixo de ${brl(S.frete)}.` }
       ];
       $("[data-steps]").innerHTML = passos.map((s, k) => `
         <li class="step${J.aberta && k === 0 ? " is-now" : ""}">
@@ -938,7 +932,7 @@
           : EMBREVE
             ? `<div class="info__notify">${avisoForm("aviso-pdp", p.slug)}</div>`
             : `<button class="btn btn--full" data-notify-open>Avise-me quando abrir <span>→</span></button><div class="info__notify" data-notify-box hidden>${avisoForm("aviso-pdp", p.slug)}</div>`}
-        <p class="info__perks">Frete grátis a partir de ${brl(S.freteGratisAPartir)}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
+        <p class="info__perks">Frete fixo de ${brl(S.frete)} para todo o Brasil. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
       </div>
       <div class="acc">
         <details open>
@@ -950,7 +944,7 @@
           <div class="acc__body">
             <p>${EMBREVE ? "Quando as sungas chegarem, cada uma será feita depois do pedido." : `Esta sunga é feita depois do seu pedido. As encomendas ficam abertas do dia ${S.janela.diaInicio} ao dia ${S.janela.diaFim} de cada mês; quando a janela fecha, a produção começa e a entrega chega em até ${J.entregaDias} dias úteis.`}</p>
             <p>A gente só produz o que foi pedido, então não sobra estoque.</p>
-            <p>Enviamos para todo o Brasil, com frete grátis a partir de ${brl(S.freteGratisAPartir)}. ${TROCA_TXT} e com etiqueta.</p>
+            <p>Enviamos para todo o Brasil, com frete fixo de ${brl(S.frete)}. ${TROCA_TXT} e com etiqueta.</p>
           </div>
         </details>
         <details>
