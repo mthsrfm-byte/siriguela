@@ -8,7 +8,7 @@ globalThis.SIRIGUELA = {
   sungasEmBreve: true,
   preco: 279.90,
   parcelas: 3,
-  freteGratisAPartir: 399.90,
+  frete: 19.90,       // frete fixo para todo o Brasil, cobrado no pagamento
   cupom: { codigo: "SIRIGUELA10", desconto: 0.10, regra: "Válido na primeira compra. Conferido no pagamento." },
   /* Quem vende: aparece no rodapé, em /contato/ e nas políticas (Decreto 7.962/2013 pede razão social, CNPJ,
      endereço e contato no site). Campo vazio não aparece. Preencha antes de rodar anúncio. */

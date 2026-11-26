@@ -95,7 +95,7 @@ Para o deploy, o secret `CLOUDFLARE_API_TOKEN` precisa estar no GitHub (veja o `
 
 - Preencha `camisetas.ficha` em `assets/js/produtos.js`: tecido, técnica, cuidados e a tabela de medidas real das amostras.
 - Se o prazo real não couber em 7 a 15 dias corridos, mude em `camisetas.entrega` e no `CLAUDE.md`, com o OK do Matheus.
-- Na Nextout, em Fretes, use o frete manual: grátis a partir de R$ 399,90 e, abaixo disso, o valor que a Dimona cobra.
+- Na Nextout, em Fretes, use o frete manual com valor fixo de R$ 19,90 para todo o Brasil, sem frete grátis.
 - Faça uma compra real do começo ao fim:
   1. pague com Pix;
   2. confira o webhook;
