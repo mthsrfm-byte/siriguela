@@ -29,7 +29,8 @@ Revisão feita em 25/11/2026. O site no ar já tem: as 9 camisetas com hero reco
 ## Infraestrutura
 
 13. **Deploy dos Workers**: a Action "Workers" falha desde o começo porque falta o secret `CLOUDFLARE_API_TOKEN` no GitHub (Settings → Secrets and variables → Actions). Sem ele, mudança no catálogo não chega ao checkout.
-14. **Pedido automático no fornecedor**: depois de escolher o fornecedor, um Worker novo recebe o webhook `pedido.pago` da Nextout e cria o pedido na API dele. A documentação da Nextout diz que checkout criado pela API ainda não dispara webhook, então confirme com o suporte dela (WhatsApp na página de documentação). Se não disparar, os primeiros pedidos passam à mão do painel da Nextout para o do fornecedor.
+14. **Deploy do site**: desde 24/11/2026 o siriguela.site não atualiza. Produção ainda serve o PR #26, porque o build "Workers Builds: siriguela" da Cloudflare falha na hora, sem rodar. Confira o motivo em Cloudflare → Workers → siriguela → Builds. Até lá, os PRs #27 em diante (arquivos de impressão, cabeçalhos de segurança, sacola) ficam fora do ar.
+15. **Pedido automático no fornecedor**: depois de escolher o fornecedor, um Worker novo recebe o webhook `pedido.pago` da Nextout e cria o pedido na API dele. A documentação da Nextout diz que checkout criado pela API ainda não dispara webhook, então confirme com o suporte dela (WhatsApp na página de documentação). Se não disparar, os primeiros pedidos passam à mão do painel da Nextout para o do fornecedor.
 
 ## Antes do primeiro real gasto em anúncio
 
