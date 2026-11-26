@@ -43,7 +43,10 @@ export default {
     if (Number(req.headers.get("Content-Length")) > 2048) return json(false, 413);
     const limited = await env.LIMITE.limit({ key: req.headers.get("CF-Connecting-IP") || "unknown" });
     if (!limited.success) return json(false, 429);
-    const data = await req.json().catch(() => null);
+    const texto = await req.text().catch(() => "");
+    if (texto.length > 2048) return json(false, 413);
+    let data = null;
+    try { data = JSON.parse(texto); } catch {}
     const email = typeof data?.email === "string" ? data.email.trim().toLowerCase() : "";
     if (email.length > 254 || !/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(email)) return json(false, 400);
     const slug = data.produto;
@@ -66,6 +69,16 @@ export default {
       const campo = aberta ? "avisado_em" : "confirmado_em";
       const claim = await env.DB.prepare(`UPDATE avisos SET tentar_apos = unixepoch()+900 WHERE id=? AND ${campo} IS NULL AND tentar_apos<=unixepoch()`).bind(item.id).run();
       if (!claim.meta.changes) continue;
+      // Quem cadastra o e-mail de outra pessoa em várias peças não lota a caixa dela:
+      // a confirmação sai uma vez por endereço a cada 24 h; as outras ficam marcadas sem envio.
+      if (!aberta) {
+        const recente = await env.DB.prepare(`SELECT 1 FROM avisos WHERE email=? AND id<>?
+          AND confirmado_em > datetime('now','-1 day') LIMIT 1`).bind(item.email, item.id).first();
+        if (recente) {
+          await env.DB.prepare("UPDATE avisos SET confirmado_em=CURRENT_TIMESTAMP, tentar_apos=0 WHERE id=?").bind(item.id).run();
+          continue;
+        }
+      }
       const nome = catalogo.produtos.find(p => p.slug === item.produto)?.nome;
       try {
         await env.EMAIL.send({ from: { email: "ola@siriguela.site", name: "siriguela" }, to: item.email, ...mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto)) });
