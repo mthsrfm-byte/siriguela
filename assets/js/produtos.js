@@ -180,16 +180,17 @@ globalThis.SIRIGUELA = {
       cuidados: "",
       medidas: null
     },
+    /* esgotada: true tira a camiseta de venda (card "Esgotada", no fim da lista). Tire a flag quando o fornecedor voltar a produzir. */
     itens: [
       { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Um painel azul no fim da tarde.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola", outra: { f: "de-cima", pose: "deitado", quem: "h" } },
+      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Arraial de junho, depois que escurece.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe", outra: { f: "banco", pose: "sentado-cubo", quem: "m" } },
+      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Sol baixo batendo no concreto.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe", outra: { f: "vao", pose: "apoiado", quem: "m" } },
       { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Um quebra-cabeça de madeira no chão da sala.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe", outra: { f: "nuca", pose: "meio-corpo", quem: "m" } },
       { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curvas azuis debaixo da abóbada.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe", outra: { f: "cubo", pose: "sentado-cubo", quem: "h" } },
-      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Sol baixo batendo no concreto.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe", outra: { f: "vao", pose: "apoiado", quem: "m" } },
-      { slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Roda de ciranda na beira do mar.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe", outra: { f: "chao", pose: "sentado-chao", quem: "h" } },
-      { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Arraial de junho, depois que escurece.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe", outra: { f: "banco", pose: "sentado-cubo", quem: "m" } },
-      { slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Escadaria pintada, vista lá de cima.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe", outra: { f: "bloco", pose: "pe-no-degrau", quem: "h" } },
-      { slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Sombra de folha num muro verde.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true, outra: { f: "sombra-samir", pose: "perfil", quem: "h" } },
-      { slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "Vento forte na duna, céu limpo.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola", outra: { f: "giro", pose: "em-pe", quem: "m" } }
+      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Roda de ciranda na beira do mar.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe", outra: { f: "chao", pose: "sentado-chao", quem: "h" } },
+      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Escadaria pintada, vista lá de cima.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe", outra: { f: "bloco", pose: "pe-no-degrau", quem: "h" } },
+      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Sombra de folha num muro verde.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true, outra: { f: "sombra-samir", pose: "perfil", quem: "h" } },
+      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "Vento forte na duna, céu limpo.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola", outra: { f: "giro", pose: "em-pe", quem: "m" } }
     ]
   }
 };

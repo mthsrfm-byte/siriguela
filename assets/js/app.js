@@ -490,7 +490,7 @@
       const corte = z ? ` style="transform: scale(${z}); transform-origin: 50% ${y || "40%"}"` : "";
       return `<img class="${cls}" ${camFoto(c, f, tam)} alt="${alt}" loading="lazy"${corte}>`;
     };
-    return `<a class="card card--cam ${cls} r${r}" href="${urlCam(c)}" style="--piso:${c.piso}">
+    return `<a class="card card--cam ${cls} r${r}${c.esgotada ? " card--esgotada" : ""}" href="${urlCam(c)}" style="--piso:${c.piso}">
       <div class="card__media">
         <div class="flip" data-flip>
           ${img(fotos[0], "flip__f", `Camiseta ${c.nome} no corpo`)}
@@ -499,7 +499,7 @@
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, tam)} alt="" loading="lazy"></div>
       </div>
       <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(C.preco)}</span></div>
-      <div class="card__sub"><span>${c.cor}</span><span class="idx">Chega em ${C.entrega.min} a ${C.entrega.max} dias</span></div>
+      <div class="card__sub"><span>${c.cor}</span><span class="idx">${c.esgotada ? "Esgotada" : `Chega em ${C.entrega.min} a ${C.entrega.max} dias`}</span></div>
     </a>`;
   };
 
@@ -666,6 +666,10 @@
         <button class="btn" data-add>Comprar <span>→</span></button>
       </div>`);
     document.body.classList.add("com-compra-fixa");
+    if (c.esgotada) {
+      $$("[data-add]").forEach((b) => { b.disabled = true; b.textContent = "Esgotada"; });
+      $("[data-msg]").textContent = "Esta estampa está esgotada. Veja as outras camisetas.";
+    }
 
     let size = null;
     const avisa = (txt, erro) => {
