@@ -55,7 +55,7 @@ Alguém que esteve lá e conta o que viu, sem pressa. Usa "a gente", trata quem 
 - **Camisetas:** R$ 159,90, tamanhos P a GG, sob encomenda, chegam em 7 a 15 dias corridos.
 - **Sungas:** R$ 279,90, em breve (`sungasEmBreve` em `assets/js/produtos.js`). A coleção fica em `/sungas/` e cada sunga pede o e-mail para avisar quando chegar. Enquanto estiverem em breve, não fale em safra, janela ou data de encomenda.
 - **Troca e devolução:** em até 7 dias corridos, com a peça sem uso.
-- **Frete:** grátis a partir de R$ 399,90.
+- **Frete:** fixo de R$ 19,90 para todo o Brasil, em todo pedido. Não tem frete grátis.
 - **Primeira compra:** 10% com SIRIGUELA10, conferido no pagamento.
 - Para explicar o "sob encomenda", diga o que acontece: a gente só estampa e costura depois do pedido, então não sobra estoque. Não use "sustentável" sozinho como argumento.
 

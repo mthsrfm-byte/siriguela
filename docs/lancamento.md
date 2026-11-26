@@ -8,7 +8,7 @@ Revisão feita em 25/11/2026. O site no ar já tem: as 9 camisetas com hero reco
    - Domínio de checkout não cadastrado: Painel Nextout → Domínio → `checkout.siriguela.site`, e o CNAME `cname.vercel-dns.com` no Cloudflare (DNS only, nuvem cinza).
    - Chave inválida: Painel → Produtos → Integração via API → gerar uma chave `nx_sk_` nova e colar no Cloudflare em Workers → `siriguela-checkout` → Settings → Variables → secret `NEXTOUT_KEY`.
    - Depois: conectar o gateway (Integrações → pagou.ai) e fazer uma compra de teste de ponta a ponta, com Pix.
-2. **Frete na Nextout.** Em Fretes, escolher "Frete manual" e criar as faixas: grátis a partir de R$ 399,90 e o valor do fornecedor abaixo disso. Quem envia é o fornecedor, então o "Next Envios" não serve aqui.
+2. **Frete na Nextout.** Em Fretes, escolher "Frete manual" com valor fixo de R$ 19,90 para todo o Brasil, em todo pedido, sem frete grátis. Quem envia é o fornecedor, então o "Next Envios" não serve aqui.
 3. **Fornecedor de produção** (ver `docs/configurar-fornecedor.md`). Sem ele, uma venda não vira camiseta.
 4. **Dados da empresa** em `assets/js/produtos.js` → `empresa`: razão social, CNPJ, endereço. O Decreto 7.962/2013 pede isso no site. Aparecem sozinhos no rodapé e nas páginas de ajuda.
 
@@ -36,4 +36,4 @@ Revisão feita em 25/11/2026. O site no ar já tem: as 9 camisetas com hero reco
 
 - Compra de teste paga de verdade, recebida em casa, conferindo estampa, cor, tamanho e prazo.
 - Trocar o prazo do site (7 a 15 dias corridos) se o do fornecedor for outro.
-- Rever a margem: preço R$ 159,90, menos custo da peça, frete subsidiado, taxa do gateway e cupom de 10%.
+- Rever a margem: preço R$ 159,90, menos custo da peça, diferença entre o frete fixo de R$ 19,90 e o custo real do envio, taxa do gateway e cupom de 10%.
