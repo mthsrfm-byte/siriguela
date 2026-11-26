@@ -768,3 +768,7 @@ body:has(.compra-fixa.is-on) .cookies { bottom: calc(150px + env(safe-area-inset
 .ajuda dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 24px; margin: 0; }
 .ajuda dt { font-family: var(--f-mono); font-size: var(--t-idx); text-transform: uppercase; letter-spacing: .06em; color: var(--faint); padding-top: 3px; }
 .ajuda dd { margin: 0; }
+
+/* camiseta esgotada: card apagado no fim da lista */
+.card--esgotada .card__media { opacity: .45; filter: grayscale(.6); }
+.card--esgotada .card__sub .idx { color: var(--ink, inherit); }
