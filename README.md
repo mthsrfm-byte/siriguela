@@ -44,6 +44,12 @@ Abra http://localhost:5190
 - UTMs e `fbclid`/`gclid` seguem do anúncio até a URL do pagamento.
 - `sitemap.xml`, `robots.txt` e `404.html` na raiz.
 
+## Segurança
+
+- `_headers`: cabeçalhos do Cloudflare Pages (CSP, nosniff, sem iframe de fora, HSTS). A CSP libera os `<script>` em linha pelo hash: página nova com script em linha precisa do hash lá. `node scripts/conferir-csp.mjs` confere (roda também na Action Conferir).
+- Checkout: o worker recalcula o preço pelo catálogo, aceita até 20 peças iguais por linha e só atende o próprio site (Origin). A sacola descarta item com tamanho ou quantidade fora do catálogo.
+- Lista de aviso: a confirmação sai no máximo uma vez a cada 24 h por e-mail, mesmo com várias peças cadastradas.
+
 ## Deploy dos workers
 
 O site sai sozinho pelo GitHub Pages. Os workers da Cloudflare (`checkout/` e `avisos/`) saem pela Action `.github/workflows/workers.yml`, que roda a cada push na `main` que mexa neles ou em `assets/js/produtos.js` (e à mão em Actions → Workers → Run workflow). Ela precisa do secret `CLOUDFLARE_API_TOKEN` no repositório, com permissão "Edit Cloudflare Workers"; se o token enxergar mais de uma conta, também de `CLOUDFLARE_ACCOUNT_ID`.

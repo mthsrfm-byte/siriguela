@@ -256,19 +256,27 @@
 
   /* ---------- Sacola ---------- */
   const KEY = "siriguela.sacola";
+  /* o mesmo teto do checkout (checkout/worker.mjs, MAX_POR_LINHA) */
+  const MAX_POR_LINHA = 20;
+  /* a sacola vem do localStorage: só passa item com tamanho do catálogo e quantidade inteira */
+  const itemValido = (i) => !!i && typeof i === "object" && !!peca(i) &&
+    (i.tipo === "camiseta" ? C.tamanhos : S.tamanhos).includes(i.size) &&
+    Number.isInteger(i.qty) && i.qty >= 1 && i.qty <= MAX_POR_LINHA;
   const bag = {
-    get() { return store.get(KEY, []) || []; },
+    get() { const v = store.get(KEY, []); return Array.isArray(v) ? v.filter(itemValido) : []; },
     set(items) { store.set(KEY, items); render(); },
     add(slug, size, tipo) {
       const items = bag.get();
       const hit = items.find((i) => i.slug === slug && i.size === size && (i.tipo || "sunga") === (tipo || "sunga"));
+      if (hit && hit.qty >= MAX_POR_LINHA) { toast(`Até ${MAX_POR_LINHA} peças iguais por pedido.`); return; }
       hit ? hit.qty++ : items.push(tipo === "camiseta" ? { slug, size, qty: 1, tipo } : { slug, size, qty: 1 });
       bag.set(items);
       evento("AddToCart", { content_ids: [`${tipo || "sunga"}-${slug}-${size}`], content_type: "product", value: tipo === "camiseta" ? C.preco : S.preco, currency: "BRL" });
     },
     qty(idx, d) {
       const items = bag.get();
-      items[idx].qty += d;
+      if (!items[idx]) return;
+      items[idx].qty = Math.min(items[idx].qty + d, MAX_POR_LINHA);
       if (items[idx].qty < 1) items.splice(idx, 1);
       bag.set(items);
     },
@@ -281,7 +289,7 @@
   };
 
   function render() {
-    const items = bag.get().filter((i) => peca(i));
+    const items = bag.get();
     const count = items.reduce((n, i) => n + i.qty, 0);
     $$("[data-count]").forEach((b) => { b.textContent = `(${count})`; b.classList.toggle("has", !!count); });
 
@@ -297,8 +305,8 @@
     }
     const temSunga = items.some((i) => peca(i).tipo === "sunga");
     const temCam = items.some((i) => peca(i).tipo === "camiseta");
-    list.innerHTML = `<p class="bag__safra idx">Sob encomenda${temSunga && !EMBREVE ? ` · ${J.safra}` : ""}</p>` + items.map((i) => {
-      const x = peca(i), idx = bag.get().indexOf(bag.get().find((b) => b.slug === i.slug && b.size === i.size && (b.tipo || "sunga") === (i.tipo || "sunga")));
+    list.innerHTML = `<p class="bag__safra idx">Sob encomenda${temSunga && !EMBREVE ? ` · ${J.safra}` : ""}</p>` + items.map((i, idx) => {
+      const x = peca(i);
       return `<div class="line">
         <a href="${x.url}"><img ${x.thumb} alt="${x.tipo === "sunga" ? "Sunga " : ""}${x.nome}"></a>
         <div>

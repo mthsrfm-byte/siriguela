@@ -2,6 +2,9 @@ import "../assets/js/produtos.js";
 
 const catalogo = globalThis.SIRIGUELA;
 const origem = "https://siriguela.site";
+/* teto de peças iguais por linha da sacola (o mesmo de MAX_POR_LINHA em assets/js/app.js) */
+const MAX_POR_LINHA = 20;
+const MAX_CORPO = 16384;
 const diaBrasilia = new Intl.DateTimeFormat("en-US", { timeZone: "America/Sao_Paulo", day: "numeric" });
 
 function responder(status, dados) {
@@ -15,10 +18,14 @@ export default {
     if (req.headers.get("Origin") !== origem) return responder(403, {});
     if (!env.NEXTOUT_KEY) return responder(503, { erro: "Pagamento indisponível por enquanto. Sua sacola está salva." });
     if (!req.headers.get("Content-Type")?.startsWith("application/json")) return responder(415, {});
-    if (Number(req.headers.get("Content-Length")) > 16384) return responder(413, {});
+    if (Number(req.headers.get("Content-Length")) > MAX_CORPO) return responder(413, {});
     const { success } = await env.LIMITE.limit({ key: req.headers.get("CF-Connecting-IP") || "local" });
     if (!success) return responder(429, { erro: "Aguarde um minuto e tente novamente." });
-    const body = await req.json().catch(() => null);
+    /* o Content-Length pode faltar (envio em partes): o limite vale para o corpo lido */
+    const texto = await req.text().catch(() => "");
+    if (texto.length > MAX_CORPO) return responder(413, {});
+    let body = null;
+    try { body = JSON.parse(texto); } catch {}
     if (!Array.isArray(body?.items) || !body.items.length || body.items.length > 50) {
       return responder(400, { erro: "Confira os itens da sua sacola." });
     }
@@ -31,8 +38,7 @@ export default {
       const produto = camiseta ? camisetas.itens.find(c => c.slug === item?.slug) : catalogo.produtos.find(p => p.slug === item?.slug);
       const preco = camiseta ? camisetas.preco : catalogo.preco;
       const tamanhos = camiseta ? camisetas.tamanhos : catalogo.tamanhos;
-      if (!produto || !tamanhos.includes(item.size) || !Number.isSafeInteger(item.qty) || item.qty < 1 ||
-          !Number.isSafeInteger(item.qty * Math.round(preco * 100))) {
+      if (!produto || !tamanhos.includes(item.size) || !Number.isSafeInteger(item.qty) || item.qty < 1 || item.qty > MAX_POR_LINHA) {
         return responder(400, { erro: "Confira o tamanho e a quantidade de cada peça." });
       }
       const tipo = camiseta ? "Camiseta" : "Sunga";
