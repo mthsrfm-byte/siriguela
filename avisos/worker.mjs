@@ -81,7 +81,7 @@ export default {
       }
       const nome = catalogo.produtos.find(p => p.slug === item.produto)?.nome;
       try {
-        await env.EMAIL.send({ from: { email: "ola@siriguela.site", name: "siriguela" }, to: item.email, ...mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto)) });
+        await env.EMAIL.send({ from: { email: "suporte@siriguela.site", name: "siriguela" }, to: item.email, ...mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto)) });
       } catch {
         console.error("Falha no envio do aviso", item.id);
         continue;

@@ -17,7 +17,7 @@ globalThis.SIRIGUELA = {
     razao: "",          // razão social, como está no CNPJ
     cnpj: "30.662.436/0001-07",
     endereco: "",       // rua, número, bairro, cidade/UF, CEP
-    email: "ola@siriguela.site",
+    email: "suporte@siriguela.site",
     whatsapp: "",       // só números com DDD, ex.: 11999998888
     telefone: "11945688442",                          // suporte, só números com DDD; o link abre o WhatsApp
     atendimento: "Segunda a sexta, das 10h às 19h"    // horário do telefone

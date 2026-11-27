@@ -163,6 +163,7 @@
             <a href="trocas/">Trocas e devoluções</a>
             <a href="privacidade/">Privacidade</a>
             <a href="contato/">Contato</a>
+            ${E.email ? `<a href="mailto:${E.email}">${E.email}</a>` : ""}
             ${E.telefone ? `<a href="https://wa.me/55${E.telefone}" target="_blank" rel="noopener">WhatsApp ${telFmt(E.telefone)}</a>${E.atendimento ? `<span class="foot__hora mono mute">${E.atendimento}</span>` : ""}` : ""}
           </div>
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->

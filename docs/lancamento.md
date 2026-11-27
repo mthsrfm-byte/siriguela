@@ -21,7 +21,7 @@ Revisão feita em 25/11/2026. O site no ar já tem: as 9 camisetas com hero reco
 
 ## Necessário para atender o cliente
 
-9. **E-mail `ola@siriguela.site`** recebendo: Cloudflare → Email → Email Routing → encaminhar para o seu e-mail pessoal. O site inteiro manda as pessoas escreverem para ele.
+9. **E-mail `suporte@siriguela.site`** recebendo: Cloudflare → Email → Email Routing → encaminhar para o seu e-mail pessoal. O site inteiro manda as pessoas escreverem para ele.
 10. **Ficha técnica** em `produtos.js` → `camisetas.ficha`: tecido, estampa, cuidados e tabela de medidas, com os números do fornecedor escolhido. Enquanto estiver vazia, a seção não aparece.
 11. **Instagram no rodapé**: quando o perfil existir, a coluna "Siga" volta em `assets/js/app.js` (está comentada em `chrome()`).
 12. **WhatsApp** (opcional) em `empresa.whatsapp`.
