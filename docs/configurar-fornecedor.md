@@ -5,7 +5,7 @@ Instruções para o Claude Code. Abra o Chrome junto com o Matheus (Claude in Ch
 ## Contexto
 
 - Repositório `mthsrfm-byte/siriguela`. Site estático em `siriguela.site`. Leia o `CLAUDE.md` (tom de voz e regras da loja) e o `docs/lancamento.md` antes de começar.
-- 9 camisetas: Azulejo, Encaixe, Meia-lua, Blocos, Ciranda, Bandeirinhas, Degraus, Jardim e Catavento. Preço de R$ 159,90. Tamanhos de P a GG, modelagem ampla. O site promete entrega em 7 a 15 dias corridos.
+- 9 camisetas: Azulejo, Encaixe, Meia-lua, Blocos, Ciranda, Bandeirinhas, Degraus, Jardim e Catavento. Preço de R$ 199,00 (a Blocos, R$ 189,00). Tamanhos de P a GG, modelagem ampla. O site promete entrega em 7 a 15 dias corridos.
 - Cor da malha de cada uma em `assets/js/produtos.js` (`camisetas.itens[].cor`): branca, off-white, preta, azul-marinho, azul-petróleo e terracota.
 - Arte vetorial de cada estampa em `assets/camisetas/<slug>/estampa.svg`. Nas camisetas escuras, o SVG tem um `<rect>` de fundo na cor do tecido, que precisa sair na arte de impressão.
 - O pagamento é na Nextout. Quando o pedido é pago, a Nextout manda o webhook `pedido.pago`, com cliente, endereço e produtos. O formato está em `https://nextout.com.br/docs#webhooks`. Cada item chega com o nome no formato `Camiseta Jardim · tamanho M`.

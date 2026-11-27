@@ -18,6 +18,8 @@
   const bySlug = (slug) => S.produtos.find((p) => p.slug === slug);
   /* endereço da página de cada sunga: /colecao1/sunga/<slug>/ (gerado por scripts/gerar-paginas.py) */
   const urlDe = (p) => `colecao1/sunga/${p.slug}/`;
+  const precoCam = (c) => (c && c.preco) || C.preco;                 // preço da camiseta: o dela, ou o padrão
+  const precoMin = () => Math.min(...C.itens.filter((c) => !c.esgotada).map(precoCam));
   const parcela = (v) => brl(Math.floor((v / S.parcelas) * 100) / 100);
   /* sungas em breve (S.sungasEmBreve): sem venda, só lista de aviso; a janela da safra fica guardada para quando voltarem */
   const EMBREVE = !!S.sungasEmBreve;
@@ -34,7 +36,7 @@
   const peca = (i) => {
     if (i.tipo === "camiseta") {
       const c = camBySlug(i.slug);
-      return c && { tipo: "camiseta", nome: `Camiseta ${c.nome}`, preco: C.preco, url: urlCam(c), thumb: `src="assets/camisetas/${c.slug}/email-1x1.jpg"` };
+      return c && { tipo: "camiseta", nome: `Camiseta ${c.nome}`, preco: precoCam(c), url: urlCam(c), thumb: `src="assets/camisetas/${c.slug}/email-1x1.jpg"` };
     }
     const p = bySlug(i.slug);
     return p && { tipo: "sunga", nome: p.nome, preco: S.preco, url: urlDe(p), thumb: pic(img(p, "frente"), "120px") };
@@ -271,7 +273,7 @@
       if (hit && hit.qty >= MAX_POR_LINHA) { toast(`Até ${MAX_POR_LINHA} peças iguais por pedido.`); return; }
       hit ? hit.qty++ : items.push(tipo === "camiseta" ? { slug, size, qty: 1, tipo } : { slug, size, qty: 1 });
       bag.set(items);
-      evento("AddToCart", { content_ids: [`${tipo || "sunga"}-${slug}-${size}`], content_type: "product", value: tipo === "camiseta" ? C.preco : S.preco, currency: "BRL" });
+      evento("AddToCart", { content_ids: [`${tipo || "sunga"}-${slug}-${size}`], content_type: "product", value: tipo === "camiseta" ? precoCam(C.itens.find((c) => c.slug === slug)) : S.preco, currency: "BRL" });
     },
     qty(idx, d) {
       const items = bag.get();
@@ -492,7 +494,7 @@
         </div>
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, tam)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(C.preco)}</span></div>
+      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(precoCam(c))}</span></div>
       <div class="card__sub"><span>${c.cor}</span><span class="idx">${c.esgotada ? "Esgotada" : `Chega em ${C.entrega.min} a ${C.entrega.max} dias`}</span></div>
     </a>`;
   };
@@ -518,7 +520,7 @@
         <img class="slide__foto" ${camFoto(c, c.outra.f, TAM_SLIDE)} alt="Camiseta ${c.nome} no corpo" loading="lazy">
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, TAM_SLIDE)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(C.preco)}</span></div>
+      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(precoCam(c))}</span></div>
       <div class="card__sub"><span>${c.cor}</span></div>
     </a>`;
   const slideSunga = (p) => `<a class="card slide" href="${urlDe(p)}" style="--piso:${p.piso || "var(--soft)"}">
@@ -633,7 +635,7 @@
       outras.innerHTML = `
         <header class="block__head">
           <h2 class="block__title">Outras camisetas</h2>
-          <span class="idx">${lista.length} estampas · ${brl(C.preco)}</span>
+          <span class="idx">${lista.length} estampas · a partir de ${brl(precoMin())}</span>
         </header>
         ${slider(lista.map(slideCam).join(""))}`;
       sliders();
@@ -643,7 +645,7 @@
     </div>`;
     const box = $("[data-compra]");
     box.innerHTML = `
-      <div class="info__price"><strong>${brl(C.preco)}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(C.preco)} sem juros</span></div>
+      <div class="info__price"><strong>${brl(precoCam(c))}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(precoCam(c))} sem juros</span></div>
       <div class="picker" data-picker>
         <div class="picker__head mono"><span>Tamanho</span><span class="mute">Modelagem ampla</span></div>
         ${tamanhos()}
@@ -652,10 +654,10 @@
         <p class="info__perks">Sob encomenda: chega em ${prazoCam}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
       </div>
       ${fichaCam()}`;
-    evento("ViewContent", { content_ids: [`camiseta-${c.slug}`], content_name: `Camiseta ${c.nome}`, content_type: "product", value: C.preco, currency: "BRL" });
+    evento("ViewContent", { content_ids: [`camiseta-${c.slug}`], content_name: `Camiseta ${c.nome}`, content_type: "product", value: precoCam(c), currency: "BRL" });
     document.body.insertAdjacentHTML("beforeend", `
       <div class="compra-fixa" data-compra-fixa>
-        <div class="compra-fixa__nome"><span>${c.nome}</span><span class="mono mute">${brl(C.preco)}</span></div>
+        <div class="compra-fixa__nome"><span>${c.nome}</span><span class="mono mute">${brl(precoCam(c))}</span></div>
         ${tamanhos()}
         <button class="btn" data-add>Comprar <span>→</span></button>
       </div>`);
@@ -812,7 +814,7 @@
     if (EMBREVE) {
       /* sungas em breve: o topo e o "Como funciona?" falam das camisetas */
       $("[data-safra-nome]").textContent = "Camisetas sob encomenda";
-      $("[data-safra-datas]").textContent = brl(C.preco);
+      $("[data-safra-datas]").textContent = "A partir de " + brl(precoMin());
       $("[data-janela-status]").textContent = `Camisetas · ${prazoCam}`;
       $("[data-steps]").innerHTML = [
         { t: "Pedido", d: "Qualquer dia", p: "Você escolhe a estampa e o tamanho. A compra das camisetas fica aberta o mês todo." },

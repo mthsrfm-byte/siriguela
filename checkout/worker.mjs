@@ -36,7 +36,7 @@ export default {
       /* camiseta: venda contínua; sunga: só na janela da safra */
       const camiseta = item?.tipo === "camiseta";
       const produto = camiseta ? camisetas.itens.find(c => c.slug === item?.slug) : catalogo.produtos.find(p => p.slug === item?.slug);
-      const preco = camiseta ? camisetas.preco : catalogo.preco;
+      const preco = camiseta ? (produto?.preco ?? camisetas.preco) : catalogo.preco;  // camiseta com preço próprio usa o dela
       const tamanhos = camiseta ? camisetas.tamanhos : catalogo.tamanhos;
       if (!produto || !tamanhos.includes(item.size) || !Number.isSafeInteger(item.qty) || item.qty < 1 || item.qty > MAX_POR_LINHA) {
         return responder(400, { erro: "Confira o tamanho e a quantidade de cada peça." });

@@ -52,7 +52,7 @@ Alguém que esteve lá e conta o que viu, sem pressa. Usa "a gente", trata quem 
 
 ### Regras da loja (dizer sempre igual)
 
-- **Camisetas:** R$ 159,90, tamanhos P a GG, sob encomenda, chegam em 7 a 15 dias corridos.
+- **Camisetas:** R$ 199,00 (a Blocos, R$ 189,00), tamanhos P a GG, sob encomenda, chegam em 7 a 15 dias corridos.
 - **Sungas:** R$ 279,90, em breve (`sungasEmBreve` em `assets/js/produtos.js`). A coleção fica em `/sungas/` e cada sunga pede o e-mail para avisar quando chegar. Enquanto estiverem em breve, não fale em safra, janela ou data de encomenda.
 - **Troca e devolução:** em até 7 dias corridos, com a peça sem uso.
 - **Frete:** fixo de R$ 19,90 para todo o Brasil, em todo pedido. Não tem frete grátis.
@@ -67,7 +67,7 @@ Alguém que esteve lá e conta o que viu, sem pressa. Usa "a gente", trata quem 
 - **Ensaio:** a chamada diz onde a foto foi feita; o texto descreve o que aparece nela e a luz daquela hora.
 - **Botões:** verbo e objeto, sem ponto ("Comprar a minha", "Ver as camisetas").
 - **Mensagens de erro:** dizem o que houve e o que fazer ("Escolha um tamanho.", "Remova as sungas para comprar as camisetas agora.").
-- **Números:** "R$ 159,90", "7 a 15 dias corridos", "90% poliéster". Por extenso só no meio do texto corrido ("dezesseis módulos").
+- **Números:** "R$ 199,00", "7 a 15 dias corridos", "90% poliéster". Por extenso só no meio do texto corrido ("dezesseis módulos").
 
 ### Antes de publicar texto novo
 
