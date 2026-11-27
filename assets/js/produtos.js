@@ -25,7 +25,7 @@ globalThis.SIRIGUELA = {
   /* Anúncios: com o ID preenchido, o site mostra o aviso de cookies e, depois do "Aceitar",
      carrega o Pixel da Meta e o Google Analytics 4. Vazio, nada é carregado. */
   marketing: {
-    metaPixel: "",      // só números, em Gerenciador de Eventos → Fontes de dados
+    metaPixel: "4044609169009777",      // só números, em Gerenciador de Eventos → Fontes de dados
     ga4: ""             // G-XXXXXXXXXX
   },
   /* Encomenda: a safra abre todo mês do dia 1 ao dia 7 (até 23h59, horário local).
