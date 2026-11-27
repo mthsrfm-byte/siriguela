@@ -72,14 +72,15 @@ export default {
         headers: { Authorization: `Bearer ${env.NEXTOUT_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({ items, utm })
       });
-      if (!resposta.ok) throw new Error(`nextout ${resposta.status}`);
+      if (!resposta.ok) throw new Error(`nextout ${resposta.status}: ${(await resposta.text()).slice(0, 200)}`);
       const { url } = await resposta.json();
       const destino = new URL(url);
       if (!["https://checkout.siriguela.site", "https://nextout.com.br"].includes(destino.origin) || destino.username || destino.password) {
         throw new Error("destino inesperado");
       }
       return responder(200, { url: destino.href });
-    } catch {
+    } catch (e) {
+      console.error("checkout falhou", String(e?.message || e));
       return responder(502, { erro: "Não foi possível abrir o pagamento. Sua sacola está salva. Tente novamente." });
     }
   }
