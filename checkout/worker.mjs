@@ -67,7 +67,7 @@ export default {
       if (typeof body.utm?.[key] === "string") utm[key] = body.utm[key].slice(0, 200);
     }
     try {
-      const resposta = await fetch("https://nextout.com.br/api/checkout", {
+      const resposta = await fetch("https://checkout.siriguela.site/api/checkout", {
         method: "POST", redirect: "error", signal: AbortSignal.timeout(12000),
         headers: { Authorization: `Bearer ${env.NEXTOUT_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({ items, utm })
