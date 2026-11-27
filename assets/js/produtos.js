@@ -15,10 +15,12 @@ globalThis.SIRIGUELA = {
   empresa: {
     nome: "Siriguela",
     razao: "",          // razão social, como está no CNPJ
-    cnpj: "",           // 00.000.000/0000-00
+    cnpj: "30.662.436/0001-07",
     endereco: "",       // rua, número, bairro, cidade/UF, CEP
     email: "ola@siriguela.site",
-    whatsapp: ""        // só números com DDD, ex.: 11999998888
+    whatsapp: "",       // só números com DDD, ex.: 11999998888
+    telefone: "11945688442",                          // suporte, só números com DDD
+    atendimento: "Segunda a sexta, das 10h às 19h"    // horário do telefone
   },
   /* Anúncios: com o ID preenchido, o site mostra o aviso de cookies e, depois do "Aceitar",
      carrega o Pixel da Meta e o Google Analytics 4. Vazio, nada é carregado. */
@@ -178,7 +180,11 @@ globalThis.SIRIGUELA = {
       tecido: "100% algodão, 210 g/m².",
       estampa: "",
       cuidados: "",
-      medidas: null
+      /* medidas em cm, do fornecedor; tolerância de 2 cm para mais ou para menos */
+      medidas: {
+        cabecalho: ["Tamanho", "Tórax", "Barra", "Comprimento"],
+        linhas: [["P", "57", "57", "66"], ["M", "60", "60", "69"], ["G", "63", "63", "72"], ["GG", "66", "66", "75"], ["XXG", "69", "69", "78"]]
+      }
     },
     /* esgotada: true tira a camiseta de venda (card "Esgotada", no fim da lista). Tire a flag quando o fornecedor voltar a produzir. */
     itens: [

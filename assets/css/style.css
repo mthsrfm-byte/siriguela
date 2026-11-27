@@ -314,6 +314,8 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 
 .picker__head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: var(--t-small); }
 .picker__head a { color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
+.picker__medidas { color: var(--ink); font-size: var(--t-small); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.picker__medidas:hover { text-decoration-color: var(--ponto); }
 .picker__opts { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
 .size { height: 46px; font-size: 14px; border: 1px solid var(--line); transition: border-color .2s, background .2s, color .2s; }
 .size:hover { border-color: var(--ink); }
@@ -779,3 +781,43 @@ body:has(.compra-fixa.is-on) .cookies { bottom: calc(150px + env(safe-area-inset
 /* camiseta esgotada: card apagado no fim da lista */
 .card--esgotada .card__media { opacity: .45; filter: grayscale(.6); }
 .card--esgotada .card__sub .idx { color: var(--ink, inherit); }
+
+/* ---------- Especificações e selos da camiseta ---------- */
+.specs-cam__medidas { margin-left: 10px; color: var(--mute); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.specs-cam__medidas:hover { color: var(--ink); }
+.foot__hora { display: block; margin-top: -4px; font-size: var(--t-idx); }
+
+/* ---------- Modal da tabela de medidas ---------- */
+html.is-modal { overflow: hidden; }
+.medidas { padding: 0; border: 0; background: transparent; color: var(--ink); width: min(560px, calc(100vw - 32px)); max-height: calc(100svh - 32px); overflow: visible; }
+.medidas::backdrop { background: rgba(18, 18, 18, .38); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); animation: medidas-fundo .3s ease both; }
+.medidas__box { position: relative; padding: clamp(24px, 4vw, 40px); background: var(--bg); border: 1px solid var(--ink); box-shadow: 0 30px 80px rgba(18, 18, 18, .22); max-height: calc(100svh - 32px); overflow: auto; animation: medidas-entra .42s cubic-bezier(.2, .8, .2, 1) both; }
+.medidas.is-saindo .medidas__box { animation: medidas-sai .22s ease both; }
+.medidas.is-saindo::backdrop { animation: medidas-fundo .22s ease reverse both; }
+.medidas__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--line); color: var(--faint); }
+.medidas__head .idx::before { content: ""; display: inline-block; width: 6px; height: 6px; margin: 0 8px 1px 0; border-radius: 50%; background: var(--ponto); vertical-align: middle; }
+.medidas__x { width: 32px; height: 32px; margin: -6px -8px -6px 0; font-size: 14px; color: var(--ink); transition: transform .25s ease; }
+.medidas__x:hover { transform: rotate(90deg); }
+.medidas__titulo { margin: 26px 0 6px; font-size: var(--t-title); font-weight: var(--w-title); letter-spacing: -0.02em; line-height: 1.05; }
+.medidas__sub { margin: 0 0 22px; font-size: var(--t-small); color: var(--mute); }
+.medidas__scroll { overflow-x: auto; }
+.medidas__tabela { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.medidas__tabela th, .medidas__tabela td { padding: 13px 10px; text-align: center; font-size: 15px; font-weight: 400; }
+.medidas__tabela thead th { padding-top: 0; font-family: var(--f-mono); font-size: var(--t-idx); text-transform: uppercase; letter-spacing: .08em; color: var(--faint); border-bottom: 1px solid var(--ink); }
+.medidas__tabela tbody tr { border-bottom: 1px solid var(--line); transition: background .2s; }
+.medidas__tabela tbody tr:hover { background: var(--surface); }
+.medidas__tabela tbody th { text-align: left; padding-left: 0; font-weight: var(--w-title); }
+.medidas__tabela thead th:first-child { text-align: left; padding-left: 0; }
+.medidas__nota { margin: 18px 0 0; font-size: var(--t-small); color: var(--mute); max-width: 44ch; }
+@keyframes medidas-entra { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
+@keyframes medidas-sai { to { opacity: 0; transform: translateY(10px); } }
+@keyframes medidas-fundo { from { opacity: 0; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .medidas__box, .medidas::backdrop, .medidas.is-saindo .medidas__box { animation: none; } }
+@media (max-width: 560px) {
+  .medidas { width: 100vw; max-width: 100vw; max-height: 92svh; margin: auto 0 0; }
+  .medidas__box { border-width: 1px 0 0; max-height: 92svh; padding-bottom: calc(28px + env(safe-area-inset-bottom)); animation-name: medidas-sobe; }
+  .medidas.is-saindo .medidas__box { animation-name: medidas-desce; }
+  .medidas__tabela th, .medidas__tabela td { padding: 12px 6px; font-size: 14px; }
+}
+@keyframes medidas-sobe { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes medidas-desce { to { transform: translateY(100%); } }

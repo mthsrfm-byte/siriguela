@@ -163,6 +163,7 @@
             <a href="trocas/">Trocas e devoluções</a>
             <a href="privacidade/">Privacidade</a>
             <a href="contato/">Contato</a>
+            ${E.telefone ? `<a href="tel:+55${E.telefone}">${telFmt(E.telefone)}</a>${E.atendimento ? `<span class="foot__hora mono mute">${E.atendimento}</span>` : ""}` : ""}
           </div>
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
         </div>
@@ -196,6 +197,7 @@
 
   /* ---------- Empresa (S.empresa): rodapé e páginas de ajuda ---------- */
   const E = S.empresa || {};
+  const telFmt = (v) => v.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
   const empresaLinha = () => [E.razao || E.nome || "Siriguela", E.cnpj && `CNPJ ${E.cnpj}`].filter(Boolean).join(" · ");
 
   /* ---------- Anúncios (S.marketing): Pixel da Meta e GA4, só depois do "Aceitar" ----------
@@ -537,21 +539,9 @@
      entrega, troca e pagamento valem sempre. */
   const fichaCam = () => {
     const F = C.ficha || {};
-    const medidas = F.medidas && F.medidas.linhas?.length ? `
-        <details id="medidas-cam">
-          <summary>Medidas</summary>
-          <div class="acc__body">
-            <table class="table">
-              <thead><tr>${F.medidas.cabecalho.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
-              <tbody>${F.medidas.linhas.map((l) => `<tr>${l.map((v) => `<td>${v}</td>`).join("")}</tr>`).join("")}</tbody>
-            </table>
-            <p class="mono">Modelagem boxy. Na dúvida entre dois tamanhos, fique com o menor.</p>
-          </div>
-        </details>` : "";
     const tecido = [F.tecido, F.estampa, F.cuidados].filter(Boolean);
     return `
       <div class="acc ficha-cam">
-        ${medidas}
         ${tecido.length ? `<details><summary>Tecido e cuidados</summary><div class="acc__body">${tecido.map((t) => `<p>${t}</p>`).join("")}</div></details>` : ""}
         <details>
           <summary>Entrega, troca e pagamento</summary>
@@ -565,12 +555,49 @@
       </div>`;
   };
 
+  /* Tabela de medidas (C.ficha.medidas) num modal: abre pelos botões [data-medidas] */
+  const temMedidas = () => !!C.ficha?.medidas?.linhas?.length;
+  function medidasModal() {
+    let dlg = $("[data-medidas-dlg]");
+    if (!dlg) {
+      const M = C.ficha.medidas;
+      document.body.insertAdjacentHTML("beforeend", `
+        <dialog class="medidas" data-medidas-dlg aria-labelledby="medidas-titulo" data-lenis-prevent>
+          <div class="medidas__box">
+            <header class="medidas__head">
+              <span class="idx">Camisetas · modelagem boxy</span>
+              <button class="medidas__x" type="button" data-medidas-x aria-label="Fechar">✕</button>
+            </header>
+            <h2 id="medidas-titulo" class="medidas__titulo">Tabela de medidas</h2>
+            <p class="medidas__sub">Medidas em centímetros.</p>
+            <div class="medidas__scroll">
+              <table class="medidas__tabela">
+                <thead><tr>${M.cabecalho.map((h) => `<th scope="col">${h}</th>`).join("")}</tr></thead>
+                <tbody>${M.linhas.map(([t, ...v]) => `<tr><th scope="row">${t}</th>${v.map((x) => `<td>${x}</td>`).join("")}</tr>`).join("")}</tbody>
+              </table>
+            </div>
+            <p class="medidas__nota">Tolerância de 2 cm para mais ou para menos. O corte boxy já veste solto: na dúvida entre dois tamanhos, fique com o menor.</p>
+          </div>
+        </dialog>`);
+      dlg = $("[data-medidas-dlg]");
+      dlg.addEventListener("click", (e) => { if (e.target === dlg || e.target.closest("[data-medidas-x]")) fechaMedidas(dlg); });
+      dlg.addEventListener("cancel", (e) => { e.preventDefault(); fechaMedidas(dlg); });
+    }
+    dlg.showModal();
+    document.documentElement.classList.add("is-modal");
+  }
+  function fechaMedidas(dlg) {
+    dlg.classList.add("is-saindo");
+    setTimeout(() => { dlg.classList.remove("is-saindo"); dlg.close(); document.documentElement.classList.remove("is-modal"); }, 220);
+  }
+  document.addEventListener("click", (e) => { if (e.target.closest("[data-medidas]") && temMedidas()) { e.preventDefault(); medidasModal(); } });
+
   /* especificações da camiseta: corte boxy, malha, tamanhos e os selos do fornecedor */
   const specsCam = () => `
     <dl class="specs-cam">
       <div><dt>Modelagem</dt><dd>Boxy</dd></div>
       <div><dt>Material</dt><dd>100% algodão · 210 g/m²</dd></div>
-      <div><dt>Tamanhos</dt><dd>${C.tamanhos.join(" · ")}</dd></div>
+      <div><dt>Tamanhos</dt><dd>${C.tamanhos.join(" · ")}${temMedidas() ? ` <button class="specs-cam__medidas" type="button" data-medidas>Ver medidas</button>` : ""}</dd></div>
     </dl>
     <p class="boxy-cam">O corte boxy desce reto do ombro à barra, sem acinturar. O ombro cai um pouco no braço e o comprimento para no quadril. A malha de 210 g/m² é encorpada e segura essa forma quadrada no corpo.</p>
     <div class="selos-cam">
@@ -635,7 +662,7 @@
     box.innerHTML = `
       <div class="info__price"><strong>${brl(precoCam(c))}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(precoCam(c))} sem juros</span></div>
       <div class="picker" data-picker>
-        <div class="picker__head mono"><span>Tamanho</span><span class="mute">Modelagem boxy</span></div>
+        <div class="picker__head mono"><span>Tamanho</span>${temMedidas() ? `<button class="picker__medidas" type="button" data-medidas>Tabela de medidas</button>` : `<span class="mute">Modelagem boxy</span>`}</div>
         ${tamanhos()}
         <p class="picker__msg mono mute" data-msg>Escolha o tamanho.</p>
         <button class="btn btn--full" data-add>Comprar a minha <span>→</span></button>
@@ -787,6 +814,7 @@
         return;
       }
       if (k === "email") { el.textContent = v; el.href = `mailto:${v}`; }
+      else if (k === "telefone") { el.textContent = telFmt(v); el.href = `tel:+55${v}`; }
       else if (k === "whatsapp") { el.textContent = v.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3"); el.href = `https://wa.me/55${v}`; }
       else el.textContent = v;
     });
