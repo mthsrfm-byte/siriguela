@@ -15,10 +15,12 @@ globalThis.SIRIGUELA = {
   empresa: {
     nome: "Siriguela",
     razao: "",          // razão social, como está no CNPJ
-    cnpj: "",           // 00.000.000/0000-00
+    cnpj: "30.662.436/0001-07",
     endereco: "",       // rua, número, bairro, cidade/UF, CEP
     email: "ola@siriguela.site",
-    whatsapp: ""        // só números com DDD, ex.: 11999998888
+    whatsapp: "",       // só números com DDD, ex.: 11999998888
+    telefone: "11945688442",                          // suporte, só números com DDD
+    atendimento: "Segunda a sexta, das 10h às 19h"    // horário do telefone
   },
   /* Anúncios: com o ID preenchido, o site mostra o aviso de cookies e, depois do "Aceitar",
      carrega o Pixel da Meta e o Google Analytics 4. Vazio, nada é carregado. */
@@ -168,17 +170,21 @@ globalThis.SIRIGUELA = {
      não deixar duas poses iguais nem o mesmo modelo lado a lado. As sungas têm o mesmo campo, só com a pose. */
   camisetas: {
     preco: 199.00,     // preço padrão; a camiseta com preco próprio usa o dela
-    tamanhos: ["P", "M", "G", "GG"],
+    tamanhos: ["P", "M", "G", "GG", "XXG"],
     entrega: { min: 7, max: 15 },
     /* Ficha técnica que aparece em "Detalhes" na página de cada camiseta. Vem do fornecedor que produz:
        preencha com os dados dele (não invente). Enquanto estiver vazio, a seção não aparece.
        tecido: frase curta, ex.: "100% algodão, fio 30.1 penteado, 180 g/m²"
        medidas: { cabecalho: ["Tamanho", "Largura", "Comprimento"], linhas: [["P", "52 cm", "70 cm"], ...] } */
     ficha: {
-      tecido: "",
+      tecido: "100% algodão, 210 g/m².",
       estampa: "",
       cuidados: "",
-      medidas: null
+      /* medidas em cm, do fornecedor; tolerância de 2 cm para mais ou para menos */
+      medidas: {
+        cabecalho: ["Tamanho", "Tórax", "Barra", "Comprimento"],
+        linhas: [["P", "57", "57", "66"], ["M", "60", "60", "69"], ["G", "63", "63", "72"], ["GG", "66", "66", "75"], ["XXG", "69", "69", "78"]]
+      }
     },
     /* esgotada: true tira a camiseta de venda (card "Esgotada", no fim da lista). Tire a flag quando o fornecedor voltar a produzir. */
     itens: [
@@ -187,10 +193,10 @@ globalThis.SIRIGUELA = {
       { slug: "blocos", preco: 189.00, nome: "Blocos", cor: "Preta", chamada: "Sol baixo batendo no concreto.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe", outra: { f: "vao", pose: "apoiado", quem: "m" } },
       { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Um quebra-cabeça de madeira no chão da sala.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe", outra: { f: "nuca", pose: "meio-corpo", quem: "m" } },
       { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curvas azuis debaixo da abóbada.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe", outra: { f: "cubo", pose: "sentado-cubo", quem: "h" } },
-      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Roda de ciranda na beira do mar.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe", outra: { f: "chao", pose: "sentado-chao", quem: "h" } },
-      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Escadaria pintada, vista lá de cima.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe", outra: { f: "bloco", pose: "pe-no-degrau", quem: "h" } },
-      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Sombra de folha num muro verde.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true, outra: { f: "sombra-samir", pose: "perfil", quem: "h" } },
-      { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "Vento forte na duna, céu limpo.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola", outra: { f: "giro", pose: "em-pe", quem: "m" } }
+      { esgotada: true, esgotados: ["P", "M", "G", "GG", "XXG"], slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Roda de ciranda na beira do mar.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe", outra: { f: "chao", pose: "sentado-chao", quem: "h" } },
+      { esgotada: true, esgotados: ["P", "M", "G", "GG", "XXG"], slug: "degraus", nome: "Degraus", cor: "Azul-petróleo", chamada: "Escadaria pintada, vista lá de cima.", piso: "#C75A4B", takes: ["bloco", "inteira"], perto: ["recorte", "inteira:1.8:28%"], estatica: "detalhe", outra: { f: "bloco", pose: "pe-no-degrau", quem: "h" } },
+      { esgotada: true, esgotados: ["P", "M", "G", "GG", "XXG"], slug: "jardim", nome: "Jardim", cor: "Terracota", chamada: "Sombra de folha num muro verde.", piso: "#1D322B", takes: ["cubo", "sombra-samir"], perto: ["bolsos", "nuca"], estatica: "solta", solta: true, outra: { f: "sombra-samir", pose: "perfil", quem: "h" } },
+      { esgotada: true, esgotados: ["P", "M", "G", "GG", "XXG"], slug: "catavento", nome: "Catavento", cor: "Off-white", chamada: "Vento forte na duna, céu limpo.", piso: "#92651D", takes: ["capa", "caminhada"], perto: ["nuca", "thales:1.9:30%"], estatica: "gola", outra: { f: "giro", pose: "em-pe", quem: "m" } }
     ]
   }
 };

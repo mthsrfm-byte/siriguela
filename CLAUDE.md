@@ -52,7 +52,7 @@ Alguém que esteve lá e conta o que viu, sem pressa. Usa "a gente", trata quem 
 
 ### Regras da loja (dizer sempre igual)
 
-- **Camisetas:** R$ 199,00 (a Blocos sai por R$ 189,00; o preço de cada uma fica em `assets/js/produtos.js`), tamanhos P a GG, sob encomenda, chegam em 7 a 15 dias corridos.
+- **Camisetas:** R$ 199,00 (a Blocos sai por R$ 189,00; o preço de cada uma fica em `assets/js/produtos.js`), tamanhos P a XXG, corte boxy em algodão 210 g/m², sob encomenda, chegam em 7 a 15 dias corridos.
 - **Sungas:** R$ 279,90, em breve (`sungasEmBreve` em `assets/js/produtos.js`). A coleção fica em `/sungas/` e cada sunga pede o e-mail para avisar quando chegar. Enquanto estiverem em breve, não fale em safra, janela ou data de encomenda.
 - **Troca e devolução:** em até 7 dias corridos, com a peça sem uso.
 - **Frete:** fixo de R$ 19,90 para todo o Brasil, em todo pedido. Não tem frete grátis.
