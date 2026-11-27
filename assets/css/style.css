@@ -113,7 +113,8 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero__a img { aspect-ratio: 617 / 407; }
 .hero__b img { aspect-ratio: 3 / 4; }
 .hero figcaption { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; }
-.hero__foot { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); align-items: end; margin: clamp(20px, 3.4vw, 48px) 0 clamp(36px, 4.4vw, 64px); }
+.hero__foot { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); align-items: end; margin: clamp(16px, 2.4vw, 36px) 0 clamp(20px, 2.6vw, 40px); }
+.hero + .block { padding-top: clamp(44px, 6vw, 88px); }
 .hero__title {
   grid-column: 5 / span 8;
   justify-self: end;
