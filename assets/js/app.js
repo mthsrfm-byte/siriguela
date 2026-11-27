@@ -516,8 +516,18 @@
            <p class="bag__note">${temCam ? `As sungas ainda não estão à venda. Remova as sungas para comprar as camisetas agora.` : "Sua sacola fica guardada até lá."}</p>`}`;
   }
 
-  const openBag = () => { document.body.classList.add("is-bag"); $(".bag").setAttribute("aria-hidden", "false"); $(".bag").inert = false; window.siriguelaLenis?.stop(); };
-  const closeBag = () => { document.body.classList.remove("is-bag"); $(".bag").setAttribute("aria-hidden", "true"); $(".bag").inert = true; window.siriguelaLenis?.start(); };
+  let focoAntes = null;
+  const openBag = () => {
+    focoAntes = document.activeElement;
+    document.body.classList.add("is-bag"); $(".bag").setAttribute("aria-hidden", "false"); $(".bag").inert = false; window.siriguelaLenis?.stop();
+    $(".bag [data-close-bag]")?.focus({ preventScroll: true });
+  };
+  const closeBag = () => {
+    const estavaAberta = document.body.classList.contains("is-bag");
+    document.body.classList.remove("is-bag"); $(".bag").setAttribute("aria-hidden", "true"); $(".bag").inert = true; window.siriguelaLenis?.start();
+    if (estavaAberta && focoAntes && focoAntes.isConnected) focoAntes.focus({ preventScroll: true });
+    focoAntes = null;
+  };
 
   let toastT;
   function toast(msg) {
@@ -593,7 +603,15 @@
     else if (t.matches("[data-copy]")) copiar(t.dataset.copy);
     else if (t.matches("[data-checkout]")) finalizar(t);
   });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeBag(); });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    closeBag();
+    if (document.body.classList.contains("is-menu")) {
+      const m = $("[data-menu]");
+      document.body.classList.remove("is-menu");
+      if (m) { m.setAttribute("aria-expanded", "false"); m.textContent = "Menu"; m.focus(); }
+    }
+  });
   window.addEventListener("storage", (e) => { if (e.key === KEY) render(); });
 
   /* ---------- Componentes ---------- */
@@ -963,7 +981,7 @@
 
   /* aviso por e-mail quando a janela está fechada */
   const avisoForm = (id, produto = "") => `
-    <form class="notify" data-notify="${produto}">
+    <form class="notify" data-notify="${produto}" novalidate>
       <label class="sr" for="${id}">Seu e-mail</label>
       <input id="${id}" type="email" required placeholder="Seu e-mail" autocomplete="email">
       <button type="submit">Avisar</button>
@@ -976,6 +994,12 @@
     const button = f.querySelector("button");
     if (button.disabled) return;
     const status = f.parentElement.querySelector("[data-notify-ok]");
+    const campo = f.querySelector("input");
+    if (!/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(campo.value.trim())) {
+      status.textContent = "Escreva um e-mail válido.";
+      campo.focus();
+      return;
+    }
     button.disabled = true;
     status.textContent = "Anotando seu e-mail…";
     try {

@@ -50,7 +50,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   padding: 0 var(--pad);
   color: #fff;
   mix-blend-mode: difference;
+  pointer-events: none;   /* a faixa transparente não engole o toque no conteúdo que passa por baixo */
 }
+.head a, .head button, .is-menu .head { pointer-events: auto; }
 .head :focus-visible { outline-color: currentColor; }
 .head-dot {
   position: sticky; top: 0; z-index: 41;
@@ -275,6 +277,7 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .is-bag .scrim { opacity: 1; pointer-events: auto; }
 .is-bag .bag { transform: none; }
 .bag__head { display: flex; justify-content: space-between; align-items: center; height: var(--head); padding: 0 24px; border-bottom: 1px solid var(--line); }
+.bag__head button { padding: 12px 0; }
 .bag__head button:hover { opacity: .55; }
 .bag__list { flex: 1; overflow-y: auto; }
 .bag__empty { padding: 24px; }
@@ -284,11 +287,11 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .line--camiseta img { height: auto; aspect-ratio: 1; object-fit: contain; padding: 6px; }
 .line__name { font-weight: var(--w-text); }
 .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); margin-top: 10px; }
-.qty button { width: 30px; height: 28px; }
+.qty button { width: 40px; height: 40px; }
 .qty button:hover { background: var(--soft); }
 .qty span { min-width: 24px; text-align: center; font-size: var(--t-small); font-variant-numeric: tabular-nums; }
 .line__right { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
-.line__rm { font-size: var(--t-small); color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
+.line__rm { padding: 12px 0; font-size: var(--t-small); color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
 .bag__foot { padding: 18px 24px 24px; border-top: 1px solid var(--line); }
 .bag__row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
 .bag__row.total { font-size: 17px; margin: 14px 0 18px; padding-top: 14px; border-top: 1px solid var(--line); }
@@ -773,6 +776,8 @@ html.lenis, html.lenis body { height: auto; }
 .cookies__acoes { display: flex; gap: 8px; }
 .cookies__acoes .btn { height: 44px; }
 .cookies__nao { height: 44px; padding: 0 18px; border: 1px solid var(--line); }
+/* com a sacola aberta o aviso (z-index maior) cobria o "Finalizar compra"; volta ao fechar */
+.is-bag .cookies { display: none; }
 body:has(.compra-fixa.is-on) .cookies { bottom: calc(150px + env(safe-area-inset-bottom)); }
 
 /* ---------- Ficha da camiseta ("Detalhes", logo abaixo da compra) ---------- */
