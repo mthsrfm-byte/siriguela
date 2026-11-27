@@ -405,6 +405,14 @@
     }
     eventos.splice(0).forEach(([n, d]) => evento(n, d));
   }
+  /* Simple Analytics: conta visitas sem cookie e sem dado pessoal, então carrega sem pedir aceite.
+     Painel em https://dashboard.simpleanalytics.com/siriguela.site */
+  function simpleAnalytics() {
+    if (location.hostname === "localhost" || document.querySelector("script[data-sa]")) return;
+    const sa = document.createElement("script");
+    sa.async = true; sa.dataset.sa = ""; sa.src = "https://scripts.simpleanalyticscdn.com/latest.js";
+    document.head.appendChild(sa);
+  }
   function cookies() {
     if (!temRastreio) return;
     const escolha = store.get(CONSENT_KEY, null);
@@ -1360,6 +1368,7 @@
 
   chromeTop();
   const init = () => {
+    simpleAnalytics();
     reel();
     chrome();
     if (document.body.dataset.page === "home") home();
