@@ -622,9 +622,6 @@ html.lenis, html.lenis body { height: auto; }
   background-size: 160px; mix-blend-mode: multiply; opacity: .22;
 }
 
-/* ponto do título do hero: cai, cresce e passa por baixo da faixa de vídeos (locomotiva.js) */
-.has-loco .hero__title .mask.solta { clip-path: inset(-.25em -100vw -200vh -.3em); }
-.has-loco .hero__title .ch--ponto { transform-origin: 50% 70%; will-change: translate, scale; }
 .reel { z-index: 1; }
 
 /* ==========================================================

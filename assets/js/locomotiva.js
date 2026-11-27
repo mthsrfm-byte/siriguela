@@ -122,29 +122,14 @@
     p.dataset.scrollCssProgress = "";
   });
 
-  /* 3. Título do hero: cada letra escapa pela máscara da sua palavra numa velocidade, o ponto vem por último, com atraso */
-  document.querySelectorAll(".hero__title .ch").forEach((ch, i, todos) => {
-    const ultimo = i === todos.length - 1;
-    ch.dataset.scroll = "";
-    ch.dataset.scrollSpeed = ultimo ? "-0.22" : String([0.05, 0.11, 0.03, 0.14, 0.07, 0.12, 0.04, 0.1, 0.06, 0.13][i % 10]);
-    if (ultimo) {
-      ch.dataset.scrollDelay = "0.07";
-      ch.dataset.scrollGrow = "3";
-      ch.classList.add("ch--ponto");
-      /* depois da entrada, a máscara solta o pé: o ponto pode cair inteiro, sem ser cortado */
-      ch.addEventListener("animationend", () => ch.closest(".mask")?.classList.add("solta"), { once: true });
-      if (!ch.getAnimations().length) ch.closest(".mask")?.classList.add("solta");
-    }
-  });
-
-  /* 4. Títulos de seção sobem por trás de uma linha, de novo a cada vez que entram */
+  /* 2. Títulos de seção sobem por trás de uma linha, de novo a cada vez que entram */
   document.querySelectorAll(".block__title").forEach((t) => {
     t.innerHTML = `<span class="linha"><span>${t.innerHTML}</span></span>`;
     t.dataset.scroll = "";
     t.dataset.scrollRepeat = "";
   });
 
-  /* 5. Menu: a seção que cruza o meio da tela fica sublinhada */
+  /* 3. Menu: a seção que cruza o meio da tela fica sublinhada */
   const links = [...document.querySelectorAll(".head__nav a")];
   document.querySelectorAll("main section[id]").forEach((s) => { s.dataset.scroll = ""; s.dataset.scrollCall = "secao"; });
   addEventListener("secao", (e) => {
