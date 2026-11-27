@@ -274,8 +274,13 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .line__right { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
 .line__rm { font-size: var(--t-small); color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
 .bag__foot { padding: 18px 24px 24px; border-top: 1px solid var(--line); }
-.bag__row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.bag__row.total { font-size: 17px; margin: 12px 0 18px; }
+.bag__row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.bag__row.total { font-size: 17px; margin: 14px 0 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.bag__total { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.bag__total small { font-size: 11px; letter-spacing: .04em; }
+.bag__info { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 6px; font-size: 11px; letter-spacing: .04em; line-height: 1.4; }
+.bag__info li { display: flex; gap: 8px; }
+.bag__info li::before { content: "·"; }
 .bag__note { margin: 12px 0 0; text-align: center; color: var(--mute); }
 
 /* ---------- Aviso ---------- */

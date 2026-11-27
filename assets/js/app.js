@@ -495,12 +495,11 @@
     const prazo = [temCam ? `Camisetas chegam em ${prazoCam}.` : "", temSunga ? `Sungas: produção a partir de ${J.longa(J.producao)}, chegam até ${J.longa(J.entrega)}.` : ""].filter(Boolean).join("<br>");
     foot.innerHTML = `
       <div class="bag__row"><span class="mute">Subtotal</span><span>${brl(c.sub)}</span></div>
-      <p class="bag__note">O cupom pode ser aplicado na próxima página.</p>
-      <div class="bag__row"><span class="mute">Frete</span><span>${brl(c.frete)}</span></div>
-      <div class="bag__row total"><span>Total</span><span>${brl(c.total)}</span></div>
+      <div class="bag__row"><span class="mute">Frete fixo</span><span>${brl(c.frete)}</span></div>
+      <div class="bag__row total"><span>Total</span><span class="bag__total">${brl(c.total)}${pode ? `<small class="mono mute">ou ${S.parcelas}x de ${parcela(c.total)} sem juros</small>` : ""}</span></div>
       ${pode
         ? `<button class="btn btn--full" data-checkout>Finalizar compra <span>→</span></button>
-           <p class="bag__note">${prazo}<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.total)} sem juros</span></p>`
+           <ul class="bag__info mono mute"><li>${prazo.replace(/<br>/g, "</li><li>")}</li><li>Cupom de desconto na próxima página.</li></ul>`
         : `<button class="btn btn--ghost btn--full" type="button" disabled>${EMBREVE ? "Sungas em breve" : `Sungas abrem em ${J.longa(J.ini)}`}</button>
            <p class="bag__note">${temCam ? `As sungas ainda não estão à venda. Remova as sungas para comprar as camisetas agora.` : "Sua sacola fica guardada até lá."}</p>`}`;
   }
