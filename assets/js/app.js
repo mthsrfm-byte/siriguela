@@ -663,13 +663,13 @@
     return melhor;
   };
   const TAM_SLIDE = "(max-width: 600px) 74vw, (max-width: 1000px) 40vw, 24vw";
-  const slideCam = (c) => `<a class="card slide" href="${urlCam(c)}" style="--piso:${c.piso}">
+  const slideCam = (c) => `<a class="card slide${c.esgotada ? " card--esgotada" : ""}" href="${urlCam(c)}" style="--piso:${c.piso}">
       <div class="card__media">
         <img class="slide__foto" ${camFoto(c, c.outra.f, TAM_SLIDE)} alt="Camiseta ${c.nome} no corpo" loading="lazy">
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, TAM_SLIDE)} alt="" loading="lazy"></div>
       </div>
       <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(precoCam(c))}</span></div>
-      <div class="card__sub"><span>${c.cor}</span></div>
+      <div class="card__sub"><span>${c.cor}</span>${c.esgotada ? `<span class="idx">Esgotada</span>` : ""}</div>
     </a>`;
   const slideSunga = (p) => `<a class="card slide" href="${urlDe(p)}" style="--piso:${p.piso || "var(--soft)"}">
       <div class="card__media">
@@ -859,10 +859,12 @@
     const c = camBySlug(document.body.dataset.slug);
     if (!c) return;
     $$("[data-encomenda-cam]").forEach((el) => (el.innerHTML = encomendaCam()));
-    /* fim da página: todas as outras camisetas num slider, em ordem sorteada */
+    /* fim da página: todas as outras camisetas num slider, em ordem sorteada.
+       As esgotadas vão para o fim, apagadas como na home. */
     const outras = $("[data-outras-cam]");
     if (outras) {
-      const lista = sorteia(C.itens.filter((x) => x !== c));
+      const resto = C.itens.filter((x) => x !== c);
+      const lista = [...sorteia(resto.filter((x) => !x.esgotada)), ...sorteia(resto.filter((x) => x.esgotada))];
       outras.innerHTML = `
         <header class="block__head">
           <h2 class="block__title">Outras camisetas</h2>
