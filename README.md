@@ -43,6 +43,7 @@ Abra http://localhost:5190
 - `camisetas.ficha`: tecido, estampa, cuidados e tabela de medidas do fornecedor. Vazio, a seção não aparece em "Detalhes".
 - UTMs e `fbclid`/`gclid` seguem do anúncio até a URL do pagamento.
 - `sitemap.xml`, `robots.txt` e `404.html` na raiz.
+- Black Friday (`boasVindas` em `assets/js/produtos.js`): faixa no topo e pop-up na primeira visita, até as 23h59 de `fim`. O e-mail entra na lista `boas-vindas` do worker `avisos/`, que manda na hora o e-mail do cupom (`cupom()` em `avisos/email.mjs`, foto `assets/camisetas/ciranda/email-luz.jpg`). O código precisa existir no painel da Nextout.
 
 ## Segurança
 

@@ -11,10 +11,11 @@ globalThis.SIRIGUELA = {
   frete: 19.90,       // frete fixo para todo o Brasil, cobrado no pagamento
   cupom: { codigo: "SIRIGUELA10", desconto: 0.10, regra: "Válido na primeira compra. Conferido no pagamento." },
   /* Black Friday: faixa no topo + pop-up que abre sozinho na primeira visita, até as 23h59 do dia `fim`.
-     A pessoa deixa o e-mail (lista "boas-vindas" do /api/avisos) e recebe o código na tela e por e-mail.
-     O código precisa existir no painel da Nextout com 25% e frete grátis. Para desligar, apague o bloco. */
+     Oferta: leve 3, pague 2 (a camiseta de menor valor sai de graça).
+     A pessoa deixa o e-mail (lista "boas-vindas" do /api/avisos) e o worker manda o cupom na hora.
+     O código precisa existir no painel da Nextout com a mesma regra. Para desligar, apague o bloco. */
   boasVindas: {
-    codigo: "BLACK25", fim: "2026-11-27",
+    codigo: "SIRIGUELA3POR2", fim: "2026-11-27",
     foto: "assets/camisetas/ciranda/luz",
     alt: "Rapaz com a camiseta Ciranda sob a luz de um óculo de concreto"
   },

@@ -1,5 +1,5 @@
 import "../assets/js/produtos.js";
-import { mensagem } from "./email.mjs";
+import { mensagem, cupom } from "./email.mjs";
 
 const catalogo = globalThis.SIRIGUELA;
 const diaLocal = () => new Intl.DateTimeFormat("sv-SE", { timeZone: "America/Sao_Paulo" }).format(new Date());
@@ -21,14 +21,13 @@ const PRE_VENDA = {
   "camiseta-bandeirinhas": { nome: "camiseta bandeirinhas", url: "/camisetas/bandeirinhas/", foto: "/assets/camisetas/bandeirinhas/email-1x1.jpg" }
 };
 const SEM_DATA = "9999-12-31";
+const CUPOM = "boas-vindas";
 const EM_BREVE = "quando as sungas chegarem, você fica sabendo primeiro, por aqui.";
 const preVenda = (slug) => {
   if (typeof slug !== "string") return null;
   if (Object.hasOwn(PRE_VENDA, slug)) return PRE_VENDA[slug];
-  // pop-up de boas-vindas (catalogo.boasVindas): a confirmação leva o cupom
-  const bv = catalogo.boasVindas;
-  if (slug === "boas-vindas" && bv) return { nome: "camisetas siriguela", url: "/camisetas/", foto: "/assets/camisetas/ciranda/email-1x1.jpg",
-    texto: `seu cupom de boas-vindas é ${bv.codigo}: 25% de desconto e frete grátis. use no pagamento até as 23h59 do dia ${bv.fim.split("-").reverse().join("/")}.` };
+  // pop-up de Black Friday (catalogo.boasVindas): o e-mail é o do cupom (cupom() em email.mjs)
+  if (slug === CUPOM && catalogo.boasVindas) return { nome: "cupom de black friday", url: "/camisetas/", foto: "/assets/camisetas/ciranda/email-1x1.jpg" };
   // sungas em breve: o e-mail só confirma o interesse; o aviso de safra fica para quando elas abrirem
   if (!catalogo.sungasEmBreve) return null;
   const p = catalogo.produtos.find(x => x.slug === slug);
@@ -38,8 +37,8 @@ const preVenda = (slug) => {
 };
 const json = (ok, status) => Response.json({ ok }, { status, headers: { "Cache-Control": "no-store" } });
 
-export default {
-  async fetch(req, env) {
+const worker = {
+  async fetch(req, env, ctx) {
     if (new URL(req.url).pathname !== "/api/avisos") return json(false, 404);
     if (req.method !== "POST") return json(false, 405);
     if (req.headers.get("Origin") !== "https://siriguela.site") return json(false, 403);
@@ -57,6 +56,8 @@ export default {
     if (slug !== "" && !preVenda(slug) && !catalogo.produtos.some(p => p.slug === slug)) return json(false, 400);
     await env.DB.prepare("INSERT INTO avisos(email, produto, abertura) VALUES(?,?,?) ON CONFLICT(email,produto,abertura) DO NOTHING")
       .bind(email, slug, preVenda(slug) ? SEM_DATA : proximaAbertura()).run();
+    // o cupom sai na hora, sem esperar o cron de 5 em 5 minutos (que continua como reserva)
+    if (slug === CUPOM && ctx) ctx.waitUntil(worker.scheduled(null, env).catch(() => {}));
     return json(true, 200);
   },
   async scheduled(event, env) {
@@ -75,7 +76,7 @@ export default {
       if (!claim.meta.changes) continue;
       // Quem cadastra o e-mail de outra pessoa em várias peças não lota a caixa dela:
       // a confirmação sai uma vez por endereço a cada 24 h; as outras ficam marcadas sem envio.
-      if (!aberta) {
+      if (!aberta && item.produto !== CUPOM) {
         const recente = await env.DB.prepare(`SELECT 1 FROM avisos WHERE email=? AND id<>?
           AND confirmado_em > datetime('now','-1 day') LIMIT 1`).bind(item.email, item.id).first();
         if (recente) {
@@ -85,7 +86,7 @@ export default {
       }
       const nome = catalogo.produtos.find(p => p.slug === item.produto)?.nome;
       try {
-        await env.EMAIL.send({ from: { email: "ola@siriguela.site", name: "siriguela" }, to: item.email, ...mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto)) });
+        await env.EMAIL.send({ from: { email: "ola@siriguela.site", name: "siriguela" }, to: item.email, ...(item.produto === CUPOM ? cupom(catalogo.boasVindas, catalogo.frete, catalogo.camisetas.preco) : mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto))) });
       } catch {
         console.error("Falha no envio do aviso", item.id);
         continue;
@@ -94,3 +95,5 @@ export default {
     }
   }
 };
+
+export default worker;
