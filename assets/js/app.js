@@ -145,7 +145,7 @@
             <div class="bv__corpo">
               <p class="bv__idx">Cupom por e-mail</p>
               <h2 class="bv__titulo" id="bv-titulo">Leve 3, pague 2<span class="bv__ponto">.</span></h2>
-              <p class="bv__texto">Escolha três camisetas e a de menor valor sai de graça. Deixe seu e-mail e a gente manda o cupom agora.</p>
+              <p class="bv__texto">Em três camisetas, o cupom tira ${brl(BV.desconto)} do total, o preço de uma Blocos. Deixe seu e-mail e a gente manda o cupom agora.</p>
               <div class="bv__relogio" role="timer" aria-label="Tempo até as 23h59 de hoje">
                 <span class="bv__relogio-rot">Acaba às 23h59</span>
                 <div class="bv-relogio" aria-hidden="true">${par("h")}<i>:</i>${par("min")}<i>:</i>${par("s")}</div>
