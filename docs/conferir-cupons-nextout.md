@@ -60,7 +60,7 @@ Liste qualquer outro cupom ativo, com código, tipo, valor e validade.
 
 Monte a sacola em https://siriguela.site/camisetas/, vá até o pagamento e aplique o cupom. Pare antes de pagar. Use qualquer tamanho.
 
-Preços: a Blocos custa R$ 189,00. As outras oito camisetas custam R$ 199,00.
+Preços: a Blocos custa R$ 189,00 e a Ciranda, R$ 219,00. As outras sete camisetas custam R$ 199,00. Nos testes, use as de R$ 199,00 onde a tabela pede.
 
 | Sacola | Subtotal | Com SIRIGUELA3POR2 | Total com frete |
 |---|---|---|---|
