@@ -4,6 +4,12 @@
 .ed figure { margin: 0; }
 .ed img { width: 100%; height: auto; background: var(--soft); user-select: none; -webkit-user-drag: none; }
 .ed p { margin: 0; }
+/* .ed p zera a margem; a compra e a ficha precisam de respiro */
+.ed .picker__msg { margin: 10px 0 18px; }
+.ed .picker__modelo + .picker__msg { margin-top: 4px; }
+.ed .info__perks { margin: 16px 0 0; line-height: 1.6; }
+.ed .acc__body p { margin: 0 0 .9em; }
+.ed .acc__body p:last-child { margin-bottom: 0; }
 .ed__frase { font-size: var(--t-lead); font-weight: var(--w-title); line-height: 1.06; letter-spacing: var(--track-title); text-wrap: balance; }
 .ed__texto { color: var(--mute); max-width: 44ch; }
 
@@ -89,7 +95,7 @@
   transform: translateY(100%); transition: transform .3s ease; }
 .compra-fixa.is-on { transform: none; }
 .compra-fixa__nome { display: flex; flex-direction: column; gap: 2px; font-weight: var(--w-text); }
-.compra-fixa .picker__opts { grid-template-columns: repeat(4, 48px); }
+.compra-fixa .picker__opts { grid-template-columns: none; grid-auto-columns: 52px; }
 .compra-fixa .size { height: 44px; }
 .compra-fixa.is-err .size { border-color: var(--hot); }
 .compra-fixa .btn { height: 44px; white-space: nowrap; }
@@ -97,7 +103,7 @@
 @media (max-width: 600px) {
   .compra-fixa { grid-template-columns: 1fr auto; gap: 10px 12px; }
   .compra-fixa__nome { flex-direction: row; justify-content: space-between; align-items: baseline; grid-column: 1 / -1; }
-  .compra-fixa .picker__opts { grid-template-columns: repeat(4, 1fr); gap: 4px; }
-  .compra-fixa .size { height: 44px; min-width: 0; }
+  .compra-fixa .picker__opts { grid-auto-columns: 1fr; gap: 4px; }
+  .compra-fixa .size { height: 44px; min-width: 0; font-size: 13px; }
   .com-compra-fixa footer { padding-bottom: 130px; }
 }

@@ -37,7 +37,7 @@
   const peca = (i) => {
     if (i.tipo === "camiseta") {
       const c = camBySlug(i.slug);
-      return c && { tipo: "camiseta", nome: `Camiseta ${c.nome}`, preco: precoCam(c), url: urlCam(c), thumb: `src="assets/camisetas/${c.slug}/email-1x1.jpg"` };
+      return c && { tipo: "camiseta", nome: `Camiseta ${c.nome}`, preco: precoCam(c), url: urlCam(c), thumb: `src="assets/camisetas/${c.slug}/solta.w640.webp" width="640" height="619"` };
     }
     const p = bySlug(i.slug);
     return p && { tipo: "sunga", nome: p.nome, preco: S.preco, url: urlDe(p), thumb: pic(img(p, "frente"), "120px") };
@@ -330,6 +330,7 @@
             <a href="trocas/">Trocas e devoluções</a>
             <a href="privacidade/">Privacidade</a>
             <a href="contato/">Contato</a>
+            ${E.email ? `<a href="mailto:${E.email}">${E.email}</a>` : ""}
             ${E.telefone ? `<a href="https://wa.me/55${E.telefone}" target="_blank" rel="noopener">WhatsApp ${telFmt(E.telefone)}</a>${E.atendimento ? `<span class="foot__hora mono mute">${E.atendimento}</span>` : ""}` : ""}
           </div>
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
@@ -471,7 +472,7 @@
     const temCam = items.some((i) => peca(i).tipo === "camiseta");
     list.innerHTML = `<p class="bag__safra idx">Sob encomenda${temSunga && !EMBREVE ? ` · ${J.safra}` : ""}</p>` + items.map((i, idx) => {
       const x = peca(i);
-      return `<div class="line">
+      return `<div class="line line--${x.tipo}">
         <a href="${x.url}"><img ${x.thumb} alt="${x.tipo === "sunga" ? "Sunga " : ""}${x.nome}"></a>
         <div>
           <div class="line__name">${x.nome}</div>

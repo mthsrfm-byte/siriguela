@@ -27,7 +27,7 @@ globalThis.SIRIGUELA = {
     razao: "",          // razão social, como está no CNPJ
     cnpj: "30.662.436/0001-07",
     endereco: "",       // rua, número, bairro, cidade/UF, CEP
-    email: "ola@siriguela.site",
+    email: "suporte@siriguela.site",
     whatsapp: "",       // só números com DDD, ex.: 11999998888
     telefone: "11945688442",                          // suporte, só números com DDD; o link abre o WhatsApp
     atendimento: "Segunda a sexta, das 10h às 19h"    // horário do telefone
@@ -187,9 +187,9 @@ globalThis.SIRIGUELA = {
        tecido: frase curta, ex.: "100% algodão, fio 30.1 penteado, 180 g/m²"
        medidas: { cabecalho: ["Tamanho", "Largura", "Comprimento"], linhas: [["P", "52 cm", "70 cm"], ...] } */
     ficha: {
-      tecido: "100% algodão, 210 g/m².",
-      estampa: "",
-      cuidados: "",
+      tecido: "Malha 100% algodão de 210 g/m², encorpada no toque.",
+      estampa: "A estampa é impressa direto no tecido (DTG), em cores chapadas e sem contorno. Onde o desenho mostra a cor da camiseta, é a própria malha que aparece.",
+      cuidados: "Lave do avesso, em água fria, e seque à sombra. Não use secadora, alvejante nem ferro em cima da estampa.",
       /* medidas em cm, do fornecedor; tolerância de 2 cm para mais ou para menos */
       medidas: {
         cabecalho: ["Tamanho", "Tórax", "Barra", "Comprimento"],

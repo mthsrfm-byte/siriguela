@@ -265,6 +265,7 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .bag__empty p { margin: 0 0 18px; color: var(--mute); }
 .line { display: grid; grid-template-columns: 96px 1fr auto; gap: 16px; padding: 18px 24px; border-bottom: 1px solid var(--line); }
 .line img { width: 96px; aspect-ratio: 617/407; object-fit: cover; background: var(--soft); }
+.line--camiseta img { height: auto; aspect-ratio: 1; object-fit: contain; padding: 6px; }
 .line__name { font-weight: var(--w-text); }
 .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); margin-top: 10px; }
 .qty button { width: 30px; height: 28px; }
