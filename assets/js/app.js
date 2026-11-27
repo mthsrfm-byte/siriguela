@@ -793,6 +793,51 @@
     grid.innerHTML = S.produtos.map((p, i) => card(p, LOOK[i % LOOK.length])).join("");
     const aviso = $("[data-aviso-sungas]");
     if (aviso) aviso.innerHTML = avisoForm("aviso-sungas", "sungas");
+    const topo = $("[data-aviso-sungas-topo]");
+    if (topo) topo.innerHTML = avisoForm("aviso-sungas-topo", "sungas");
+    avisoNavegador();
+  }
+
+  /* Aviso no navegador (Web Push): o sw.js recebe o push e mostra a notificação.
+     A inscrição vai para /api/avisos/push; o worker manda o aviso quando sungasEmBreve virar false.
+     Sem suporte (Safari no iPhone fora da Tela de Início, por exemplo), o botão some e fica o e-mail. */
+  async function avisoNavegador() {
+    const btn = $("[data-push]"), ok = $("[data-push-ok]");
+    if (!btn || !S.push) return;
+    const ios = /iPhone|iPad/.test(navigator.userAgent) && !navigator.standalone;
+    if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+      if (ios) ok.textContent = "No iPhone, adicione o site à Tela de Início para receber o aviso no navegador.";
+      return;
+    }
+    const b64 = (t) => Uint8Array.from(atob(t.replace(/-/g, "+").replace(/_/g, "/")), (c) => c.charCodeAt(0));
+    const ligado = () => { btn.hidden = true; ok.textContent = "Aviso ligado neste navegador. A gente avisa quando as sungas chegarem."; };
+    btn.hidden = false;
+    if (Notification.permission === "denied") ok.textContent = "O navegador está bloqueando os avisos deste site. Libere nas configurações do site e tente de novo.";
+    try {
+      const reg = await navigator.serviceWorker.getRegistration("/");
+      if (reg && Notification.permission === "granted" && (await reg.pushManager.getSubscription())) ligado();
+    } catch {}
+    btn.addEventListener("click", async () => {
+      btn.disabled = true;
+      ok.textContent = "Ligando o aviso…";
+      try {
+        if ((await Notification.requestPermission()) !== "granted") {
+          ok.textContent = "Sem permissão, o navegador não mostra o aviso. Libere nas configurações do site e tente de novo.";
+          return;
+        }
+        const reg = await navigator.serviceWorker.register("/sw.js", { scope: "/" });
+        await navigator.serviceWorker.ready;
+        const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64(S.push) });
+        const r = await fetch("/api/avisos/push", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(sub) });
+        if (!r.ok || (await r.json()).ok !== true) throw new Error();
+        evento("Lead", { content_name: "sungas-navegador" });
+        ligado();
+      } catch {
+        ok.textContent = "Não conseguimos ligar o aviso. Tente de novo em instantes ou deixe seu e-mail.";
+      } finally {
+        btn.disabled = false;
+      }
+    });
   }
 
   /* ---------- Camisetas: coleção (/camisetas/) ---------- */

@@ -221,6 +221,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .table td:first-child { width: 25%; }
 
 /* ---------- Lista ---------- */
+/* Sungas (/sungas/): texto da coleção de 2027 e aviso de chegada, acima da grade */
+.planos { display: grid; grid-template-columns: repeat(var(--cols), 1fr); column-gap: var(--gap); }
+.planos > .block__head, .planos > .grid { grid-column: 1 / -1; }
+.planos__texto { grid-column: 1 / span 7; }
+.planos__texto p { margin: 0 0 1em; max-width: 60ch; color: var(--mute); }
+.planos__texto .planos__lead { max-width: none; margin-bottom: .8em; font-size: var(--t-lead); font-weight: var(--w-title); line-height: 1.08; letter-spacing: var(--track-title); color: var(--ink); }
+.planos__aviso { grid-column: 9 / span 4; align-self: end; margin-bottom: 1em; }
+.planos__aviso .idx { display: block; margin: 0 0 12px; }
+.planos__ok { min-height: 1.5em; margin: 10px 0 0; font-size: var(--t-small); color: var(--mute); }
+.planos__ou { margin-top: 20px !important; }
+.planos > .grid { margin-top: var(--sect); }
+@media (max-width: 860px) {
+  .planos__texto, .planos__aviso { grid-column: 1 / -1; }
+  .planos__aviso { margin-top: 12px; }
+}
+
 .join { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); padding-bottom: var(--sect); }
 .join > .block__head { grid-column: 1 / -1; }
 .join__lead { grid-column: 1 / span 6; margin: 0; font-size: var(--t-lead); font-weight: var(--w-title); line-height: 1.08; letter-spacing: var(--track-title); }
