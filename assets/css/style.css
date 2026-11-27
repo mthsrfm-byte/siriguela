@@ -221,6 +221,22 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .table td:first-child { width: 25%; }
 
 /* ---------- Lista ---------- */
+/* Sungas (/sungas/): texto da coleção de 2027 e aviso de chegada, acima da grade */
+.planos { display: grid; grid-template-columns: repeat(var(--cols), 1fr); column-gap: var(--gap); }
+.planos > .block__head, .planos > .grid { grid-column: 1 / -1; }
+.planos__texto { grid-column: 1 / span 7; }
+.planos__texto p { margin: 0 0 1em; max-width: 60ch; color: var(--mute); }
+.planos__texto .planos__lead { max-width: none; margin-bottom: .8em; font-size: var(--t-lead); font-weight: var(--w-title); line-height: 1.08; letter-spacing: var(--track-title); color: var(--ink); }
+.planos__aviso { grid-column: 9 / span 4; align-self: end; margin-bottom: 1em; }
+.planos__aviso .idx { display: block; margin: 0 0 12px; }
+.planos__ok { min-height: 1.5em; margin: 10px 0 0; font-size: var(--t-small); color: var(--mute); }
+.planos__ou { margin-top: 20px !important; }
+.planos > .grid { margin-top: var(--sect); }
+@media (max-width: 860px) {
+  .planos__texto, .planos__aviso { grid-column: 1 / -1; }
+  .planos__aviso { margin-top: 12px; }
+}
+
 .join { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); padding-bottom: var(--sect); }
 .join > .block__head { grid-column: 1 / -1; }
 .join__lead { grid-column: 1 / span 6; margin: 0; font-size: var(--t-lead); font-weight: var(--w-title); line-height: 1.08; letter-spacing: var(--track-title); }
@@ -274,8 +290,13 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .line__right { display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; }
 .line__rm { font-size: var(--t-small); color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
 .bag__foot { padding: 18px 24px 24px; border-top: 1px solid var(--line); }
-.bag__row { display: flex; justify-content: space-between; margin-bottom: 6px; }
-.bag__row.total { font-size: 17px; margin: 12px 0 18px; }
+.bag__row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.bag__row.total { font-size: 17px; margin: 14px 0 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.bag__total { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.bag__total small { font-size: 11px; letter-spacing: .04em; }
+.bag__info { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 6px; font-size: 11px; letter-spacing: .04em; line-height: 1.4; }
+.bag__info li { display: flex; gap: 8px; }
+.bag__info li::before { content: "·"; }
 .bag__note { margin: 12px 0 0; text-align: center; color: var(--mute); }
 
 /* ---------- Aviso ---------- */
@@ -622,9 +643,6 @@ html.lenis, html.lenis body { height: auto; }
   background-size: 160px; mix-blend-mode: multiply; opacity: .22;
 }
 
-/* ponto do título do hero: cai, cresce e passa por baixo da faixa de vídeos (locomotiva.js) */
-.has-loco .hero__title .mask.solta { clip-path: inset(-.25em -100vw -200vh -.3em); }
-.has-loco .hero__title .ch--ponto { transform-origin: 50% 70%; will-change: translate, scale; }
 .reel { z-index: 1; }
 
 /* ==========================================================

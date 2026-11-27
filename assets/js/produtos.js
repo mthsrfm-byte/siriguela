@@ -6,6 +6,10 @@ globalThis.SIRIGUELA = {
   /* true: as sungas aparecem no site, mas não estão à venda (cards "Em breve", página com aviso por e-mail
      e o checkout recusa sunga). Volte para false quando a Coleção 01 abrir. */
   sungasEmBreve: true,
+  /* Aviso no navegador (Web Push) das sungas: chave pública VAPID. A privada fica só no secret VAPID_JWK
+     do worker siriguela-avisos. Quando sungasEmBreve virar false, o cron do worker manda um aviso para
+     cada navegador inscrito (tabela push). Trocou a chave, as inscrições antigas param de valer. */
+  push: "BNWgCW-qX13Fe1LC8Kl3ZfZxFqRdi3lQXpYpEpuwq8bQpPiWQ3NJWB8o5c83pcUFFHHaAeoNEtyEQSza7MZeW8o",
   preco: 279.90,
   parcelas: 3,
   frete: 19.90,       // frete fixo para todo o Brasil, cobrado no pagamento

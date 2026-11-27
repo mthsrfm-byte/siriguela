@@ -1,0 +1,14 @@
+{
+  "name": "Siriguela",
+  "short_name": "Siriguela",
+  "lang": "pt-BR",
+  "start_url": "/sungas/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F3EFE8",
+  "theme_color": "#F3EFE8",
+  "icons": [
+    { "src": "/assets/img/icone-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/img/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

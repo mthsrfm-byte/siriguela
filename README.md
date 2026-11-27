@@ -49,6 +49,7 @@ Abra http://localhost:5190
 
 - `_headers`: cabeçalhos do Cloudflare Pages (CSP, nosniff, sem iframe de fora, HSTS). A CSP libera os `<script>` em linha pelo hash: página nova com script em linha precisa do hash lá. `node scripts/conferir-csp.mjs` confere (roda também na Action Conferir).
 - Checkout: o worker recalcula o preço pelo catálogo, aceita até 20 peças iguais por linha e só atende o próprio site (Origin). A sacola descarta item com tamanho ou quantidade fora do catálogo.
+- Aviso no navegador das sungas (Web Push): botão em `/sungas/`, `sw.js` e `manifest.webmanifest` na raiz. A inscrição vai para `/api/avisos/push` (tabela `push` do D1). A chave pública fica em `push` no `produtos.js` e a privada só no secret `VAPID_JWK` do worker `siriguela-avisos`. Quando `sungasEmBreve` virar `false`, o cron manda um aviso para cada navegador inscrito. No iPhone, só funciona com o site adicionado à Tela de Início.
 - Lista de aviso: a confirmação sai no máximo uma vez a cada 24 h por e-mail, mesmo com várias peças cadastradas.
 
 ## Deploy dos workers
