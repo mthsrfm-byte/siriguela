@@ -807,6 +807,8 @@
   function home() {
     letras();
     filme();
+    const bf = $("[data-bf]");  // cartão da Black Friday: some depois de 30/11/2026, 23h59 (Brasília)
+    if (bf && Date.now() > Date.parse("2026-12-01T00:00:00-03:00")) bf.hidden = true;
     if (EMBREVE) {
       /* sungas em breve: o topo e o "Como funciona?" falam das camisetas */
       $("[data-safra-nome]").textContent = "Camisetas sob encomenda";

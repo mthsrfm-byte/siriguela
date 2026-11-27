@@ -128,6 +128,20 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .hero__aside p { margin: 0; color: var(--mute); max-width: 32ch; }
 .hero__safra { display: flex; flex-direction: column; gap: 4px; }
 .hero__datas { font-size: 26px; font-weight: var(--w-title); letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+/* Cartão da Black Friday no hero: o único bloco escuro da página. Espaços em múltiplos de 8. Some sozinho depois do prazo (app.js). */
+.bf { --bf-sec: #A9A39A; --bf-fio: rgba(243, 239, 232, .28); align-self: stretch; max-width: 448px; padding: 16px 24px 8px; background: var(--ink); color: var(--bg); }
+.bf[hidden] { display: none; }
+.bf .idx { color: var(--bf-sec); }
+.bf__top { display: flex; justify-content: space-between; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--bf-fio); }
+.bf__oferta { display: flex; align-items: flex-end; gap: 16px; padding: 24px 0; }
+.bf__oferta strong { font-size: clamp(80px, 7.4vw, 120px); font-weight: var(--w-title); line-height: .74; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.bf__oferta span { max-width: 8.5em; font-size: clamp(16px, 1.3vw, 20px); line-height: 1.15; letter-spacing: -.01em; }
+.bf__linhas { margin: 0; }
+.bf__linhas div { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 0; border-top: 1px solid var(--bf-fio); }
+.bf__linhas dd { margin: 0; font-size: 15px; font-variant-numeric: tabular-nums; }
+.bf__cupom { padding: 0; border: 0; border-bottom: 1px dashed var(--bf-sec); background: none; color: inherit; font-family: var(--f-mono); font-size: 22px; font-weight: 500; letter-spacing: .04em; line-height: 1.2; cursor: pointer; }
+.bf__cupom:hover { border-bottom-style: solid; }
+.bf__cupom:focus-visible { outline: 2px solid var(--bg); outline-offset: 4px; }
 /* microanimação: letras sobem por trás de uma máscara (uma por palavra, para a linha quebrar entre palavras), o ponto por último */
 .hero__title .mask { display: inline-block; clip-path: inset(-.25em -.3em -.28em -.3em); }
 .hero__title .ch { display: inline-block; }
@@ -422,6 +436,14 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
   .foot a { padding: 7px 0; margin: 0; }
   .janela-bar__main { padding: 6px 0; margin: -6px 0; }
 }
+/* tablet: o título sobe e o cartão fica ao lado do texto, para o hero não crescer demais */
+@media (min-width: 601px) and (max-width: 1024px) {
+  .hero--margem { display: flex; flex-direction: column; align-items: stretch; gap: 32px; }
+  .hero__title { order: -1; align-self: flex-start; max-width: none; text-align: left; }
+  .hero__aside { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 448px); gap: 24px var(--gap); align-items: start; justify-items: start; padding-bottom: 0; }
+  .hero__aside > * { grid-column: 1; }
+  .hero__aside .bf { grid-column: 2; grid-row: 1 / span 3; justify-self: stretch; }
+}
 @media (max-width: 600px) {
   .hero__a { grid-column: 1 / -1; }
   .hero__b { grid-column: 6 / -1; margin-top: var(--gap); }
@@ -429,6 +451,15 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
   .hero__title { order: -1; align-self: flex-start; max-width: none; text-align: left; font-size: clamp(40px, 11.4vw, 72px); }
   .hero__aside { padding-bottom: 0; }
   .hero__datas { font-size: 22px; }
+  .bf { max-width: none; padding: 16px 16px 4px; }
+  .bf__top { display: none; }
+  .bf__oferta { gap: 12px; padding: 0 0 16px; }
+  .bf__oferta strong { font-size: 64px; }
+  .bf__linhas { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 0 16px; border-top: 1px solid var(--bf-fio); }
+  .bf__linhas div { gap: 8px; padding: 10px 0; border-top: 0; }
+  .bf__linhas div + div dt { display: none; }
+  .bf__linhas dd { font-size: 13px; }
+  .bf__cupom { font-size: 18px; }
   .card { grid-column: 1 / -1; }
   .grid--more .card { grid-column: span 6; }
   .look .card { grid-column: 1 / -1; margin-top: 0; }
