@@ -1080,8 +1080,6 @@
     filme();
     if (EMBREVE) {
       /* sungas em breve: o topo e o "Como funciona?" falam das camisetas */
-      $("[data-safra-nome]").textContent = "Camisetas sob encomenda";
-      $("[data-safra-datas]").textContent = `a partir de ${brl(precoMin())}`;
       $("[data-janela-status]").textContent = `Camisetas · ${prazoCam}`;
       $("[data-steps]").innerHTML = [
         { t: "Pedido", d: "Qualquer dia", p: "Você escolhe a estampa e o tamanho. A compra das camisetas fica aberta o mês todo." },
@@ -1095,8 +1093,6 @@
         </li>`).join("");
       $("[data-order-cta]").innerHTML = `<a class="btn" href="camisetas/">Ver as camisetas <span>→</span></a>`;
     } else {
-      $("[data-safra-nome]").textContent = `Sungas · ${J.safra}${J.aberta ? " · aberta" : ""}`;
-      $("[data-safra-datas]").textContent = `${J.curta(J.ini)} – ${J.curta(J.fim)}`;
       $("[data-janela-status]").textContent = `${J.safra} · ${J.quando}`;
       const passos = [
         { t: "Encomenda", d: J.periodo, p: `A safra fica aberta por ${EXTENSO[J.diasJanela] || J.diasJanela} dias. Você escolhe a estampa e o tamanho e garante a sua.` },

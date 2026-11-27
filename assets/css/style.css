@@ -128,7 +128,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 }
 .hero__aside { grid-column: 1 / span 4; display: flex; flex-direction: column; align-items: flex-start; gap: 22px; padding-bottom: .5em; }
 .hero__aside p { margin: 0; color: var(--mute); max-width: 32ch; }
-.hero__safra { display: flex; flex-direction: column; gap: 4px; }
 .hero__datas { font-size: 26px; font-weight: var(--w-title); letter-spacing: -.02em; line-height: 1.1; font-variant-numeric: tabular-nums; }
 /* microanimação: letras sobem por trás de uma máscara (uma por palavra, para a linha quebrar entre palavras), o ponto por último */
 .hero__title .mask { display: inline-block; clip-path: inset(-.25em -.3em -.28em -.3em); }
