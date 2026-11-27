@@ -314,7 +314,7 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 
 .picker__head { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: var(--t-small); }
 .picker__head a { color: var(--mute); text-decoration: underline; text-underline-offset: 3px; }
-.picker__opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.picker__opts { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 6px; }
 .size { height: 46px; font-size: 14px; border: 1px solid var(--line); transition: border-color .2s, background .2s, color .2s; }
 .size:hover { border-color: var(--ink); }
 .size[aria-checked="true"] { background: var(--surface); border-color: var(--ink); }
@@ -756,6 +756,13 @@ body:has(.compra-fixa.is-on) .cookies { bottom: calc(150px + env(safe-area-inset
 
 /* ---------- Ficha da camiseta ("Detalhes", logo abaixo da compra) ---------- */
 .ficha-cam { margin-top: 28px; }
+.specs-cam { margin: 28px 0 0; display: grid; gap: 8px; font-size: var(--t-small); }
+.specs-cam div { display: grid; grid-template-columns: 7.5em 1fr; gap: 12px; }
+.specs-cam dt { color: var(--faint); }
+.specs-cam dd { margin: 0; }
+.boxy-cam { margin: 16px 0 0; font-size: var(--t-small); color: var(--faint); max-width: 46ch; }
+.selos-cam { display: flex; align-items: center; gap: 28px; margin-top: 22px; }
+.ed .selos-cam img, .gallery .selos-cam img, .selos-cam img { height: 64px; width: auto; aspect-ratio: auto; object-fit: contain; background: none; user-select: none; }
 .ficha-cam .acc__body a { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ---------- Páginas de ajuda (trocas, privacidade, contato) ---------- */

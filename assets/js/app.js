@@ -545,7 +545,7 @@
               <thead><tr>${F.medidas.cabecalho.map((h) => `<th>${h}</th>`).join("")}</tr></thead>
               <tbody>${F.medidas.linhas.map((l) => `<tr>${l.map((v) => `<td>${v}</td>`).join("")}</tr>`).join("")}</tbody>
             </table>
-            <p class="mono">Modelagem ampla. Na dúvida entre dois tamanhos, fique com o menor.</p>
+            <p class="mono">Modelagem boxy. Na dúvida entre dois tamanhos, fique com o menor.</p>
           </div>
         </details>` : "";
     const tecido = [F.tecido, F.estampa, F.cuidados].filter(Boolean);
@@ -564,6 +564,19 @@
         </details>
       </div>`;
   };
+
+  /* especificações da camiseta: corte boxy, malha, tamanhos e os selos do fornecedor */
+  const specsCam = () => `
+    <dl class="specs-cam">
+      <div><dt>Modelagem</dt><dd>Boxy</dd></div>
+      <div><dt>Material</dt><dd>100% algodão · 210 g/m²</dd></div>
+      <div><dt>Tamanhos</dt><dd>${C.tamanhos.join(" · ")}</dd></div>
+    </dl>
+    <p class="boxy-cam">O corte boxy desce reto do ombro à barra, sem acinturar. O ombro cai um pouco no braço e o comprimento para no quadril. A malha de 210 g/m² é encorpada e segura essa forma quadrada no corpo.</p>
+    <div class="selos-cam">
+      <img src="assets/img/selos/abvtex.svg" alt="Selo ABVTEX Ouro: empresa certificada em responsabilidade socioambiental" width="458" height="533" loading="lazy">
+      <img src="assets/img/selos/algodao-sustentavel.svg" alt="Selo Algodão Sustentável" width="1885" height="1487" loading="lazy">
+    </div>`;
 
   /* bloco "Sob encomenda" das camisetas: um texto só, usado na coleção e em cada camiseta */
   const encomendaCam = () => `
@@ -622,12 +635,13 @@
     box.innerHTML = `
       <div class="info__price"><strong>${brl(precoCam(c))}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(precoCam(c))} sem juros</span></div>
       <div class="picker" data-picker>
-        <div class="picker__head mono"><span>Tamanho</span><span class="mute">Modelagem ampla</span></div>
+        <div class="picker__head mono"><span>Tamanho</span><span class="mute">Modelagem boxy</span></div>
         ${tamanhos()}
         <p class="picker__msg mono mute" data-msg>Escolha o tamanho.</p>
         <button class="btn btn--full" data-add>Comprar a minha <span>→</span></button>
         <p class="info__perks">Sob encomenda: chega em ${prazoCam}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
       </div>
+      ${specsCam()}
       ${fichaCam()}`;
     evento("ViewContent", { content_ids: [`camiseta-${c.slug}`], content_name: `Camiseta ${c.nome}`, content_type: "product", value: precoCam(c), currency: "BRL" });
     document.body.insertAdjacentHTML("beforeend", `
