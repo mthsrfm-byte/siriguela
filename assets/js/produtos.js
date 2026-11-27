@@ -28,9 +28,9 @@ globalThis.SIRIGUELA = {
      endereço e contato no site). Campo vazio não aparece. Preencha antes de rodar anúncio. */
   empresa: {
     nome: "Siriguela",
-    razao: "",          // razão social, como está no CNPJ
+    razao: "M SERAFIM DE LIMA",          // razão social, como está no CNPJ
     cnpj: "30.662.436/0001-07",
-    endereco: "",       // rua, número, bairro, cidade/UF, CEP
+    endereco: "Rua Cubatão, 1001, Vila Mariana, São Paulo/SP, CEP 04013-043",       // rua, número, bairro, cidade/UF, CEP
     email: "suporte@siriguela.site",
     whatsapp: "",       // só números com DDD, ex.: 11999998888
     telefone: "11945688442",                          // suporte, só números com DDD; o link abre o WhatsApp
