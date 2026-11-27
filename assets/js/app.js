@@ -1152,7 +1152,7 @@
       <div class="info__price"><strong>${brl(S.preco)}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(S.preco)}</span></div>
       <div class="info__janela${J.aberta ? " is-open" : ""}">
         ${EMBREVE
-          ? `<span class="idx">Em breve</span><span>As sungas da Coleção 01 ainda não estão à venda. Deixe seu e-mail e a gente avisa quando chegarem.</span>`
+          ? `<span class="idx">Em breve</span><span>As sungas chegam no verão de 2027. Deixe seu e-mail e a gente avisa quando chegarem.</span>`
           : `<span class="idx">${J.safra} · ${J.aberta ? "Encomendas abertas" : "Encomendas fechadas"}</span>
         <span>${J.aberta ? `${J.quando}. Feita para você e entregue até ${J.longa(J.entrega)}.` : `Abre em ${J.longa(J.ini)}. Encomendas até ${J.longa(J.fim)}, entrega até ${J.longa(J.entrega)}.`}</span>`}
       </div>
