@@ -18,7 +18,8 @@ PASTA = os.path.join(RAIZ, "colecao1", "sunga")
 
 catalogo = open(os.path.join(RAIZ, "assets", "js", "produtos.js"), encoding="utf-8").read()
 # só a lista das sungas: as camisetas (bloco "camisetas:" no fim do arquivo) têm páginas próprias
-catalogo = catalogo.split("\n  camisetas:")[0]
+# (e sem o bloco "empresa", que também tem "nome:" e deslocava os nomes das sungas)
+catalogo = catalogo.split("\n  produtos: [", 1)[1].split("\n  camisetas:")[0]
 slugs = re.findall(r'slug:\s*"([^"]+)"', catalogo)
 nomes = re.findall(r'nome:\s*"([^"]+)"', catalogo)
 chamadas = re.findall(r'chamada:\s*"([^"]+)"', catalogo)
@@ -32,6 +33,7 @@ if os.path.isdir(PASTA):
 
 for slug, nome, chamada in zip(slugs, nomes, chamadas):
     html = modelo.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n  <base href="../../../">', 1)
+    html = html.replace('  <meta name="robots" content="noindex">\n', '', 1)  # o molde fica fora do índice; as páginas geradas não
     html = html.replace('<body data-page="produto">', f'<body data-page="produto" data-slug="{slug}">', 1)
     html = re.sub(r"<title>.*?</title>", f"<title>{nome} · Siriguela</title>", html, count=1)
     html = re.sub(r'<meta name="description" content="[^"]*">',
