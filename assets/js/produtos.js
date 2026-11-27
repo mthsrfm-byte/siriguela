@@ -167,7 +167,7 @@ globalThis.SIRIGUELA = {
      outra: a foto única do slider "Outras camisetas" no fim de cada página; pose e quem (h/m) servem para o sorteio
      não deixar duas poses iguais nem o mesmo modelo lado a lado. As sungas têm o mesmo campo, só com a pose. */
   camisetas: {
-    preco: 159.90,
+    preco: 199.00,     // preço padrão; a camiseta com preco próprio usa o dela
     tamanhos: ["P", "M", "G", "GG"],
     entrega: { min: 7, max: 15 },
     /* Ficha técnica que aparece em "Detalhes" na página de cada camiseta. Vem do fornecedor que produz:
@@ -184,7 +184,7 @@ globalThis.SIRIGUELA = {
     itens: [
       { slug: "azulejo", nome: "Azulejo", cor: "Branca", chamada: "Um painel azul no fim da tarde.", piso: "#1F4571", takes: ["ladrilho", "cubos"], perto: ["bolsos", "ladrilho:1.6:40%"], estatica: "gola", outra: { f: "de-cima", pose: "deitado", quem: "h" } },
       { slug: "bandeirinhas", nome: "Bandeirinhas", cor: "Preta", chamada: "Arraial de junho, depois que escurece.", piso: "#CF6454", takes: ["andando", "banco"], perto: ["recorte", "inteira:1.8:30%"], estatica: "detalhe", outra: { f: "banco", pose: "sentado-cubo", quem: "m" } },
-      { slug: "blocos", nome: "Blocos", cor: "Preta", chamada: "Sol baixo batendo no concreto.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe", outra: { f: "vao", pose: "apoiado", quem: "m" } },
+      { slug: "blocos", preco: 189.00, nome: "Blocos", cor: "Preta", chamada: "Sol baixo batendo no concreto.", piso: "#A3711E", takes: ["bloco", "chao"], perto: ["bloco:1.25:62%", "vao:1.7:85%"], estatica: "detalhe", outra: { f: "vao", pose: "apoiado", quem: "m" } },
       { slug: "encaixe", nome: "Encaixe", cor: "Branca", chamada: "Um quebra-cabeça de madeira no chão da sala.", piso: "#867B9F", takes: ["inteira", "cubo"], perto: ["recorte-caio", "recorte-taina"], estatica: "detalhe", outra: { f: "nuca", pose: "meio-corpo", quem: "m" } },
       { slug: "meia-lua", nome: "Meia-lua", cor: "Off-white", chamada: "Curvas azuis debaixo da abóbada.", piso: "#752D1A", takes: ["inteira", "cubo"], perto: ["recorte-caio", "inteira:1.9:30%"], estatica: "detalhe", outra: { f: "cubo", pose: "sentado-cubo", quem: "h" } },
       { esgotada: true, esgotados: ["P", "M", "G", "GG"], slug: "ciranda", nome: "Ciranda", cor: "Azul-marinho", chamada: "Roda de ciranda na beira do mar.", piso: "#D9CEBF", takes: ["inteira", "chao"], perto: ["recorte", "chao:1.6:42%"], estatica: "detalhe", outra: { f: "chao", pose: "sentado-chao", quem: "h" } },

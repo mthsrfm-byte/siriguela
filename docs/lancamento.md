@@ -36,4 +36,4 @@ Revisão feita em 25/11/2026. O site no ar já tem: as 9 camisetas com hero reco
 
 - Compra de teste paga de verdade, recebida em casa, conferindo estampa, cor, tamanho e prazo.
 - Trocar o prazo do site (7 a 15 dias corridos) se o do fornecedor for outro.
-- Rever a margem: preço R$ 159,90, menos custo da peça, diferença entre o frete fixo de R$ 19,90 e o custo real do envio, taxa do gateway e cupom de 10%.
+- Rever a margem: preço de R$ 189,00 a R$ 199,00, menos custo da peça, diferença entre o frete fixo de R$ 19,90 e o custo real do envio, taxa do gateway e cupom de 10%.

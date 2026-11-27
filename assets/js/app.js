@@ -28,13 +28,16 @@
   const camFoto = (c, f, sizes) => (c.solta && f === "solta")
     ? `src="assets/camisetas/${c.slug}/solta.w1080.webp" srcset="assets/camisetas/${c.slug}/solta.w640.webp 640w, assets/camisetas/${c.slug}/solta.w1080.webp 1080w, assets/camisetas/${c.slug}/solta.w1188.webp 1188w" sizes="${sizes}"`
     : pic(`assets/camisetas/${c.slug}/${f}.webp`, sizes);
+  const precoCam = (c) => c.preco ?? C.preco;
+  /* menor preço entre as camisetas à venda, para os textos "a partir de" */
+  const precoMin = () => Math.min(...C.itens.filter((c) => !c.esgotada).map(precoCam));
   const prazoCam = `${C.entrega.min} a ${C.entrega.max} dias corridos`;
   const TROCA_TXT = "Troca e devolução em até 7 dias corridos, com a peça sem uso";
   /* item da sacola: { slug, size, qty, tipo? } — sem tipo é sunga (sacolas antigas) */
   const peca = (i) => {
     if (i.tipo === "camiseta") {
       const c = camBySlug(i.slug);
-      return c && { tipo: "camiseta", nome: `Camiseta ${c.nome}`, preco: C.preco, url: urlCam(c), thumb: `src="assets/camisetas/${c.slug}/email-1x1.jpg"` };
+      return c && { tipo: "camiseta", nome: `Camiseta ${c.nome}`, preco: precoCam(c), url: urlCam(c), thumb: `src="assets/camisetas/${c.slug}/email-1x1.jpg"` };
     }
     const p = bySlug(i.slug);
     return p && { tipo: "sunga", nome: p.nome, preco: S.preco, url: urlDe(p), thumb: pic(img(p, "frente"), "120px") };
@@ -98,15 +101,12 @@
     return { ...w, producao, entrega, longa, curta, safra, periodo, quando, entregaDias: cfg.entregaDiasUteis, diasJanela: cfg.diaFim - cfg.diaInicio + 1 };
   })();
 
-  /* ---------- Cupom e frete ---------- */
-  const CUPOM_KEY = "siriguela.cupom";
-  const cupomAtivo = () => store.get(CUPOM_KEY, null) === S.cupom.codigo;
+  /* ---------- Frete ---------- */
+  /* o cupom não é digitado na sacola: o cliente aplica no checkout da Nextout */
   const contas = (items) => {
     const sub = items.reduce((v, i) => v + peca(i).preco * i.qty, 0);
-    const desc = cupomAtivo() ? Math.round(sub * S.cupom.desconto * 100) / 100 : 0;
-    const produtos = sub - desc;
     const frete = S.frete;
-    return { sub, desc, produtos, frete, total: produtos + frete };
+    return { sub, frete, total: sub + frete };
   };
 
   /* ---------- Cabeçalho, rodapé e sacola (comuns às páginas) ---------- */
@@ -271,7 +271,7 @@
       if (hit && hit.qty >= MAX_POR_LINHA) { toast(`Até ${MAX_POR_LINHA} peças iguais por pedido.`); return; }
       hit ? hit.qty++ : items.push(tipo === "camiseta" ? { slug, size, qty: 1, tipo } : { slug, size, qty: 1 });
       bag.set(items);
-      evento("AddToCart", { content_ids: [`${tipo || "sunga"}-${slug}-${size}`], content_type: "product", value: tipo === "camiseta" ? C.preco : S.preco, currency: "BRL" });
+      evento("AddToCart", { content_ids: [`${tipo || "sunga"}-${slug}-${size}`], content_type: "product", value: tipo === "camiseta" ? precoCam(camBySlug(slug)) : S.preco, currency: "BRL" });
     },
     qty(idx, d) {
       const items = bag.get();
@@ -323,21 +323,11 @@
     const c = contas(items);
     const pode = J.aberta || !temSunga;
     const prazo = [temCam ? `Camisetas chegam em ${prazoCam}.` : "", temSunga ? `Sungas: produção a partir de ${J.longa(J.producao)}, chegam até ${J.longa(J.entrega)}.` : ""].filter(Boolean).join("<br>");
-    const cupom = cupomAtivo()
-      ? `<div class="bag__row bag__row--cupom"><span>Cupom ${S.cupom.codigo} <button class="line__rm" data-cupom-rm>remover</button></span><span>− ${brl(c.desc)}</span></div>`
-      : `<form class="coupon" data-coupon novalidate>
-          <label class="sr" for="cupom">Cupom de desconto</label>
-          <input id="cupom" name="cupom" placeholder="Cupom" autocomplete="off" autocapitalize="characters" spellcheck="false">
-          <button type="submit">Aplicar</button>
-        </form>
-        <p class="coupon__msg" data-coupon-msg aria-live="polite"></p>`;
-
     foot.innerHTML = `
       <div class="bag__row"><span class="mute">Subtotal</span><span>${brl(c.sub)}</span></div>
-      ${cupom}
-      ${cupomAtivo() ? `<p class="bag__note">Use ${S.cupom.codigo} no pagamento para confirmar o desconto da primeira compra.</p>` : ""}
+      <p class="bag__note">O cupom pode ser aplicado na próxima página.</p>
       <div class="bag__row"><span class="mute">Frete</span><span>${brl(c.frete)}</span></div>
-      <div class="bag__row total"><span>${cupomAtivo() ? "Total com cupom" : "Total"}</span><span>${brl(c.total)}</span></div>
+      <div class="bag__row total"><span>Total</span><span>${brl(c.total)}</span></div>
       ${pode
         ? `<button class="btn btn--full" data-checkout>Finalizar compra <span>→</span></button>
            <p class="bag__note">${prazo}<br><span class="mute">ou ${S.parcelas}x de ${parcela(c.total)} sem juros</span></p>`
@@ -414,30 +404,17 @@
   }
 
   document.addEventListener("click", (e) => {
-    const t = e.target.closest("[data-open-bag],[data-close-bag],[data-q],[data-rm],[data-checkout],[data-cupom-rm],[data-copy]");
+    const t = e.target.closest("[data-open-bag],[data-close-bag],[data-q],[data-rm],[data-checkout],[data-copy]");
     if (!t) return;
     if (t.matches("[data-open-bag]")) { e.preventDefault(); openBag(); }
     else if (t.matches("[data-close-bag]")) closeBag();
     else if (t.matches("[data-q]")) bag.qty(+t.dataset.q, +t.dataset.d);
     else if (t.matches("[data-rm]")) bag.rm(+t.dataset.rm);
-    else if (t.matches("[data-cupom-rm]")) { store.set(CUPOM_KEY, null); render(); }
     else if (t.matches("[data-copy]")) copiar(t.dataset.copy);
     else if (t.matches("[data-checkout]")) finalizar(t);
   });
-  document.addEventListener("submit", (e) => {
-    const f = e.target.closest("[data-coupon]");
-    if (!f) return;
-    e.preventDefault();
-    const code = f.querySelector("input").value.trim().toUpperCase();
-    const msg = $("[data-coupon-msg]");
-    if (!code) { msg.textContent = "Digite o cupom."; return; }
-    if (code !== S.cupom.codigo) { msg.textContent = "Esse cupom não existe. Confira as letras."; return; }
-    store.set(CUPOM_KEY, S.cupom.codigo);
-    render();
-    toast(`${S.cupom.codigo} aplicado. ${S.cupom.regra}`);
-  });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeBag(); });
-  window.addEventListener("storage", (e) => { if (e.key === KEY || e.key === CUPOM_KEY) render(); });
+  window.addEventListener("storage", (e) => { if (e.key === KEY) render(); });
 
   /* ---------- Componentes ---------- */
   /* Lookbook: na home cada sunga tem proporção e lugar próprios na grade.
@@ -492,7 +469,7 @@
         </div>
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, tam)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(C.preco)}</span></div>
+      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(precoCam(c))}</span></div>
       <div class="card__sub"><span>${c.cor}</span><span class="idx">${c.esgotada ? "Esgotada" : `Chega em ${C.entrega.min} a ${C.entrega.max} dias`}</span></div>
     </a>`;
   };
@@ -518,7 +495,7 @@
         <img class="slide__foto" ${camFoto(c, c.outra.f, TAM_SLIDE)} alt="Camiseta ${c.nome} no corpo" loading="lazy">
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, TAM_SLIDE)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(C.preco)}</span></div>
+      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(precoCam(c))}</span></div>
       <div class="card__sub"><span>${c.cor}</span></div>
     </a>`;
   const slideSunga = (p) => `<a class="card slide" href="${urlDe(p)}" style="--piso:${p.piso || "var(--soft)"}">
@@ -633,7 +610,7 @@
       outras.innerHTML = `
         <header class="block__head">
           <h2 class="block__title">Outras camisetas</h2>
-          <span class="idx">${lista.length} estampas · ${brl(C.preco)}</span>
+          <span class="idx">${lista.length} estampas · a partir de ${brl(precoMin())}</span>
         </header>
         ${slider(lista.map(slideCam).join(""))}`;
       sliders();
@@ -643,7 +620,7 @@
     </div>`;
     const box = $("[data-compra]");
     box.innerHTML = `
-      <div class="info__price"><strong>${brl(C.preco)}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(C.preco)} sem juros</span></div>
+      <div class="info__price"><strong>${brl(precoCam(c))}</strong><span class="mono mute">ou ${S.parcelas}x de ${parcela(precoCam(c))} sem juros</span></div>
       <div class="picker" data-picker>
         <div class="picker__head mono"><span>Tamanho</span><span class="mute">Modelagem ampla</span></div>
         ${tamanhos()}
@@ -652,10 +629,10 @@
         <p class="info__perks">Sob encomenda: chega em ${prazoCam}. Na primeira compra, <button class="perk-code" data-copy="${S.cupom.codigo}" title="Copiar cupom">${S.cupom.codigo}</button> dá 10% de desconto.</p>
       </div>
       ${fichaCam()}`;
-    evento("ViewContent", { content_ids: [`camiseta-${c.slug}`], content_name: `Camiseta ${c.nome}`, content_type: "product", value: C.preco, currency: "BRL" });
+    evento("ViewContent", { content_ids: [`camiseta-${c.slug}`], content_name: `Camiseta ${c.nome}`, content_type: "product", value: precoCam(c), currency: "BRL" });
     document.body.insertAdjacentHTML("beforeend", `
       <div class="compra-fixa" data-compra-fixa>
-        <div class="compra-fixa__nome"><span>${c.nome}</span><span class="mono mute">${brl(C.preco)}</span></div>
+        <div class="compra-fixa__nome"><span>${c.nome}</span><span class="mono mute">${brl(precoCam(c))}</span></div>
         ${tamanhos()}
         <button class="btn" data-add>Comprar <span>→</span></button>
       </div>`);
@@ -810,7 +787,7 @@
     if (EMBREVE) {
       /* sungas em breve: o topo e o "Como funciona?" falam das camisetas */
       $("[data-safra-nome]").textContent = "Camisetas sob encomenda";
-      $("[data-safra-datas]").textContent = brl(C.preco);
+      $("[data-safra-datas]").textContent = `a partir de ${brl(precoMin())}`;
       $("[data-janela-status]").textContent = `Camisetas · ${prazoCam}`;
       $("[data-steps]").innerHTML = [
         { t: "Pedido", d: "Qualquer dia", p: "Você escolhe a estampa e o tamanho. A compra das camisetas fica aberta o mês todo." },
