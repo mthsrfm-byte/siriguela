@@ -315,6 +315,12 @@
   }
 
   function chrome() {
+    /* Acordeões: ao abrir um, fecha os outros do mesmo grupo */
+    document.addEventListener("toggle", (e) => {
+      const d = e.target;
+      if (!(d instanceof HTMLDetailsElement) || !d.open || !d.parentElement?.classList.contains("acc")) return;
+      d.parentElement.querySelectorAll(":scope > details[open]").forEach((o) => { if (o !== d) o.open = false; });
+    }, true);
     document.body.insertAdjacentHTML("beforeend", `
       <footer>
         <div class="foot">

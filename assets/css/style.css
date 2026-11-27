@@ -359,11 +359,11 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 
 .acc details { border-top: 1px solid var(--line); }
 .acc details:last-child { border-bottom: 1px solid var(--line); }
-.acc summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; padding: 15px 0; font-size: var(--t-small); }
+.acc summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; padding: 18px 0; font-size: clamp(17px, 1.5vw, 19px); font-weight: var(--w-title); letter-spacing: -.01em; color: var(--ink); }
 .acc summary::-webkit-details-marker { display: none; }
 .acc summary::after { content: "+"; font-family: var(--f-mono); color: var(--faint); }
 .acc details[open] summary::after { content: "−"; }
-.acc__body { padding: 0 0 18px; color: var(--mute); }
+.acc__body { padding: 0 0 20px; color: var(--mute); font-size: 14px; line-height: 1.6; }
 .acc__body p { margin: 0 0 .9em; max-width: 52ch; }
 .acc__body .mono { font-family: var(--f-mono); font-size: var(--t-idx); color: var(--faint); }
 
