@@ -68,7 +68,7 @@ export default {
     }
     try {
       const resposta = await fetch("https://checkout.siriguela.site/api/checkout", {
-        method: "POST", redirect: "error", signal: AbortSignal.timeout(12000),
+        method: "POST", redirect: "manual", signal: AbortSignal.timeout(12000),
         headers: { Authorization: `Bearer ${env.NEXTOUT_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({ items, utm })
       });
