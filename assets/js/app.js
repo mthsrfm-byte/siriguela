@@ -109,6 +109,167 @@
     return { sub, frete, total: sub + frete };
   };
 
+  /* ---------- Black Friday (S.boasVindas): faixa no topo + pop-up com cadastro ----------
+     O pop-up abre sozinho uma vez por navegador, na primeira visita; a faixa abre de novo quando quiser.
+     Tudo some depois das 23h59 do dia `fim`. O relógio conta até as 23h59 de hoje,
+     e cada dígito troca com fade e desfoque. */
+  const BV = S.boasVindas;
+  const fimDoDia = (d) => { const f = new Date(d); f.setHours(23, 59, 59, 999); return f; };
+  function bvAtivo() {
+    if (!BV || /checkout/.test(location.pathname)) return false;
+    const [a, m, d] = BV.fim.split("-").map(Number);
+    return Date.now() <= fimDoDia(new Date(a, m - 1, d));
+  }
+  function boasVindas() {
+    if (!bvAtivo()) return;
+    const VISTO = "siriguela.boasvindas";
+    let aberto = false;
+
+    const abre = () => {
+      if (aberto) return;
+      aberto = true;
+      store.set(VISTO, true);
+      const pos = () => `<span class="bv-dig"><span class="bv-dig__n">0</span></span>`;
+      const par = (u) => `<span class="bv-relogio__par"><span class="bv-relogio__dd">${pos()}${pos()}</span><small>${u}</small></span>`;
+      const ja = store.get("siriguela.boasvindas.email", false);
+      document.body.insertAdjacentHTML("beforeend", `
+        <div class="bv" data-bv data-lenis-prevent>
+          <div class="bv__fundo" data-bv-fecha></div>
+          <div class="bv__caixa" role="dialog" aria-modal="true" aria-labelledby="bv-titulo" tabindex="-1">
+            <figure class="bv__foto">
+              <img ${pic(`${BV.foto}.webp`, "(max-width: 720px) 100vw, 440px")} alt="${BV.alt}" decoding="async">
+              <figcaption class="bv__legenda"><span>Black Friday</span><span>Só hoje</span></figcaption>
+            </figure>
+            <button class="bv__x" data-bv-fecha aria-label="Fechar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+            <div class="bv__corpo">
+              <p class="bv__idx">Boas-vindas</p>
+              <h2 class="bv__titulo" id="bv-titulo">Quer 25% off e frete grátis<span class="bv__ponto">?</span></h2>
+              <p class="bv__texto">Gere seu cupom exclusivo de boas-vindas e aproveite a Black Friday.</p>
+              <div class="bv__relogio" role="timer" aria-label="Tempo até as 23h59 de hoje">
+                <span class="bv__relogio-rot">Acaba às 23h59</span>
+                <div class="bv-relogio" aria-hidden="true">${par("h")}<i>:</i>${par("min")}<i>:</i>${par("s")}</div>
+              </div>
+              <div class="bv__acao" data-bv-acao>
+                <form class="bv-form" data-bv-form novalidate>
+                  <label class="bv-form__rot" for="bv-email">Seu e-mail</label>
+                  <div class="bv-form__linha">
+                    <input id="bv-email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="voce@email.com" required>
+                    <button class="btn bv-form__btn" type="submit">Gerar meu cupom</button>
+                  </div>
+                  <p class="bv-form__msg" data-bv-msg aria-live="polite"></p>
+                </form>
+              </div>
+              <button class="bv__nao" data-bv-fecha>Agora não</button>
+            </div>
+          </div>
+        </div>`);
+      const raiz = $("[data-bv]"), caixa = $(".bv__caixa", raiz);
+      const antes = document.activeElement;
+      requestAnimationFrame(() => requestAnimationFrame(() => raiz.classList.add("is-on")));
+      caixa.focus({ preventScroll: true });
+      document.documentElement.classList.add("bv-aberto");
+
+      /* relógio: só anima o dígito que mudou */
+      const digs = $$(".bv-dig", raiz);
+      const troca = (el, v) => {
+        const atual = el.lastElementChild;
+        if (atual.textContent === v) return;
+        atual.classList.add("is-sai");
+        const novo = document.createElement("span");
+        novo.className = "bv-dig__n is-entra";
+        novo.textContent = v;
+        el.appendChild(novo);
+        requestAnimationFrame(() => requestAnimationFrame(() => novo.classList.remove("is-entra")));
+        setTimeout(() => atual.remove(), 650);
+      };
+      const tick = () => {
+        const t = Math.floor(Math.max(0, fimDoDia(new Date()) - Date.now()) / 1000);
+        const txt = [Math.floor(t / 3600), Math.floor(t / 60) % 60, t % 60].map((n) => String(n).padStart(2, "0")).join("");
+        digs.forEach((el, i) => troca(el, txt[i]));
+      };
+      tick();
+      const relogio = setInterval(tick, 1000);
+
+      /* depois do cadastro: o código aparece letra a letra, com botão de copiar */
+      const mostraCupom = () => {
+        $("[data-bv-acao]", raiz).innerHTML = `
+          <div class="bv-cupom">
+            <span class="bv-cupom__rot">Seu cupom</span>
+            <span class="bv-cupom__cod" data-bv-cod aria-label="${BV.codigo}"></span>
+            <button class="bv-cupom__copiar" data-bv-copiar>Copiar</button>
+          </div>
+          <p class="bv__regra">25% de desconto e frete grátis, até as 23h59 de hoje. Cole o código no pagamento. A gente mandou uma cópia para o seu e-mail.</p>`;
+        const cod = $("[data-bv-cod]", raiz), alvo = BV.codigo, letras = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        if (matchMedia("(prefers-reduced-motion: reduce)").matches) { cod.textContent = alvo; cod.classList.add("is-pronto"); }
+        else {
+          let passo = 0;
+          const embaralha = setInterval(() => {
+            passo++;
+            cod.textContent = [...alvo].map((c, i) => (i < passo / 3 ? c : letras[Math.floor(Math.random() * letras.length)])).join("");
+            if (passo / 3 >= alvo.length) { clearInterval(embaralha); cod.textContent = alvo; cod.classList.add("is-pronto"); }
+          }, 40);
+        }
+        $(".bv__nao", raiz).textContent = "Fechar";
+        $("[data-bv-copiar]", raiz).focus({ preventScroll: true });
+      };
+      if (ja) mostraCupom();
+
+      const fecha = () => {
+        clearInterval(relogio);
+        raiz.classList.remove("is-on");
+        document.documentElement.classList.remove("bv-aberto");
+        document.removeEventListener("keydown", tecla);
+        setTimeout(() => { raiz.remove(); aberto = false; }, 500);
+        if (antes && antes.focus) antes.focus({ preventScroll: true });
+      };
+      const tecla = (e) => {
+        if (e.key === "Escape") return fecha();
+        if (e.key !== "Tab") return;
+        const f = $$("button, input, a[href]", caixa).filter((el) => el.offsetParent);
+        if (!f.length) return;
+        if (e.shiftKey && document.activeElement === f[0]) { e.preventDefault(); f[f.length - 1].focus(); }
+        else if (!e.shiftKey && document.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
+      };
+      document.addEventListener("keydown", tecla);
+
+      raiz.addEventListener("submit", async (e) => {
+        const form = e.target.closest("[data-bv-form]");
+        if (!form) return;
+        e.preventDefault();
+        const input = $("input", form), btn = $("button", form), msg = $("[data-bv-msg]", form);
+        const email = input.value.trim();
+        if (!/^[^\s@,;<>]+@[^\s@,;<>]+\.[^\s@,;<>]+$/.test(email)) { msg.textContent = "Escreva um e-mail válido."; input.focus(); return; }
+        if (btn.disabled) return;
+        btn.disabled = true;
+        msg.textContent = "Gerando seu cupom…";
+        try {
+          const r = await fetch("/api/avisos", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, produto: "boas-vindas" })
+          });
+          if (!r.ok || (await r.json()).ok !== true) throw new Error();
+          store.set("siriguela.boasvindas.email", true);
+          evento("Lead", { content_name: "boas-vindas" });
+          mostraCupom();
+        } catch {
+          msg.textContent = "Não conseguimos anotar seu e-mail. Tente de novo em instantes.";
+          btn.disabled = false;
+        }
+      });
+      raiz.addEventListener("click", (e) => {
+        if (e.target.closest("[data-bv-fecha]")) return fecha();
+        const copiar = e.target.closest("[data-bv-copiar]");
+        if (!copiar) return;
+        const ok = () => { copiar.textContent = "Copiado"; setTimeout(() => { copiar.textContent = "Copiar"; }, 1800); };
+        if (navigator.clipboard) navigator.clipboard.writeText(BV.codigo).then(ok, () => {});
+      });
+    };
+
+    document.addEventListener("click", (e) => { if (e.target.closest("[data-bv-abre]")) abre(); });
+    if (!store.get(VISTO, false)) setTimeout(abre, 1400);
+  }
+
   /* ---------- Cabeçalho, rodapé e sacola (comuns às páginas) ---------- */
   /* faixa da safra + cabeçalho: entram antes do conteúdo (app.js roda no início do <body>),
      assim nada empurra a página para baixo depois que ela aparece */
@@ -123,6 +284,10 @@
           <span>Encomendas até ${J.curta(J.fim)}</span>
         </a>`;
     document.body.insertAdjacentHTML("afterbegin", `
+      ${bvAtivo() ? `<button class="bv-faixa" data-bv-abre>
+        <span class="bv-faixa__txt">Cupom exclusivo com 25% off + frete grátis, apenas por e-mail</span>
+        <span class="bv-faixa__cta">Quero o meu <span aria-hidden="true">→</span></span>
+      </button>` : ""}
       ${limpo ? "" : `<div class="janela-bar">
         ${faixa}
         <span class="janela-bar__aside">10% na primeira compra com ${S.cupom.codigo}</span>
@@ -1154,6 +1319,7 @@
     render();
     flips();
     cookies();
+    boasVindas();
     movimento();
   };
 

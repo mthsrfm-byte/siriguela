@@ -25,6 +25,10 @@ const EM_BREVE = "quando as sungas chegarem, você fica sabendo primeiro, por aq
 const preVenda = (slug) => {
   if (typeof slug !== "string") return null;
   if (Object.hasOwn(PRE_VENDA, slug)) return PRE_VENDA[slug];
+  // pop-up de boas-vindas (catalogo.boasVindas): a confirmação leva o cupom
+  const bv = catalogo.boasVindas;
+  if (slug === "boas-vindas" && bv) return { nome: "camisetas siriguela", url: "/camisetas/", foto: "/assets/camisetas/ciranda/email-1x1.jpg",
+    texto: `seu cupom de boas-vindas é ${bv.codigo}: 25% de desconto e frete grátis. use no pagamento até as 23h59 do dia ${bv.fim.split("-").reverse().join("/")}.` };
   // sungas em breve: o e-mail só confirma o interesse; o aviso de safra fica para quando elas abrirem
   if (!catalogo.sungasEmBreve) return null;
   const p = catalogo.produtos.find(x => x.slug === slug);
