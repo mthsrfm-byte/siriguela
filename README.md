@@ -52,7 +52,7 @@ Abra http://localhost:5190
 
 ## Deploy dos workers
 
-O site sai sozinho pelo GitHub Pages. Os workers da Cloudflare (`checkout/` e `avisos/`) saem pela Action `.github/workflows/workers.yml`, que roda a cada push na `main` que mexa neles ou em `assets/js/produtos.js` (e à mão em Actions → Workers → Run workflow). Ela precisa do secret `CLOUDFLARE_API_TOKEN` no repositório, com permissão "Edit Cloudflare Workers"; se o token enxergar mais de uma conta, também de `CLOUDFLARE_ACCOUNT_ID`.
+O site sai sozinho pelo GitHub Pages. Os workers da Cloudflare (`checkout/` e `avisos/`) são publicados pela própria Cloudflare, ligada ao repositório, a cada push na `main`. O worker leva junto uma cópia de `assets/js/produtos.js`: preço e tamanhos que a Nextout cobra vêm dessa cópia. Para publicar à mão: `npx wrangler deploy --config checkout/wrangler.jsonc`.
 
 ## Encomenda
 
