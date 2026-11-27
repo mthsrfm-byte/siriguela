@@ -56,7 +56,7 @@ export function cupom(bv, frete, preco) {
   const url = `${site}/camisetas/?utm_source=email&utm_medium=cupom&utm_campaign=black-friday`;
   const meta = "font:11px/16px 'Courier New',monospace;letter-spacing:1.3px;color:#5e5953";
   const titulo = "leve 3, pague 2.";
-  const resumo = `seu cupom ${bv.codigo} chegou. em três camisetas, ele tira ${brl(bv.desconto)} do total. vale até as 23h59 de ${ate}.`;
+  const resumo = `seu cupom ${bv.codigo} chegou. compre 3 camisetas e ganhe ${brl(bv.desconto)} de desconto no carrinho. vale até as 23h59 de ${ate}.`;
   const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark"><meta name="supported-color-schemes" content="light dark">
 <title>${titulo}</title>
@@ -87,7 +87,8 @@ export function cupom(bv, frete, preco) {
 <p class="secundario" style="margin:10px 0 0;${meta}">A CIRANDA, DEBAIXO DA LUZ QUE ENTRA PELO TETO</p></td></tr>
 <tr><td style="padding:34px 24px 0">
 <h1 class="titulo" style="margin:0;font:normal 52px/1 Arial,Helvetica,sans-serif;letter-spacing:-2.4px">leve 3, pague 2<span style="color:#b8322a">.</span></h1>
-<p style="max-width:400px;margin:18px 0 0;font-size:17px;line-height:1.5">em três camisetas, o cupom tira ${brl(bv.desconto)} do total, o preço de uma blocos. três de ${brl(preco)} saem por ${brl(preco * 3 - bv.desconto)}.</p></td></tr>
+<p style="max-width:400px;margin:18px 0 0;font-size:17px;line-height:1.5">compre 3 camisetas e ganhe ${brl(bv.desconto)} de desconto no carrinho.</p>
+<p class="secundario" style="margin:8px 0 0;font-size:13px;line-height:1.5;color:#5e5953">não cumulativo com frete grátis.</p></td></tr>
 <tr><td style="padding:28px 24px 0">
 <table class="info" role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#fbf9f5;color:#121212;border:1px dashed #121212"><tr>
 <td style="padding:20px 22px">
@@ -97,7 +98,7 @@ export function cupom(bv, frete, preco) {
 <tr><td style="padding:24px 24px 0"><a class="acao" href="${url}" style="display:inline-block;background-color:#121212;color:#f3efe8;padding:16px 24px;text-decoration:none;font-size:15px">escolher as três &rarr;</a></td></tr>
 <tr><td style="padding:28px 24px 36px">
 <p class="secundario" style="margin:0 0 6px;${meta}">COMO USAR</p>
-<p class="secundario" style="margin:0;font-size:14px;line-height:21px;color:#5e5953">coloque três camisetas na sacola e cole o código no pagamento. o cupom vale em pedidos a partir de ${brl(bv.minimo)}. frete fixo de ${brl(frete)} para todo o brasil. a gente estampa depois do pedido, e a sua chega em 7 a 15 dias corridos.</p></td></tr>
+<p class="secundario" style="margin:0;font-size:14px;line-height:21px;color:#5e5953">coloque três camisetas na sacola e cole o código no pagamento. frete fixo de ${brl(frete)} para todo o brasil. a gente estampa depois do pedido, e a sua chega em 7 a 15 dias corridos.</p></td></tr>
 <tr><td class="linha secundario" style="border-top:1px solid #d9d1c4;padding:18px 24px 26px;color:#5e5953;font-size:12px;line-height:18px">você recebeu este e-mail porque pediu o cupom de black friday em siriguela.site.</td></tr>
 </table></td></tr></table></body></html>`;
   const text = [titulo, resumo, "cupom: " + bv.codigo, "coloque três camisetas na sacola e cole o código no pagamento. frete fixo de " + brl(frete) + ".", url].join("\n\n");
