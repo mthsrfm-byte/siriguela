@@ -163,7 +163,7 @@
             <a href="trocas/">Trocas e devoluções</a>
             <a href="privacidade/">Privacidade</a>
             <a href="contato/">Contato</a>
-            ${E.telefone ? `<a href="tel:+55${E.telefone}">${telFmt(E.telefone)}</a>${E.atendimento ? `<span class="foot__hora mono mute">${E.atendimento}</span>` : ""}` : ""}
+            ${E.telefone ? `<a href="https://wa.me/55${E.telefone}" target="_blank" rel="noopener">WhatsApp ${telFmt(E.telefone)}</a>${E.atendimento ? `<span class="foot__hora mono mute">${E.atendimento}</span>` : ""}` : ""}
           </div>
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
         </div>
@@ -814,7 +814,7 @@
         return;
       }
       if (k === "email") { el.textContent = v; el.href = `mailto:${v}`; }
-      else if (k === "telefone") { el.textContent = telFmt(v); el.href = `tel:+55${v}`; }
+      else if (k === "telefone") { el.textContent = telFmt(v); el.href = `https://wa.me/55${v}`; el.target = "_blank"; el.rel = "noopener"; }
       else if (k === "whatsapp") { el.textContent = v.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3"); el.href = `https://wa.me/55${v}`; }
       else el.textContent = v;
     });

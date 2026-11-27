@@ -19,7 +19,7 @@ globalThis.SIRIGUELA = {
     endereco: "",       // rua, número, bairro, cidade/UF, CEP
     email: "ola@siriguela.site",
     whatsapp: "",       // só números com DDD, ex.: 11999998888
-    telefone: "11945688442",                          // suporte, só números com DDD
+    telefone: "11945688442",                          // suporte, só números com DDD; o link abre o WhatsApp
     atendimento: "Segunda a sexta, das 10h às 19h"    // horário do telefone
   },
   /* Anúncios: com o ID preenchido, o site mostra o aviso de cookies e, depois do "Aceitar",
