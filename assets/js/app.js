@@ -562,8 +562,7 @@
       });
       const dados = await resposta.json();
       if (resposta.ok && dados.url) {
-        const itens = bag.get();
-        evento("InitiateCheckout", { content_ids: itens.map((i) => `${i.tipo || "sunga"}-${i.slug}-${i.size}`), num_items: itens.reduce((n, i) => n + i.qty, 0), value: contas(itens.filter((i) => peca(i))).produtos, currency: "BRL" });
+        /* InitiateCheckout, AddPaymentInfo e Purchase saem do checkout da Nextout (navegador + servidor). */
         location.assign(comCampanha(dados.url, utm));
       }
       else toast(dados.erro || "Não foi possível abrir o pagamento. Tente novamente.");
