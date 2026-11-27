@@ -263,7 +263,12 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .foot a, .foot p { display: block; margin: 0 0 6px; }
 .foot p { color: var(--mute); max-width: 34ch; }
 .foot a:hover { opacity: .55; }
-.foot__base { display: flex; justify-content: space-between; padding: 18px var(--pad) 22px; border-top: 1px solid rgba(18, 18, 18, .1); font-family: var(--f-mono); font-size: var(--t-idx); color: var(--faint); }
+.foot__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px 32px; padding: 18px var(--pad) 22px; border-top: 1px solid rgba(18, 18, 18, .1); font-family: var(--f-mono); font-size: var(--t-idx); color: var(--faint); }
+.foot__legal { display: grid; gap: 6px; }
+.foot__legal span { white-space: nowrap; }
+.foot__credit { margin: 0; color: var(--mute); }
+.foot__credit a { color: var(--ink, inherit); text-decoration: underline; text-underline-offset: 3px; }
+.foot__credit a:hover { opacity: .55; }
 
 /* ---------- Sacola ---------- */
 .scrim { position: fixed; inset: 0; z-index: 60; background: rgba(22, 22, 21, .25); opacity: 0; pointer-events: none; transition: opacity .25s; }

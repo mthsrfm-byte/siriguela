@@ -340,8 +340,12 @@
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
         </div>
         <div class="foot__base mono mute">
-          <span>© ${new Date().getFullYear()} ${empresaLinha()}</span>
-          <span>Feito sob encomenda no Brasil</span>
+          <div class="foot__legal">
+            <span>© ${new Date().getFullYear()} ${E.razao || E.nome || "Siriguela"}</span>
+            ${E.cnpj ? `<span>CNPJ ${E.cnpj}</span>` : ""}
+            <span>Feito sob encomenda no Brasil</span>
+          </div>
+          <p class="foot__credit">Made in Brazil <span aria-hidden="true">•</span> designed with coffee by <a href="https://matheusserafim.com" target="_blank" rel="noopener">Matheus Serafim</a></p>
         </div>
       </footer>
       <div class="scrim" data-close-bag></div>
@@ -370,7 +374,6 @@
   /* ---------- Empresa (S.empresa): rodapé e páginas de ajuda ---------- */
   const E = S.empresa || {};
   const telFmt = (v) => v.replace(/^(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
-  const empresaLinha = () => [E.razao || E.nome || "Siriguela", E.cnpj && `CNPJ ${E.cnpj}`].filter(Boolean).join(" · ");
 
   /* ---------- Anúncios (S.marketing): Pixel da Meta e GA4, só depois do "Aceitar" ----------
      Sem ID preenchido, nada aparece e nada é carregado. A escolha fica guardada no navegador. */
