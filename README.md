@@ -39,7 +39,7 @@ Abra http://localhost:5190
 ## Lançamento: o que fica no catálogo
 
 - `empresa` em `assets/js/produtos.js`: razão social, CNPJ, endereço, e-mail e WhatsApp. Aparecem no rodapé e nas páginas `/trocas/`, `/privacidade/` e `/contato/` (campo vazio não aparece).
-- `marketing`: ID do Pixel da Meta e do GA4. Com algum preenchido, o site mostra o aviso de cookies e só carrega o rastreio depois do "Aceitar". Eventos: PageView, ViewContent (página da camiseta), AddToCart, InitiateCheckout e Lead (e-mail na lista). O Purchase sai do checkout da Nextout.
+- `marketing`: ID do Pixel da Meta e do GA4. Com algum preenchido, o site mostra o aviso de cookies e só carrega o rastreio depois do "Aceitar". Eventos do site: PageView, ViewContent (página da camiseta), AddToCart e Lead (e-mail na lista). InitiateCheckout, AddPaymentInfo e Purchase saem do checkout da Nextout (Marketing → Pixels de anúncio), que usa o mesmo Pixel; com o token da API de Conversões lá, a compra também vai pelo servidor.
 - `camisetas.ficha`: tecido, estampa, cuidados e tabela de medidas do fornecedor. Vazio, a seção não aparece em "Detalhes".
 - UTMs e `fbclid`/`gclid` seguem do anúncio até a URL do pagamento.
 - `sitemap.xml`, `robots.txt` e `404.html` na raiz.
