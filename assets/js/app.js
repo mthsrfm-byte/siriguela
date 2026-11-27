@@ -285,12 +285,16 @@
           <span class="janela-bar__sep" aria-hidden="true">·</span>
           <span>Encomendas até ${J.curta(J.fim)}</span>
         </a>`;
+    /* Black Friday: a faixa preta desliza no topo, fica presa ao rolar e esconde a faixa da encomenda */
+    const bv = bvAtivo();
+    if (bv) document.documentElement.classList.add("tem-faixa");
+    const bvItem = `<span class="bv-faixa__item">Black Friday<i></i>Leve 3, pague 2<i></i>Cupom só por e-mail<i></i><b>Quero o meu →</b><i></i></span>`;
+    const bvMetade = `<span class="bv-faixa__metade">${bvItem.repeat(6)}</span>`;
     document.body.insertAdjacentHTML("afterbegin", `
-      ${bvAtivo() ? `<button class="bv-faixa" data-bv-abre>
-        <span class="bv-faixa__txt">Black Friday · Leve 3, pague 2 · Cupom só por e-mail</span>
-        <span class="bv-faixa__cta">Quero o meu <span aria-hidden="true">→</span></span>
+      ${bv ? `<button class="bv-faixa" data-bv-abre aria-label="Black Friday: leve 3, pague 2. Cupom só por e-mail. Abrir o cadastro">
+        <span class="bv-faixa__trilho" aria-hidden="true">${bvMetade}${bvMetade}</span>
       </button>` : ""}
-      ${limpo ? "" : `<div class="janela-bar">
+      ${limpo || bv ? "" : `<div class="janela-bar">
         ${faixa}
         <span class="janela-bar__aside">10% na primeira compra com ${S.cupom.codigo}</span>
       </div>`}

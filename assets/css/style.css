@@ -826,20 +826,26 @@ html.is-modal { overflow: hidden; }
 /* ==========================================================
    BLACK FRIDAY: faixa no topo + pop-up de boas-vindas (S.boasVindas)
    ========================================================== */
+/* faixa da Black Friday: presa no topo, o texto desliza da direita para a esquerda.
+   O cabeçalho desce a altura dela (--faixa) para não ficar por baixo. */
+html.tem-faixa { --faixa: 44px; scroll-padding-top: calc(var(--head) + var(--faixa) + 24px); }
+html.tem-faixa .head, html.tem-faixa .head-dot { top: var(--faixa); }
+html.tem-faixa .info { top: calc(var(--head) + var(--faixa) + 8px); }
 .bv-faixa {
-  display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 18px;
-  width: 100%; padding: 11px var(--pad);
+  position: sticky; top: 0; z-index: 45;
+  display: block; width: 100%; height: var(--faixa, 44px); padding: 0; overflow: hidden;
   background: var(--tinta); color: var(--linho); border: 0; cursor: pointer;
-  font-family: var(--f-mono); font-size: max(10px, calc(var(--t-idx) * 0.9)); font-weight: var(--w-mid);
-  letter-spacing: var(--track-meta); text-transform: uppercase; text-align: center;
+  font-family: var(--f-mono); font-size: 11.5px; font-weight: var(--w-mid);
+  letter-spacing: var(--track-meta); text-transform: uppercase;
 }
-.bv-faixa__txt::before {
-  content: ""; display: inline-block; width: 6px; height: 7px; margin: 0 10px 1px 0;
-  border-radius: 50%; background: var(--ponto); vertical-align: middle;
-}
-.bv-faixa__cta { color: #B9B2A8; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--ponto); }
-.bv-faixa:hover .bv-faixa__cta { color: var(--linho); }
+.bv-faixa__trilho { display: flex; width: max-content; height: 100%; align-items: center; animation: bv-desliza 70s linear infinite; }
+.bv-faixa:hover .bv-faixa__trilho, .bv-faixa:focus-visible .bv-faixa__trilho { animation-play-state: paused; }
+.bv-faixa__metade, .bv-faixa__item { display: flex; align-items: center; white-space: nowrap; }
+.bv-faixa__item { gap: 22px; padding-right: 22px; }
+.bv-faixa__item i { flex: none; width: 6px; height: 7px; border-radius: 50%; background: var(--ponto); }
+.bv-faixa__item b { font-weight: inherit; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--ponto); }
 .bv-faixa:focus-visible { outline: 2px solid var(--ponto); outline-offset: -4px; }
+@keyframes bv-desliza { to { transform: translateX(-50%); } }
 
 html.bv-aberto, html.bv-aberto body { overflow: hidden; }
 .bv { position: fixed; inset: 0; z-index: 120; display: grid; place-items: center; padding: 16px; }
@@ -959,9 +965,6 @@ html.bv-aberto, html.bv-aberto body { overflow: hidden; }
   .bv__relogio-rot { margin-bottom: 8px; }
   .bv__acao { min-height: 0; }
   .bv__nao { margin-top: 10px; }
-  .bv-faixa { flex-wrap: nowrap; gap: 10px; padding: 10px 16px; letter-spacing: .08em; }
-  .bv-faixa__cta { display: none; }
-  .bv-faixa__txt { text-decoration: underline; text-underline-offset: 4px; text-decoration-color: var(--ponto); }
   .bv__x { color: var(--linho); background: rgba(18, 18, 18, .28); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
   .bv__idx { margin-bottom: 10px; }
   .bv__relogio { margin: 16px 0 14px; padding: 12px 0 10px; }
@@ -970,6 +973,6 @@ html.bv-aberto, html.bv-aberto body { overflow: hidden; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bv__caixa, .bv__fundo, .bv__foto img, .bv-dig__n { transition: none; filter: none; transform: none; }
-  .bv-relogio i, .bv-ok, .bv-form__campo.is-erro, .bv-form__btn svg { animation: none; }
+  .bv-relogio i, .bv-faixa__trilho, .bv-ok, .bv-form__campo.is-erro, .bv-form__btn svg { animation: none; }
   .bv-ok__icone path { animation: none; stroke-dashoffset: 0; }
 }
