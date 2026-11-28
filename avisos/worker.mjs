@@ -130,7 +130,7 @@ const worker = {
       }
       const nome = catalogo.produtos.find(p => p.slug === item.produto)?.nome;
       try {
-        await env.EMAIL.send({ from: { email: "suporte@siriguela.site", name: "siriguela" }, to: item.email, ...(item.produto === CUPOM ? cupom(catalogo.boasVindas, catalogo.frete, catalogo.camisetas.preco) : mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto))) });
+        await env.EMAIL.send({ from: { email: "matheus@siriguela.site", name: "siriguela" }, to: item.email, ...(item.produto === CUPOM ? cupom(catalogo.boasVindas, catalogo.frete, catalogo.camisetas.preco) : mensagem(nome, item.produto, item.abertura, aberta, preVenda(item.produto))) });
       } catch {
         console.error("Falha no envio do aviso", item.id);
         continue;
