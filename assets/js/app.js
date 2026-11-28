@@ -347,11 +347,11 @@
           <div class="foot__legal mono">
             <span>© ${new Date().getFullYear()} ${E.razao || E.nome || "Siriguela"}</span>
             ${E.cnpj ? `<span>CNPJ ${E.cnpj}</span>` : ""}
+            <p class="foot__credit">
+              <span>Designed with coffee by</span>
+              <a href="https://matheusserafim.com" target="_blank" rel="noopener">Matheus Serafim<svg aria-hidden="true" viewBox="0 0 120 8" preserveAspectRatio="none"><path d="M1 5C30 2 60 6 92 3S116 4 119 2"/></svg></a>
+            </p>
           </div>
-          <p class="foot__credit">
-            <span class="foot__credit-de">designed with coffee by</span>
-            <a href="https://matheusserafim.com" target="_blank" rel="noopener">Matheus Serafim</a>
-          </p>
         </div>
       </footer>
       <div class="scrim" data-close-bag></div>

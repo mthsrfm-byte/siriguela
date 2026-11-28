@@ -265,13 +265,14 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 .foot__marca p { margin: 0; color: var(--mute); max-width: 30ch; }
 .foot a:hover { opacity: .55; }
 .foot__hora { font-size: var(--t-small); color: var(--mute); }
-.foot__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px 32px; margin: 0 var(--pad); padding: 22px 0 28px; border-top: 1px solid rgba(18, 18, 18, .12); }
+.foot__base { margin: 0 var(--pad); padding: 22px 0 28px; border-top: 1px solid rgba(18, 18, 18, .12); }
 .foot__legal { display: grid; gap: 6px; color: var(--mute); }
 .foot__legal span { white-space: nowrap; }
-.foot__credit { margin: 0; display: flex; flex-direction: column; align-items: flex-start; font-family: var(--f-mao); font-weight: 400; line-height: .9; color: var(--mute); transform: rotate(-3deg); transform-origin: left center; }
-.foot__credit-de { font-size: 21px; }
-.foot__credit a { position: relative; margin-left: 1.4em; font-size: 34px; color: var(--ink); }
-.foot__credit a::after { content: ""; position: absolute; right: -11px; bottom: .32em; width: 6px; height: 6px; border-radius: 50%; background: var(--ponto); }
+.foot__credit { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; margin: 14px 0 0; }
+/* só o nome é manuscrito: letras e palavras apertadas para a Reenie Beanie parecer escrita, com um traço fino embaixo */
+.foot__credit a { position: relative; display: inline-block; font-family: var(--f-mao); font-size: 22px; font-weight: 400; line-height: 1; letter-spacing: -0.04em; word-spacing: -0.18em; text-transform: none; color: #2B2825; transform: rotate(-2deg); }
+.foot__credit svg { position: absolute; left: -2px; bottom: -3px; width: calc(100% + 6px); height: 6px; overflow: visible; }
+.foot__credit path { fill: none; stroke: var(--mute); stroke-width: 1; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .foot__credit a:hover { opacity: .6; }
 
 /* ---------- Sacola ---------- */
@@ -478,7 +479,6 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
   .foot { row-gap: 40px; }
   .foot__col { grid-column: span 6; }
   .foot__atend { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid rgba(18, 18, 18, .12); }
-  .foot__base { flex-direction: column; align-items: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
