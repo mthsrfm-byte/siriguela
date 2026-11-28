@@ -40,6 +40,7 @@
   /* ---- Tipografia ---- */
   --f-sans: "Instrument Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --f-mao:  "Reenie Beanie", "Bradley Hand", cursive;  /* só a assinatura do rodapé */
 
   --t-hero:  clamp(64px, 12.5vw, 220px);  /* título grande */
   --t-h1:    clamp(44px, 5vw, 80px);      /* nome da sunga */
