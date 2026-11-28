@@ -14,6 +14,8 @@
     return `src="${b}.w1080.webp" srcset="${b}.w640.webp 640w, ${b}.w1080.webp 1080w, ${b}.w1600.webp 1600w" sizes="${sizes}"`;
   };
   const num = (i) => String(i + 1).padStart(2, "0");
+  /* legenda do card: uma linha em mono com cor ou cidade, preço e situação */
+  const linhaCard = (...partes) => `<div class="card__sub"><span class="idx">${partes.filter(Boolean).join(" · ")}</span></div>`;
   const total = S.produtos.length;
   const bySlug = (slug) => S.produtos.find((p) => p.slug === slug);
   /* endereço da página de cada sunga: /colecao1/sunga/<slug>/ (gerado por scripts/gerar-paginas.py) */
@@ -655,8 +657,8 @@
         </div>
         <div class="card__piso" aria-hidden="true"><img ${pic(look.r === "32" ? img(p, "frente") : `assets/produtos/${p.slug}/piso-v.jpg`, tam)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(i)}</span><span class="card__name">${p.nome}</span><span class="card__price">${brl(S.preco)}</span></div>
-      <div class="card__sub"><span>${p.origem}</span><span class="idx">${EMBREVE ? "Em breve" : J.aberta ? `Encomenda até ${J.curta(J.fim)}` : `Abre ${J.curta(J.ini)}`}</span></div>
+      <div class="card__meta"><span class="card__name">${p.nome}</span></div>
+      ${linhaCard(p.origem, brl(S.preco), EMBREVE && "Em breve")}
     </a>`;
   };
 
@@ -682,8 +684,8 @@
         </div>
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, tam)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(precoCam(c))}</span></div>
-      <div class="card__sub"><span>${c.cor}</span><span class="idx">${c.esgotada ? "Esgotada" : `Chega em ${C.entrega.min} a ${C.entrega.max} dias`}</span></div>
+      <div class="card__meta"><span class="card__name">${c.nome}</span></div>
+      ${linhaCard(c.cor, brl(precoCam(c)), c.esgotada && "Esgotada")}
     </a>`;
   };
 
@@ -708,16 +710,16 @@
         <img class="slide__foto" ${camFoto(c, c.outra.f, TAM_SLIDE)} alt="Camiseta ${c.nome} no corpo" loading="lazy">
         <div class="card__piso${c.solta ? " card__piso--solta" : ""}" aria-hidden="true"><img ${camFoto(c, c.estatica, TAM_SLIDE)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(C.itens.indexOf(c))}</span><span class="card__name">${c.nome}</span><span class="card__price">${brl(precoCam(c))}</span></div>
-      <div class="card__sub"><span>${c.cor}</span>${c.esgotada ? `<span class="idx">Esgotada</span>` : ""}</div>
+      <div class="card__meta"><span class="card__name">${c.nome}</span></div>
+      ${linhaCard(c.cor, brl(precoCam(c)), c.esgotada && "Esgotada")}
     </a>`;
   const slideSunga = (p) => `<a class="card slide" href="${urlDe(p)}" style="--piso:${p.piso || "var(--soft)"}">
       <div class="card__media">
         <img class="slide__foto" ${pic(`assets/produtos/${p.slug}/${p.outra.f}.jpg`, TAM_SLIDE)} alt="Sunga ${p.nome} no corpo" loading="lazy">
         <div class="card__piso" aria-hidden="true"><img ${pic(`assets/produtos/${p.slug}/piso-v.jpg`, TAM_SLIDE)} alt="" loading="lazy"></div>
       </div>
-      <div class="card__meta"><span class="idx">${num(S.produtos.indexOf(p))}</span><span class="card__name">${p.nome}</span><span class="card__price">${brl(S.preco)}</span></div>
-      <div class="card__sub"><span>${p.origem}</span>${EMBREVE ? `<span class="idx">Em breve</span>` : ""}</div>
+      <div class="card__meta"><span class="card__name">${p.nome}</span></div>
+      ${linhaCard(p.origem, brl(S.preco), EMBREVE && "Em breve")}
     </a>`;
   const slider = (cards) => `
     <div class="slider" data-slider>

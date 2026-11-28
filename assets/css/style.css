@@ -168,14 +168,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .card__piso img { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; }
 @media (hover: hover) { .card:hover .card__piso { opacity: 1; } }
 
-.card__meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 12px; margin-top: 12px; font-size: var(--t-body); }
-.card__name { font-weight: var(--w-text); }
-.card__price { margin-left: auto; }
-.card__sub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-top: 4px; font-size: var(--t-small); color: var(--mute); transition: opacity .2s, transform .2s; }
-@media (hover: hover) {
-  .look .card__sub { opacity: 0; transform: translateY(-4px); }
-  .look .card:hover .card__sub { opacity: 1; transform: none; }
-}
+.card__meta { margin-top: 14px; }
+.card__name { font-size: clamp(19px, 1.6vw, 22px); font-weight: var(--w-title); letter-spacing: -.02em; line-height: 1.15; }
+.card__sub { margin-top: 6px; }
+.card__sub .idx { color: var(--mute); line-height: 1.6; }
 .card:hover .card__name { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; text-decoration-color: var(--ponto); }
 
 /* ---------- Índice das estampas ---------- */
@@ -767,11 +763,6 @@ html.lenis, html.lenis body { height: auto; }
 .card--cam .flip img { object-position: 50% 30%; }
 .card__piso--solta img { object-fit: contain; padding: 10%; }
 .block__cta { margin-top: clamp(40px, 5vw, 72px); }
-/* cards pequenos no celular (duas colunas): preço embaixo do nome e sem o prazo, que não cabe */
-@media (max-width: 600px) {
-  .grid--more .card__price { flex-basis: 100%; margin-left: 0; }
-  .grid--more .card__sub .idx { display: none; }
-}
 /* camisetas: o card pequeno (quadrado) do lookbook fica 22% maior */
 .look .card--cam.l3 { width: 122%; }
 .look .card--cam.l6 { width: 122%; margin-left: -22%; }
