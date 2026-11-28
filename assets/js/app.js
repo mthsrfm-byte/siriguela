@@ -318,34 +318,40 @@
     document.body.insertAdjacentHTML("beforeend", `
       <footer>
         <div class="foot">
-          <div>
+          <div class="foot__marca">
             <h3 class="foot__logo"><img src="assets/img/logo-mono.svg" alt="Siriguela" width="104" height="28"></h3>
             <p>Camisetas e sungas estampadas, feitas sob encomenda a partir de pedaços do Brasil.</p>
           </div>
-          <div>
+          <nav class="foot__col" aria-label="Loja">
             <h3 class="mono">Loja</h3>
             <a href="camisetas/">Camisetas</a>
             <a href="sungas/">Sungas</a>
             <a href="#" data-open-bag>Sacola</a>
-          </div>
-          <div>
+          </nav>
+          <nav class="foot__col" aria-label="Ajuda">
             <h3 class="mono">Ajuda</h3>
-            <a href="index.html#encomenda">Como funciona a encomenda</a>
-            <a href="trocas/">Trocas e devoluções</a>
+            <a href="index.html#encomenda">Como funciona</a>
+            <a href="trocas/">Trocas</a>
             <a href="privacidade/">Privacidade</a>
             <a href="contato/">Contato</a>
+          </nav>
+          ${E.email || E.telefone ? `<div class="foot__col foot__atend">
+            <h3 class="mono">Atendimento</h3>
             ${E.email ? `<a href="mailto:${E.email}">${E.email}</a>` : ""}
-            ${E.telefone ? `<a href="https://wa.me/55${E.telefone}" target="_blank" rel="noopener">WhatsApp ${telFmt(E.telefone)}</a>${E.atendimento ? `<span class="foot__hora mono mute">${E.atendimento}</span>` : ""}` : ""}
-          </div>
+            ${E.telefone ? `<a href="https://wa.me/55${E.telefone}" target="_blank" rel="noopener">WhatsApp ${telFmt(E.telefone)}</a>` : ""}
+            ${E.telefone && E.atendimento ? `<span class="foot__hora">${E.atendimento}</span>` : ""}
+          </div>` : ""}
           <!-- coluna "Siga" (Instagram, TikTok) volta quando os perfis estiverem no ar -->
         </div>
-        <div class="foot__base mono mute">
-          <div class="foot__legal">
+        <div class="foot__base">
+          <div class="foot__legal mono">
             <span>© ${new Date().getFullYear()} ${E.razao || E.nome || "Siriguela"}</span>
             ${E.cnpj ? `<span>CNPJ ${E.cnpj}</span>` : ""}
-            <span>Feito sob encomenda no Brasil</span>
           </div>
-          <p class="foot__credit">Made in Brazil <span aria-hidden="true">•</span> designed with coffee by <a href="https://matheusserafim.com" target="_blank" rel="noopener">Matheus Serafim</a></p>
+          <p class="foot__credit">
+            <span class="foot__credit-de">designed with coffee by</span>
+            <a href="https://matheusserafim.com" target="_blank" rel="noopener">Matheus Serafim</a>
+          </p>
         </div>
       </footer>
       <div class="scrim" data-close-bag></div>

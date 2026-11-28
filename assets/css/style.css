@@ -27,7 +27,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 .mono { font-size: var(--t-small); }
 /* mono: só para dados (número, origem, coordenada, medida), sempre em caixa alta */
-.idx, .foot h3, .foot__base, .table thead th, .info__top, .gallery figcaption, .gallery__count, .acc__body .mono {
+.idx, .foot h3, .foot__legal, .table thead th, .info__top, .gallery figcaption, .gallery__count, .acc__body .mono {
   font-family: var(--f-mono); font-size: var(--t-idx); font-weight: var(--w-mid);
   letter-spacing: var(--track-meta); text-transform: uppercase; font-variant-numeric: tabular-nums;
 }
@@ -251,23 +251,28 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .join button:hover { opacity: .55; }
 .join__ok { margin: 12px 0 0; min-height: 1.5em; font-size: var(--t-small); color: var(--mute); }
 
-/* ---------- Rodapé ---------- */
+/* ---------- Rodapé ----------
+   Marca, Loja, Ajuda e Atendimento na grade; embaixo, razão social e CNPJ
+   em linhas separadas e a assinatura manuscrita (Reenie Beanie). */
 footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza claro não passa no contraste */
-.foot { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: var(--gap); padding: clamp(40px, 5vw, 72px) var(--pad); font-size: var(--t-small); }
-.foot > div:first-child { grid-column: 1 / span 6; }
-.foot > div { grid-column: span 2; }
-.foot h3 { margin: 0 0 14px; font-family: var(--f-mono); font-size: var(--t-idx); font-weight: var(--w-text); color: var(--faint); }
+.foot { display: grid; grid-template-columns: repeat(var(--cols), 1fr); gap: 48px var(--gap); padding: clamp(56px, 6vw, 88px) var(--pad) clamp(40px, 5vw, 64px); font-size: var(--t-body); }
+.foot__marca { grid-column: 1 / span 5; }
+.foot__col { grid-column: span 2; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
+.foot__atend { grid-column: span 3; }
+.foot h3 { margin: 0 0 4px; font-family: var(--f-mono); font-size: var(--t-idx); font-weight: var(--w-text); color: var(--faint); }
 .foot__logo { margin: 0 0 16px; }
-.foot__logo img { height: 32px; width: auto; }
-.foot a, .foot p { display: block; margin: 0 0 6px; }
-.foot p { color: var(--mute); max-width: 34ch; }
+.foot__logo img { height: 26px; width: auto; }
+.foot__marca p { margin: 0; color: var(--mute); max-width: 30ch; }
 .foot a:hover { opacity: .55; }
-.foot__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px 32px; padding: 18px var(--pad) 22px; border-top: 1px solid rgba(18, 18, 18, .1); font-family: var(--f-mono); font-size: var(--t-idx); color: var(--faint); }
-.foot__legal { display: grid; gap: 6px; }
+.foot__hora { font-size: var(--t-small); color: var(--mute); }
+.foot__base { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 20px 32px; margin: 0 var(--pad); padding: 22px 0 28px; border-top: 1px solid rgba(18, 18, 18, .12); }
+.foot__legal { display: grid; gap: 6px; color: var(--mute); }
 .foot__legal span { white-space: nowrap; }
-.foot__credit { margin: 0; color: var(--mute); }
-.foot__credit a { color: var(--ink, inherit); text-decoration: underline; text-underline-offset: 3px; }
-.foot__credit a:hover { opacity: .55; }
+.foot__credit { margin: 0; display: flex; flex-direction: column; align-items: flex-start; font-family: var(--f-mao); font-weight: 400; line-height: .9; color: var(--mute); transform: rotate(-3deg); transform-origin: left center; }
+.foot__credit-de { font-size: 21px; }
+.foot__credit a { position: relative; margin-left: 1.4em; font-size: 34px; color: var(--ink); }
+.foot__credit a::after { content: ""; position: absolute; right: -11px; bottom: .32em; width: 6px; height: 6px; border-radius: 50%; background: var(--ponto); }
+.foot__credit a:hover { opacity: .6; }
 
 /* ---------- Sacola ---------- */
 .scrim { position: fixed; inset: 0; z-index: 60; background: rgba(22, 22, 21, .25); opacity: 0; pointer-events: none; transition: opacity .25s; }
@@ -416,8 +421,8 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
   .sizes__table { grid-column: 1 / -1; }
   .gallery-wrap { grid-column: 1 / span 7; }
   .info { grid-column: 8 / span 5; }
-  .foot > div:first-child { grid-column: 1 / -1; margin-bottom: 16px; }
-  .foot > div { grid-column: span 4; }
+  .foot__marca { grid-column: 1 / -1; }
+  .foot__col { grid-column: span 4; }
 }
 @media (max-width: 860px) {
   :root { --head: 56px; }
@@ -450,7 +455,7 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
 @media (pointer: coarse) {
   .head__menu, .head__bag { padding: 12px 0; margin: -12px 0; }
   .head__nav a { padding: 11px 0; }
-  .foot a { padding: 7px 0; margin: 0; }
+  .foot__col a { padding: 4px 0; margin: -4px 0; }
   .janela-bar__main { padding: 6px 0; margin: -6px 0; }
 }
 @media (max-width: 600px) {
@@ -470,7 +475,10 @@ footer { background: var(--soft); --faint: var(--mute); } /* na areia o cinza cl
   .index__from { display: none; }
   .index__go { grid-column: span 2; }
   .about__cols, .join__form { grid-column: 1 / -1; }
-  .foot > div { grid-column: span 6; }
+  .foot { row-gap: 40px; }
+  .foot__col { grid-column: span 6; }
+  .foot__atend { grid-column: 1 / -1; padding-top: 24px; border-top: 1px solid rgba(18, 18, 18, .12); }
+  .foot__base { flex-direction: column; align-items: flex-start; }
 }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -813,7 +821,6 @@ body:has(.compra-fixa.is-on) .cookies { bottom: calc(150px + env(safe-area-inset
 /* ---------- Especificações e selos da camiseta ---------- */
 .specs-cam__medidas { margin-left: 10px; color: var(--mute); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
 .specs-cam__medidas:hover { color: var(--ink); }
-.foot__hora { display: block; margin-top: -4px; font-size: var(--t-idx); }
 
 /* ---------- Modal da tabela de medidas ---------- */
 html.is-modal { overflow: hidden; }
